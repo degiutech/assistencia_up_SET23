@@ -1,0 +1,12 @@
+{
+    "require": {
+        "phpmailer/phpmailer": "^6.4",
+        "gumlet/php-image-resize": "^2.0",
+        "cboden/ratchet": "^0.4.4"
+    },
+	"autoload": {
+        "psr-4": {
+            "Chat\\": "src"
+        }
+    }
+}

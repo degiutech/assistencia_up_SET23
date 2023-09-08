@@ -1,0 +1,16 @@
+.cor-bg {
+    background-color: #2F4F4F;
+}
+
+.cor-texto {
+    color: #A0522D;
+    /* color: #6495ED; */
+}
+
+.azul-cinza {
+    color: lightslategray;
+}
+
+.meu_hover:hover {
+    background-color: #F5F5F5;
+}
