@@ -17,17 +17,13 @@ class Supervisao extends Controller
     {
 
         if (!Sessao::estaLogado()) :
-        // URL::redirect('users/login_email');
+        
         else :
             $this->sessao_acesso = Sessao::sessaoUser();
 
             if ($this->sessao_acesso['acesso'] == 'Supervisão') {
                 $this->home = URL . '/supervisao';
-            } else {
-                // $this->userController = $this->controller('Users');
-                // $this->userController->index_acesso();
-                // exit();
-            }
+            } 
 
         endif;
 
@@ -490,8 +486,6 @@ class Supervisao extends Controller
         $array_assistidos = [];
         for ($i = 0; $i < count($updates); $i++) {
 
-            // $assistencias[] = ['updates' => $updates[$i]];
-
             $descricao = $updates[$i]['status_compl_updated'];
 
             //Primeiro registro
@@ -589,10 +583,7 @@ class Supervisao extends Controller
     {
 
         $updates_res = $this->assistenciaUpModel->allUpdatesNaoFinalizadas();
-        // if ($updates_res['erro'] != '') {
-        //     Sessao::mensagem('assistencias', $updates_res['erro']);
-        //     return $this->view('admin/minhas_assistencias', $dados);
-        // }
+        
         $updates = $updates_res['updates'];
 
         $assistencias = [];

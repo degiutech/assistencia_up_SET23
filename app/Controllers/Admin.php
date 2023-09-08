@@ -21,17 +21,6 @@ class Admin extends Controller
     public function __construct()
     {
 
-        // if (!Sessao::estaLogado()) :
-        //     URL::redirect('users/login_email');
-        // else :
-        //     $this->sessao_acesso = Sessao::sessaoUser();
-
-        //     if ($this->sessao_acesso['acesso'] == 'Administração') {
-        //         $this->home = URL . '/admin/index';
-        //     }
-
-        // endif;
-
         $this->sessao_acesso = Sessao::sessaoUser();
 
         if ($this->sessao_acesso['acesso'] == 'Administração') {
@@ -575,117 +564,6 @@ class Admin extends Controller
     // GERENCIAMENTO DE ASSISTÊNCIAS
     //Geral - recentes
 
-    //NÃO DELETAR
-
-    // public function assistencias()
-    // {
-
-    //     $id_operador = $_SESSION['user']['id'];
-    //     $dados = [];
-
-    //     $updates_res = $this->assistenciaUpModel->allUpdatesRecentes();
-    //     if ($updates_res['erro'] != '') {
-    //         Sessao::mensagem('assistencias', $updates_res['erro']);
-    //         return $this->view('admin/minhas_assistencias', $dados);
-    //     }
-    //     $updates = $updates_res['updates'];
-
-    //     $assistencias = [];
-    //     $array_assistidos = [];
-    //     for ($i = 0; $i < count($updates); $i++) {
-
-    //         // $assistencias[] = ['updates' => $updates[$i]];
-
-    //         $descricao = $updates[$i]['status_compl_updated'];
-
-    //         //Primeiro registro
-    //         $primeiro_registro = '';
-    //         $primeiro_registro_res = $this->assistenciaModel->getAssistenciaById($updates[$i]['id_assistencia']);
-    //         if ($primeiro_registro_res['erro'] == '') {
-    //             $primeiro_registro = $primeiro_registro_res['assistencia'];
-    //             $dpr = new DateTime($primeiro_registro['date_at']);
-    //             $data_primeiro_registro = $dpr->format('d/m/Y');
-
-    //             //Descrição primeiro registro
-    //             if ($updates[$i]['status_compl_updated'] == 'Assistência Iniciada') {
-    //                 $descricao = $primeiro_registro['descricao'];
-    //             }
-
-    //             //array assistidos
-    //             if (!in_array($primeiro_registro['id_cidadao'], $array_assistidos)) {
-    //                 $array_assistidos[] = $primeiro_registro['id_cidadao'];
-    //             }
-    //         }
-
-    //         //Nome do Cidadão
-    //         $nome_cidadao = '';
-    //         $cidadao_res = $this->cidadaoModel->getNomeIdCidadao($primeiro_registro['id_cidadao']);
-    //         if ($cidadao_res['erro'] == '') {
-    //             $nome_cidadao = $cidadao_res['cidadao']['nome'];
-    //         }
-
-    //         //Tipo de registro
-    //         $tipo = '';
-    //         if ($updates[$i]['status_updated'] == 'Iniciada') {
-    //             $tipo = 'Primeiro registro';
-    //         }
-    //         if ($updates[$i]['status_updated'] == 'Finalizada') {
-    //             $tipo = 'Finalização';
-    //         }
-    //         if ($updates[$i]['status_updated'] != 'Iniciada' && $updates[$i]['status_updated'] != 'Finalizada') {
-    //             $tipo = 'Atualização';
-    //         }
-
-    //         //Coordenadoria
-    //         $nome_coordenadoria = $updates[$i]['nome_coordenadoria'];
-    //         $id_coordenadoria = $updates[$i]['id_coordenadoria'];
-
-    //         //$data
-    //         $dt = new DateTime($updates[$i]['updated_at']);
-    //         $data = $dt->format('d/m/Y');
-    //         $assistencias[$i] = [
-    //             'data' => $data,
-    //             'primeiro_registro' => $primeiro_registro,
-    //             'id_primeiro_registro' => $primeiro_registro['id'],
-    //             'status_assist'        => $primeiro_registro['status_assist'],
-    //             'nome_cidadao' => $nome_cidadao,
-    //             'id_cidadao'         => $primeiro_registro['id_cidadao'],
-    //             'tipo' => $tipo,
-    //             'nome_coordenadoria' => $nome_coordenadoria,
-    //             'id_coordenadoria' => $id_coordenadoria,
-    //             'descricao'          => $descricao,
-    //             'data_primeiro_registro' => $data_primeiro_registro
-    //         ];
-    //     }
-
-    //     //Título
-    //     $titulo = '<b>ASSISTÊNCIAS RECENTES</b>';
-    //     // $assistencias = $titulo;
-    //     $num_registros = 'Registros: ' . count($updates);
-
-    //     $count_assistidos = count($array_assistidos);
-
-    //     $meses = Times::meses();
-
-    //     $dados = [
-    //         'titulo'          => $titulo,
-    //         'num_registros'   => $num_registros,
-    //         'count_assistidos' => 'Assistidos(as): ' . $count_assistidos,
-    //         'anos'             => Times::anos_12(),
-    //         'updates'         => $updates,
-    //         'meses'            => $meses,
-    //         'home'             => $this->home,
-    //         'titulo_botao'     => 'recentes',
-
-    //         'assistencias'     => $assistencias
-
-
-    //     ];
-
-
-    //     $this->view('admin/assistencias', $dados);
-    // }
-
     public function assistencias()
     {
 
@@ -693,10 +571,7 @@ class Admin extends Controller
         $dados = [];
 
         $updates_res = $this->assistenciaUpModel->allUpdatesRecentes();
-        // if ($updates_res['erro'] != '') {
-        //     Sessao::mensagem('assistencias', $updates_res['erro']);
-        //     return $this->view('admin/minhas_assistencias', $dados);
-        // }
+        
         $updates = $updates_res['updates'];
 
         $assistencias = [];
