@@ -1146,7 +1146,7 @@ class Supervisao extends Controller
         $titulo = $titulo = '<b>ASSISTÊNCIAS INICIADAS, ATUALIZADAS OU FINALIZADAS ENTRE ' . $inicial . ' e ' . $final . '</b>';
 
         $updates_res = $this->assistenciaUpModel->allUpdatesByPeriodo($dt_inicial, $dt_final, $status);
-        
+
         $updates = $updates_res['updates'];
 
         $assistencias = [];
@@ -1262,15 +1262,15 @@ class Supervisao extends Controller
 
 
         if ($status == 'nao_finalizadas') {
-            $titulo = '<b>MINHAS ASSISTÊNCIAS NÃO FINALIZADAS (recentes)</b>';
+            $titulo = '<b>MEUS REGISTROS RECENTES EM ASSISTÊNCIAS NÃO FINALIZADAS</b>';
             $titulo_botao = 'não finalizadas';
         }
         if ($status == 'todas') {
-            $titulo = '<b>MINHAS ASSISTÊNCIAS RECENTES (todas)</b>';
+            $titulo = '<b>MEUS REGISTROS RECENTES EM ASSISTÊNCIAS INICIADAS, ATUALIZADAS OU FINALIZADAS</b>';
             $titulo_botao = 'recentes';
         }
         if ($status == 'finalizadas') {
-            $titulo = '<b>MINHAS ASSISTÊNCIAS FINALIZADAS (recentes)</b>';
+            $titulo = '<b>MEUS REGISTROS RECENTES EM ASSISTÊNCIAS FINALIZADAS</b>';
             $titulo_botao = 'finalizadas';
         }
 
@@ -1305,6 +1305,11 @@ class Supervisao extends Controller
                 if (!in_array($primeiro_registro['id_cidadao'], $array_assistidos)) {
                     $array_assistidos[] = $primeiro_registro['id_cidadao'];
                 }
+                //status_assist
+                $st_primeiro_reg = $primeiro_registro['status_assist'];
+
+                //descrição_complemeto do primeiro registro
+                $desc_comp_primeiro_reg = $primeiro_registro['descricao_complemento'];
             }
 
             //Nome do Cidadão
@@ -1333,19 +1338,46 @@ class Supervisao extends Controller
             //$data
             $dt = new DateTime($updates[$i]['updated_at']);
             $data = $dt->format('d/m/Y');
-            $assistencias[$i] = [
-                'data' => $data,
-                'primeiro_registro' => $primeiro_registro,
-                'id_primeiro_registro' => $primeiro_registro['id'],
-                'status_assist'        => $primeiro_registro['status_assist'],
-                'nome_cidadao' => $nome_cidadao,
-                'id_cidadao'         => $primeiro_registro['id_cidadao'],
-                'tipo' => $tipo,
-                'nome_coordenadoria' => $nome_coordenadoria,
-                'id_coordenadoria' => $id_coordenadoria,
-                'descricao'          => $descricao,
-                'data_primeiro_registro' => $data_primeiro_registro
-            ];
+
+
+            if ($status == 'nao_finalizadas') {
+                if ($primeiro_registro['status_assist'] != 'Finalizada') {
+                    $assistencias[] = [
+                        'data' => $data,
+                        'primeiro_registro' => $primeiro_registro,
+                        'id_primeiro_registro' => $primeiro_registro['id'],
+                        'status_assist'        => $st_primeiro_reg, // $primeiro_registro['status_assist'],
+                        'status_updated'       => $updates[$i]['status_updated'],
+                        'status_compl_updated'       => $updates[$i]['status_compl_updated'],
+                        'nome_cidadao' => $nome_cidadao,
+                        'id_cidadao'         => $primeiro_registro['id_cidadao'],
+                        'tipo' => $tipo,
+                        'nome_coordenadoria' => $nome_coordenadoria,
+                        'id_coordenadoria' => $id_coordenadoria,
+                        'descricao'          => $descricao,
+                        'desc_comp_primeiro_reg' => $desc_comp_primeiro_reg,
+                        'data_primeiro_registro' => $data_primeiro_registro
+                    ];
+                }
+            } else {
+
+                $assistencias[] = [
+                    'data' => $data,
+                    'primeiro_registro' => $primeiro_registro,
+                    'id_primeiro_registro' => $primeiro_registro['id'],
+                    'status_assist'        => $st_primeiro_reg, // $primeiro_registro['status_assist'],
+                    'status_updated'       => $updates[$i]['status_updated'],
+                    'status_compl_updated'       => $updates[$i]['status_compl_updated'],
+                    'nome_cidadao' => $nome_cidadao,
+                    'id_cidadao'         => $primeiro_registro['id_cidadao'],
+                    'tipo' => $tipo,
+                    'nome_coordenadoria' => $nome_coordenadoria,
+                    'id_coordenadoria' => $id_coordenadoria,
+                    'descricao'          => $descricao,
+                    'desc_comp_primeiro_reg' => $desc_comp_primeiro_reg,
+                    'data_primeiro_registro' => $data_primeiro_registro
+                ];
+            }
         }
 
         // $assistencias = $titulo;
@@ -1392,6 +1424,7 @@ class Supervisao extends Controller
             'count_geral_nao_finalizadas'      => $count_geral_nao_finalizadas,
             'count_geral_finalizadas'      => $count_geral_finalizadas,
 
+            'titulo_relatorio'        => '<b>RELATÓRIO</b> ' . $titulo,
 
         ];
 
@@ -1428,17 +1461,19 @@ class Supervisao extends Controller
     public function minhas_assistencias_by_filtros($dia, $mes, $ano, $dt_inicial, $dt_final, $status)
     {
 
+        $status = 'todas';
+
         $id_operador = $_SESSION['user']['id'];
 
         //por data
         if ($dia && $mes && $ano) {
             $updates_res = $this->assistenciaModel->updatesByOperadorByData($id_operador, $dia, $mes, $ano, $status);
-            $titulo = '<b>MINHAS ASSISTÊNCIAS REGISTRADAS EM ' . $dia . '/' . $mes . '/' . $ano . ' (' . $status . ')</b>';
+            $titulo = '<b>MEUS REGISTROS EM ASSISTÊNCIAS INICIADAS, ATUALIZADAS OU FINALIZADAS EM ' . $dia . '/' . $mes . '/' . $ano . '</b>';
         }
         //mês e ano
         if (!$dia && $mes && $ano) {
             $updates_res = $this->assistenciaModel->updatesByOperadorMesAno($id_operador, $mes, $ano, $status);
-            $titulo = '<b>MINHAS ASSISTÊNCIAS REGISTRADAS EM ' . Times::mes_string($mes) . '/' . $ano . ' (' . $status . ')</b>';
+            $titulo = '<b>MEUS REGISTROS EM ASSISTÊNCIAS INICIADAS, ATUALIZADAS OU FINALIZADAS EM ' . Times::mes_string($mes) . '/' . $ano . '</b>';
         }
         //período
         if ($dt_inicial && $dt_final) {
@@ -1450,7 +1485,7 @@ class Supervisao extends Controller
             $dtf = new DateTime($dt_final);
             $dt_f = $dtf->format('d/m/Y');
 
-            $titulo = '<b>MINHAS ASSISTÊNCIAS REGISTRADAS ENTRE ' . $dt_i . ' e ' . $dt_f . ' (' . $status . ')</b>';
+            $titulo = '<b>MEUS REGISTROS EM ASSISTÊNCIAS ENTRE ' . $dt_i . ' e ' . $dt_f . '</b>';
         }
 
         if (!isset($updates_res)) {
@@ -1466,8 +1501,6 @@ class Supervisao extends Controller
         $assistencias = [];
         $array_assistidos = [];
         for ($i = 0; $i < count($updates); $i++) {
-
-            // $assistencias[] = ['updates' => $updates[$i]];
 
             $descricao = $updates[$i]['status_compl_updated'];
 
@@ -1488,6 +1521,11 @@ class Supervisao extends Controller
                 if (!in_array($primeiro_registro['id_cidadao'], $array_assistidos)) {
                     $array_assistidos[] = $primeiro_registro['id_cidadao'];
                 }
+                //status_assist
+                $st_primeiro_reg = $primeiro_registro['status_assist'];
+
+                //descrição_complemeto do primeiro registro
+                $desc_comp_primeiro_reg = $primeiro_registro['descricao_complemento'];
             }
 
             //Nome do Cidadão
@@ -1520,13 +1558,16 @@ class Supervisao extends Controller
                 'data' => $data,
                 'primeiro_registro' => $primeiro_registro,
                 'id_primeiro_registro' => $primeiro_registro['id'],
-                'status_assist'        => $primeiro_registro['status_assist'],
+                'status_assist'        => $st_primeiro_reg, // $primeiro_registro['status_assist'],
+                'status_updated'       => $updates[$i]['status_updated'],
+                'status_compl_updated'       => $updates[$i]['status_compl_updated'],
                 'nome_cidadao' => $nome_cidadao,
                 'id_cidadao'         => $primeiro_registro['id_cidadao'],
                 'tipo' => $tipo,
                 'nome_coordenadoria' => $nome_coordenadoria,
                 'id_coordenadoria' => $id_coordenadoria,
                 'descricao'          => $descricao,
+                'desc_comp_primeiro_reg' => $desc_comp_primeiro_reg,
                 'data_primeiro_registro' => $data_primeiro_registro
             ];
         }
@@ -1571,6 +1612,8 @@ class Supervisao extends Controller
             'count_geral'      => $count_geral,
             'count_geral_nao_finalizadas' => $count_geral_nao_finalizadas,
             'count_geral_finalizadas'     => $count_geral_finalizadas,
+
+            'titulo_relatorio'        => '<b>RELATÓRIO</b> ' . $titulo
 
         ];
 
