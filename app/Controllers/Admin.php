@@ -694,17 +694,12 @@ class Admin extends Controller
         $dados = [];
 
         $updates_res = $this->assistenciaUpModel->allUpdatesNaoFinalizadas();
-        // if ($updates_res['erro'] != '') {
-        //     Sessao::mensagem('assistencias', $updates_res['erro']);
-        //     return $this->view('admin/minhas_assistencias', $dados);
-        // }
+        
         $updates = $updates_res['updates'];
 
         $assistencias = [];
         $array_assistidos = [];
         for ($i = 0; $i < count($updates); $i++) {
-
-            // $assistencias[] = ['updates' => $updates[$i]];
 
             $descricao = $updates[$i]['status_compl_updated'];
 
@@ -786,7 +781,7 @@ class Admin extends Controller
 
         //Título
         $titulo = '<b>REGISTROS RECENTES EM ASSISTÊNCIAS NÃO FINALIZADAS</b>';
-        // $assistencias = $titulo;
+        
         $num_registros = 'Registros: ' . count($updates);
 
         $count_assistidos = count($array_assistidos);
@@ -834,8 +829,6 @@ class Admin extends Controller
         $assistencias = [];
         $array_assistidos = [];
         for ($i = 0; $i < count($updates); $i++) {
-
-            // $assistencias[] = ['updates' => $updates[$i]];
 
             $descricao = $updates[$i]['status_compl_updated'];
 
@@ -912,7 +905,7 @@ class Admin extends Controller
 
         //Título
         $titulo = '<b>REGISTROS RECENTES EM ASSISTÊNCIAS FINALIZADAS</b>';
-        // $assistencias = $titulo;
+        
         $num_registros = 'Registros: ' . count($updates);
 
         $count_assistidos = count($array_assistidos);
