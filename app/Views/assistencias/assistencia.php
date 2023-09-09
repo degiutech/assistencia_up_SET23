@@ -37,12 +37,18 @@
             <div>Primeiro registro: <b><?= $dados['data_hora_registro'] ?></b></div>
             <div>Última atualização: <b><?= $dados['data_hora'] ?></b></div>
             <div>Coordenadoria: <b><?= $dados['assistencia']['nome_coordenadoria'] ?></b></div>
-            
+
             <?php if ($dados['assistencia']['id_coordenadoria'] == 2) { ?>
                 <div>Processo Jurídico: <b><?= $dados['assistencia']['desc_juridica'] . ' - ' . $dados['assistencia']['num_proc_juridica'] ?></b></div>
             <?php } ?>
-            
-            <div>Primeiro registro feito por: <b><?= $dados['assistencia']['name_created_by'] ?></b></div>
+
+            <div class="mb-2">Primeiro registro feito por: <b><?= $dados['assistencia']['name_created_by'] ?></b></div>
+
+            <?php if ($dados['status_atual'] != 'Finalizada') { ?>
+                <a href="<?= URL ?>/admin/update_status_assistencia/<?= $dados['assistencia']['id'] ?>/<?= $dados['assistencia']['status_assist'] ?>" class="btn btn-primary">Atualizar</a>
+                <a href="<?= URL ?>/admin/finalizar_assistencia/<?= $dados['assistencia']['id'] ?>" class="btn btn-primary">Finalizar</a>
+            <?php } ?>
+
 
             <hr>
 
