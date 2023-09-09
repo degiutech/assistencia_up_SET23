@@ -17,13 +17,13 @@ class Supervisao extends Controller
     {
 
         if (!Sessao::estaLogado()) :
-        
+
         else :
             $this->sessao_acesso = Sessao::sessaoUser();
 
             if ($this->sessao_acesso['acesso'] == 'Supervisão') {
                 $this->home = URL . '/supervisao';
-            } 
+            }
 
         endif;
 
@@ -490,6 +490,9 @@ class Supervisao extends Controller
 
             //Primeiro registro
             $primeiro_registro = '';
+            $st_primeiro_reg = '';
+            $desc_comp_primeiro_reg = '';
+
             $primeiro_registro_res = $this->assistenciaModel->getAssistenciaById($updates[$i]['id_assistencia']);
             if ($primeiro_registro_res['erro'] == '') {
                 $primeiro_registro = $primeiro_registro_res['assistencia'];
@@ -505,6 +508,11 @@ class Supervisao extends Controller
                 if (!in_array($primeiro_registro['id_cidadao'], $array_assistidos)) {
                     $array_assistidos[] = $primeiro_registro['id_cidadao'];
                 }
+                //status_assist
+                $st_primeiro_reg = $primeiro_registro['status_assist'];
+
+                //descrição_complemeto do primeiro registro
+                $desc_comp_primeiro_reg = $primeiro_registro['descricao_complemento'];
             }
 
             //Nome do Cidadão
@@ -537,19 +545,22 @@ class Supervisao extends Controller
                 'data' => $data,
                 'primeiro_registro' => $primeiro_registro,
                 'id_primeiro_registro' => $primeiro_registro['id'],
-                'status_assist'        => $primeiro_registro['status_assist'],
+                'status_assist'        => $st_primeiro_reg, // $primeiro_registro['status_assist'],
+                'status_updated'       => $updates[$i]['status_updated'],
+                'status_compl_updated'       => $updates[$i]['status_compl_updated'],
                 'nome_cidadao' => $nome_cidadao,
                 'id_cidadao'         => $primeiro_registro['id_cidadao'],
                 'tipo' => $tipo,
                 'nome_coordenadoria' => $nome_coordenadoria,
                 'id_coordenadoria' => $id_coordenadoria,
                 'descricao'          => $descricao,
+                'desc_comp_primeiro_reg' => $desc_comp_primeiro_reg,
                 'data_primeiro_registro' => $data_primeiro_registro
             ];
         }
 
         //Título
-        $titulo = '<b>ASSISTÊNCIAS RECENTES (todas)</b>';
+        $titulo = '<b>REGISTROS RECENTES EM ASSISTÊNCIAS INICIADAS, ATUALIZADAS OU FINALIZADAS</b>';
         // $assistencias = $titulo;
         $num_registros = 'Registros: ' . count($updates);
 
@@ -574,6 +585,8 @@ class Supervisao extends Controller
             'count_geral_nao_finalizadas'      => $this->assistenciaUpModel->countUpdates('não finalizadas'),
             'count_geral_finalizadas'      => $this->assistenciaUpModel->countUpdates('finalizadas'),
 
+            'titulo_relatorio'        => '<b>RELATÓRIO</b> ' . $titulo
+
         ];
 
         $this->view('supervisao/assistencias', $dados);
@@ -583,7 +596,7 @@ class Supervisao extends Controller
     {
 
         $updates_res = $this->assistenciaUpModel->allUpdatesNaoFinalizadas();
-        
+
         $updates = $updates_res['updates'];
 
         $assistencias = [];
