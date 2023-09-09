@@ -2,36 +2,9 @@
 
 <div class="container">
 
-    <div class="row mb-1">
-        <div class="col-md-6">
-            <h3 class="mt-4">Assistências</h3>
+    <h3 class="mt-4">Assistências</h3>
 
-            <div class="row">
-
-                <div class="col-auto cor-texto">
-                    Todas (<?= $dados['count_geral'] ?>)
-                </div>
-                <div class="col-auto cor-texto">
-                    Não finalizadas (<?= $dados['count_geral_nao_finalizadas'] ?>)
-                </div>
-                <div class="col-auto cor-texto">
-                    Finalizadas (<?= $dados['count_geral_finalizadas'] ?>)
-                </div>
-
-            </div>
-
-        </div>
-        <div class="col-md-6 d-flex justify-content-end align-items-end">
-
-            <?php if (isset($dados['home'])) { ?>
-                <!-- <a href="<?= $dados['home'] ?>" class="btn btn-secondary btn-block" style="float:right; margin-right: 5px">HOME</a>
-            <?php } ?>
-
-            <a href="<?= URL ?>/cidadao/cadastros_recentes" class="btn btn-secondary" style="margin-right: 5px;">Cidadãos</a> -->
-
-        </div>
-    </div>
-
+    <!-- BOTÕES DE OPÇÕES -->
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid p-0">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
@@ -112,48 +85,92 @@
     </nav>
 
     <!-- Assistências -->
-    <div class="card col-12">
+    <div class="card col-12" id="div_registros">
         <div class="card-body">
 
             <?= Sessao::mensagem('assistencias') ?>
 
+            <?php
+
+            $array_idsa = [];
+            $count_assistencias = 0;
+            $count_nao_finalizadas = 0;
+            $count_finalizadas = 0;
+
+            if ($dados['assistencias']) {
+                foreach ($dados['assistencias'] as $ass) {
+
+                    if (!in_array($ass['id_primeiro_registro'], $array_idsa)) {
+                        $array_idsa[] = $ass['id_primeiro_registro'];
+                        $count_assistencias += 1;
+
+                        if ($ass['status_assist'] != 'Finalizada') {
+                            $count_nao_finalizadas += 1;
+                        } else {
+                            $count_finalizadas += 1;
+                        }
+                    }
+                }
+            }
+
+            ?>
+
             <div><?= $dados['titulo'] ?></div>
-            <div><?= $dados['num_registros'] ?></div>
-            <div class="mb-3"><?= $dados['count_assistidos'] ?></div>
 
+            <div>Assistências: <?= $count_assistencias; ?></div>
 
+            <?php if ($dados['titulo_botao'] != 'não finalizadas' && $dados['titulo_botao'] != 'finalizadas') { ?>
+                <div>Não Finalizadas: <?= $count_nao_finalizadas; ?></div>
+                <div>Finalizadas: <?= $count_finalizadas; ?></div>
+            <?php } ?>
 
+            <button type="button" class="btn btn-success btn-sm mb-2" onclick="toggle_relatorio()">RELATÓRIO <i class="bi bi-arrow-right"></i></button>
 
+            <!-- Lista de Assistências -->
             <?php if ($dados['assistencias']) {
-                foreach ($dados['assistencias'] as $ass) { ?>
 
-                    <div class="card mb-3 meu_hover">
-                        <div class="card-body">
-                            <div>Assistido(a): <?= $ass['nome_cidadao'] ?></div>
-                            <div>Descrição: <?= $ass['descricao'] ?></div>
-                            <div>Data: <?= $ass['data'] ?></div>
-                            <div>Tipo: <?= $ass['tipo'] ?></div>
-                            <div>Cidadão assistido desde <?= $ass['data_primeiro_registro'] ?></div>
-                            <div>Coordenadoria: <?= $ass['nome_coordenadoria'] ?></div>
+                $array_existe = [];
 
-                            <div class="mt-2">
+                foreach ($dados['assistencias'] as $ass) {
 
-                                <a href="<?= URL ?>/cidadao/cidadao/<?= $ass['id_cidadao'] ?>" class="btn btn-outline-primary btn-sm">Info Cidadão</a>
+                    if (!in_array($ass['id_primeiro_registro'], $array_existe)) {
+                        $array_existe[] = $ass['id_primeiro_registro'];
 
-                                <?php if ($ass['tipo'] != 'Finalização') { ?>
+            ?>
 
-                                    <a href="<?= URL ?>/assistencias/finalizar/<?= $ass['id_primeiro_registro'] ?>" class="btn btn-outline-dark btn-sm">Finalizar</a>
-                                    <a href="<?= URL ?>/assistencias/update_status/<?= $ass['id_primeiro_registro'] ?>/<?= $ass['status_assist'] ?>" class="btn btn-outline-secondary btn-sm">Atualizar</a>
-                                <?php } ?>
+                        <div class="card mb-3 meu_hover">
+                            <div class="card-body">
 
-                                <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id_primeiro_registro'] ?>" class="btn btn-outline-success btn-sm">Histórico</a>
+                                <?php if ($ass['status_assist'] == 'Finalizada') {
+                                    echo '<b>ASSISTÊNCIA FINALIZADA</b>';
+                                } ?>
+
+                                <div>Assistido(a): <?= $ass['nome_cidadao'] ?></div>
+                                <div>Descrição: <?= $ass['descricao'] ?></div>
+                                <div>Data: <?= $ass['data'] ?></div>
+                                <div>Tipo: <?= $ass['tipo'] ?></div>
+                                <div>Cidadão assistido desde <?= $ass['data_primeiro_registro'] ?></div>
+                                <div>Coordenadoria: <?= $ass['nome_coordenadoria'] ?></div>
+
+                                <div class="mt-2">
+
+                                    <a href="<?= URL ?>/cidadao/cidadao/<?= $ass['id_cidadao'] ?>" class="btn btn-outline-primary btn-sm" target="_blank">Info Cidadão</a>
+
+                                    <?php if ($ass['tipo'] != 'Finalização') { ?>
+
+                                        <a href="<?= URL ?>/assistencias/finalizar/<?= $ass['id_primeiro_registro'] ?>" class="btn btn-outline-dark btn-sm">Finalizar</a>
+                                        <a href="<?= URL ?>/assistencias/update_status/<?= $ass['id_primeiro_registro'] ?>/<?= $ass['status_assist'] ?>" class="btn btn-outline-secondary btn-sm" target="_blank">Atualizar</a>
+                                    <?php } ?>
+
+                                    <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id_primeiro_registro'] ?>" class="btn btn-outline-success btn-sm" target="_blank">Histórico</a>
+                                </div>
+
                             </div>
 
                         </div>
 
-                    </div>
-
             <?php }
+                }
             } else {
                 echo 'Não há registros de Assistências';
             } ?>
@@ -162,6 +179,70 @@
 
     </div>
 
+    <!-- RELATÓRIO -->
+    <div class="card" id="div_relatorio" style="display: none;">
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-10">
+                    <h6><?= $dados['titulo_relatorio'] ?><span><i class="bi bi-file-arrow-down-fill text-dark" onclick="Javascript:window.print()" title="Salvar relatório" style="font-size: 2rem; cursor: pointer;"></i></span></h6>
+
+                    Assistências: <?= $count_assistencias ?>
+
+                    <?php if ($dados['titulo_botao'] != 'não finalizadas' && $dados['titulo_botao'] != 'finalizadas') { ?>
+                        <div>Não Finalizadas: <?= $count_nao_finalizadas; ?></div>
+                        <div>Finalizadas: <?= $count_finalizadas; ?></div>
+                    <?php } ?>
+
+                </div>
+                <div class="col-2 d-flex justify-content-end">
+                    <button type="button" class="btn btn-success mb-2" onclick="toggle_relatorio()"><i class="bi bi-arrow-left"></i> Voltar</button>
+                </div>
+            </div>
+
+            <table class="table table-sm table-bordered mt-3" style="width: 100%; position: relative;">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 15%;">1º registro</th>
+                        <th scope="col" style="width: 20%;">Descrição 1º registro</th>
+                        <th scope="col" style="width: 15%;">Última atualização</th>
+                        <th scope="col" style="width: 20%;">Desc. última atualização</th>
+                        <th scope="col" style="width: 15%;">Status Atual</th>
+                        <th scope="col" style="width: 15%;">Histórico</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <?php if ($dados['assistencias']) {
+
+                        $array_existe2 = [];
+
+                        foreach ($dados['assistencias'] as $ass) {
+                            if (!in_array($ass['id_primeiro_registro'], $array_existe2)) {
+                                $array_existe2[] = $ass['id_primeiro_registro'];
+                    ?>
+
+                                <tr>
+                                    <td scope="row" style="width: 15%;"><?= $ass['data_primeiro_registro'] ?></td>
+                                    <td style="width: 20%;"><?= $ass['descricao'] ?> - <?= $ass['desc_comp_primeiro_reg'] ?></td>
+                                    <td style="width: 15%;"><?= $ass['data'] ?></td>
+                                    <td style="width: 20%;"><?= $ass['status_compl_updated'] ?></td>
+                                    <td style="width: 15%;"><?= $ass['status_assist'] ?></td>
+                                    <td style="width: 15%;">
+                                        <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id_primeiro_registro'] ?>" target="_blank">
+                                            <i class="bi bi-list-task" title="Histórico"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                    <?php }
+                        }
+                    } ?>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <!-- MODAIS -->
 
@@ -182,27 +263,6 @@
                 <form action="<?= URL ?>/representante/minhas_ass_por_data" method="post">
                     <div class="modal-body">
                         <input type="date" name="por_data" id="input_por_data" class="form-control">
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="status_assistencia" id="status_assistencia1" value="não finalizadas">
-                            <label class="form-check-label" for="status_assistencia1">
-                                Não finalizadas
-                            </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="status_assistencia" id="status_assistencia2" value="finalizadas">
-                            <label class="form-check-label" for="status_assistencia2">
-                                Finalizadas
-                            </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="status_assistencia" id="status_assistencia3" value="todas" checked>
-                            <label class="form-check-label" for="status_assistencia3">
-                                Todas
-                            </label>
-                        </div>
 
                     </div>
                     <div class="modal-footer">
@@ -266,27 +326,6 @@
 
                         </div>
 
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="status_assistencia" id="status_mes_ano1" value="não finalizadas">
-                            <label class="form-check-label" for="status_mes_ano1">
-                                Não finalizadas
-                            </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="status_assistencia" id="status_mes_ano2" value="finalizadas">
-                            <label class="form-check-label" for="status_mes_ano2">
-                                Finalizadas
-                            </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="status_assistencia" id="status_mes_ano3" value="todas" checked>
-                            <label class="form-check-label" for="status_mes_ano3">
-                                Todas
-                            </label>
-                        </div>
-
                     </div>
                     <div class="modal-footer">
                         <a class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</a>
@@ -325,26 +364,6 @@
                             </div>
                         </div>
 
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="status_assistencia" id="status_periodo1" value="não finalizadas">
-                            <label class="form-check-label" for="status_periodo1">
-                                Não finalizadas
-                            </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="status_assistencia" id="status_periodo2" value="finalizadas">
-                            <label class="form-check-label" for="status_periodo2">
-                                Finalizadas
-                            </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="status_assistencia" id="status_periodo3" value="todas" checked>
-                            <label class="form-check-label" for="status_periodo3">
-                                Todas
-                            </label>
-                        </div>
                     </div>
 
                     <div class="modal-footer">
@@ -359,6 +378,13 @@
 
     <!-- SCRIPT -->
     <script>
+        function toggle_relatorio() {
+
+            $("#div_relatorio").toggle()
+            $("#div_registros").toggle()
+
+        }
+
         //POR DATA
         function por_data() {
             $("#btn_modal_data").click();

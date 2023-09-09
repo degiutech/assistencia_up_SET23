@@ -1554,7 +1554,7 @@ class Supervisao extends Controller
             //$data
             $dt = new DateTime($updates[$i]['updated_at']);
             $data = $dt->format('d/m/Y');
-            $assistencias[$i] = [
+            $assistencias[] = [
                 'data' => $data,
                 'primeiro_registro' => $primeiro_registro,
                 'id_primeiro_registro' => $primeiro_registro['id'],
