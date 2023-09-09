@@ -44,10 +44,10 @@
 
             <div class="mb-2">Primeiro registro feito por: <b><?= $dados['assistencia']['name_created_by'] ?></b></div>
 
-            <?php if ($dados['status_atual'] != 'Finalizada') { ?>
+            <!-- <?php if ($dados['status_atual'] != 'Finalizada') { ?>
                 <a href="<?= URL ?>/admin/update_status_assistencia/<?= $dados['assistencia']['id'] ?>/<?= $dados['assistencia']['status_assist'] ?>" class="btn btn-primary">Atualizar</a>
                 <a href="<?= URL ?>/admin/finalizar_assistencia/<?= $dados['assistencia']['id'] ?>" class="btn btn-primary">Finalizar</a>
-            <?php } ?>
+            <?php } ?> -->
 
 
             <hr>
