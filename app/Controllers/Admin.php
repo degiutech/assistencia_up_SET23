@@ -646,7 +646,7 @@ class Admin extends Controller
                 'tipo' => $tipo,
                 'nome_coordenadoria' => $nome_coordenadoria,
                 'id_coordenadoria' => $id_coordenadoria,
-                'descricao'          => $descricao,
+                'descricao'          => $primeiro_registro['descricao'], //$descricao,
                 'desc_comp_primeiro_reg' => $desc_comp_primeiro_reg,
                 'data_primeiro_registro' => $data_primeiro_registro,
 
@@ -772,7 +772,7 @@ class Admin extends Controller
                     'tipo' => $tipo,
                     'nome_coordenadoria' => $nome_coordenadoria,
                     'id_coordenadoria' => $id_coordenadoria,
-                    'descricao'          => $descricao,
+                    'descricao'          => $primeiro_registro['descricao'], //$descricao,
                     'desc_comp_primeiro_reg' => $desc_comp_primeiro_reg,
                     'data_primeiro_registro' => $data_primeiro_registro
                 ];
@@ -897,7 +897,7 @@ class Admin extends Controller
                 'tipo' => $tipo,
                 'nome_coordenadoria' => $nome_coordenadoria,
                 'id_coordenadoria' => $id_coordenadoria,
-                'descricao'          => $descricao,
+                'descricao'          => $primeiro_registro['descricao'], //$descricao,
                 'desc_comp_primeiro_reg' => $desc_comp_primeiro_reg,
                 'data_primeiro_registro' => $data_primeiro_registro
             ];
@@ -1266,7 +1266,7 @@ class Admin extends Controller
                 'tipo' => $tipo,
                 'nome_coordenadoria' => $nome_coordenadoria,
                 'id_coordenadoria' => $id_coordenadoria,
-                'descricao'          => $descricao,
+                'descricao'          => $primeiro_registro['descricao'], //$descricao,
                 'desc_comp_primeiro_reg' => $desc_comp_primeiro_reg,
                 'data_primeiro_registro' => $data_primeiro_registro
             ];
@@ -1408,7 +1408,7 @@ class Admin extends Controller
                 'tipo' => $tipo,
                 'nome_coordenadoria' => $nome_coordenadoria,
                 'id_coordenadoria' => $id_coordenadoria,
-                'descricao'          => $descricao,
+                'descricao'          => $primeiro_registro['descricao'], //$descricao,
                 'desc_comp_primeiro_reg' => $desc_comp_primeiro_reg,
                 'data_primeiro_registro' => $data_primeiro_registro
             ];
@@ -1545,7 +1545,7 @@ class Admin extends Controller
                         'tipo' => $tipo,
                         'nome_coordenadoria' => $nome_coordenadoria,
                         'id_coordenadoria' => $id_coordenadoria,
-                        'descricao'          => $descricao,
+                        'descricao'          => $primeiro_registro['descricao'], //$descricao,
                         'desc_comp_primeiro_reg' => $desc_comp_primeiro_reg,
                         'data_primeiro_registro' => $data_primeiro_registro
                     ];
@@ -1564,7 +1564,7 @@ class Admin extends Controller
                     'tipo' => $tipo,
                     'nome_coordenadoria' => $nome_coordenadoria,
                     'id_coordenadoria' => $id_coordenadoria,
-                    'descricao'          => $descricao,
+                    'descricao'          => $primeiro_registro['descricao'], //$descricao,
                     'desc_comp_primeiro_reg' => $desc_comp_primeiro_reg,
                     'data_primeiro_registro' => $data_primeiro_registro
                 ];
@@ -1758,7 +1758,7 @@ class Admin extends Controller
                 'tipo' => $tipo,
                 'nome_coordenadoria' => $nome_coordenadoria,
                 'id_coordenadoria' => $id_coordenadoria,
-                'descricao'          => $descricao,
+                'descricao'          => $primeiro_registro['descricao'], //$descricao,
                 'desc_comp_primeiro_reg' => $desc_comp_primeiro_reg,
                 'data_primeiro_registro' => $data_primeiro_registro
             ];
