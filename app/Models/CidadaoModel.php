@@ -280,7 +280,7 @@ class CidadaoModel
 
         $res = ['erro' => '', 'cidadao' => ''];
 
-        $query = "SELECT nome, id FROM cidadaos WHERE id=?";
+        $query = "SELECT nome, id, sus FROM cidadaos WHERE id=?";
 
         if (!($stmt = $mysqli->prepare($query))) {
             $res['erro'] = "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;

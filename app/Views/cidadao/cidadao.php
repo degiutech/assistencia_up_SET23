@@ -13,7 +13,7 @@
             <?php if (isset($dados['home'])) { ?>
                 <a href="<?= $dados['home'] ?>" class="btn btn-secondary btn-block" style="margin-right: 10px;">HOME</a>
             <?php } ?>
-            <a href="<?= URL ?>/diversos/create_assistencia/<?= $dados['cidadao']['id'] ?>" class="btn btn-success btn-block">Nova Assistência</a>
+            <a href="<?= URL ?>/assistencias/create/<?= $dados['cidadao']['id'] ?>" class="btn btn-success btn-block">Nova Assistência</a>
             <a href="<?= URL ?>/cidadao/edit/<?= $dados['cidadao']['id'] ?>" class="btn btn-info btn-block" style="margin-left: 10px;">Atualizar Cadastro</a>
         </div>
     </div>

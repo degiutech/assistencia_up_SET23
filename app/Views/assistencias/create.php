@@ -60,7 +60,7 @@
                                 <i class="bi bi-question-circle col-auto"></i>
                             </button>
 
-                            <textarea name="descricao_complemento" id="descricao_complemento" class="form-control" cols="20" rows="3" maxlength="100" placeholder="máx. 100 caracteres"></textarea>
+                            <textarea name="descricao_complemento" id="descricao_complemento" class="form-control" cols="20" rows="3" maxlength="100" placeholder="máx. 100 caracteres" required></textarea>
 
                             <div class="invalid-feedback">
                                 <?= $dados['descricao_complemento_erro'] ?>
@@ -95,7 +95,7 @@
                                 <?php foreach ($dados['coordenadorias'] as $coord) { ?>
 
                                     <!-- <option value="<?= $coord['id'] ?>" <?= ($coord['nome'] == $coord['id']) ? 'selected' : '' ?>><?= $coord['nome'] ?></option> -->
-                                    <option value="<?= $coord['id'] ?>" <?= ($dados['user_id_coordenadoria'] == $coord['id']) ? 'selected' : '' ?>><?= $coord['nome'] ?></option>
+                                    <option value="<?= $coord['id'] ?>" <?= ($dados['user_id_coordenadoria'] == $coord['id'] || $dados['id_coordenadoria'] == $coord['id']) ? 'selected' : '' ?>><?= $coord['nome'] ?></option>
 
                                 <?php } ?>
 
@@ -108,8 +108,11 @@
                         </div>
                     </div>
 
+                    <!-- Qual coordenadoria? -->
+                    <input type="hidden" name="qual_coordenadoria" id="qual_coordenadoria">
+
                     <!-- Processo jurídico -->
-                    <div id="div_coordenadoria_juridica" style="display: none;">
+                    <div id="div_coordenadoria_juridica" class="mais_coordenadorias" style="display: none;">
                         <label class="mt-2">Processo Jurídico</label>
                         <div class="row" style="margin-top: -15px;">
 
@@ -120,7 +123,28 @@
 
                             <!-- Número do processo -->
                             <div class="col-md-4 mt-4">
-                                <input type="text" class="procJuridico form-control" name="proc_juridico" placeholder="Número Processo Jurídico">
+                                <input type="text" class="procJuridico form-control <?= $dados['num_proc_juridica_erro'] != '' ? 'is-invalid' : '' ?>" name="num_proc_juridica" value="<?= $dados['num_proc_juridica'] ?>" placeholder="Número Processo Jurídico">
+                                <div class="invalid-feedback">
+                                    <?= $dados['num_proc_juridica_erro'] ?>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- SUS -->
+                    <div id="div_coordenadoria_saude" style="display: none;" class="mais_coordenadorias">
+
+                        <div class="row" style="margin-top: -15px;">
+
+                            <!-- Número do cartão -->
+                            <div class="col-md-4 mt-4">
+                                <label for="sus">Cartão SUS </label>
+                                <input type="text" name="sus" id="sus" value="<?= $dados['sus'] ?>" class="sus form-control <?= $dados['sus_erro'] != '' ? 'is-invalid' : '' ?>" maxlength="18" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" placeholder="somente números">
+                                <div class="invalid-feedback">
+                                    <?= $dados['sus_erro'] ?>
+                                </div>
                             </div>
 
                         </div>
@@ -149,19 +173,40 @@
     $("#status_complemento").val('<?= $dados['status_complemento'] ?>')
     $("#descricao_complemento").val('<?= $dados['descricao_complemento'] ?>')
 
-    if ($("#coordenadoria_select").val() == 2) {
-        if ($("#coordenadoria_select").val() == 2) {
-            $("#div_coordenadoria_juridica").show()
-        } else {
-            $("#div_coordenadoria_juridica").hide()
-        }
-    }
+    //Coordenadorias
+    //ATENÇÃO: MUDAR AS VARIÁVEIS CONFORME O BD EM PRODUÇÃO
+    let id_coord_saude = 2
+    let id_coord_juridica = 3
 
+    //ao selecionar uma coordenadoria
     $("#coordenadoria_select").change(() => {
-        if ($("#coordenadoria_select").val() == 2) {
+
+        $(".mais_coordenadorias").hide()
+
+        //Saúde
+        if ($("#coordenadoria_select").val() == id_coord_saude) {
+            $("#div_coordenadoria_saude").show()
+            $("#qual_coordenadoria").val("saude")
+        }
+
+        //Jurídica
+        if ($("#coordenadoria_select").val() == id_coord_juridica) {
             $("#div_coordenadoria_juridica").show()
-        } else {
-            $("#div_coordenadoria_juridica").hide()
+            $("#qual_coordenadoria").val("juridica")
         }
     })
+
+    //exibir div_coordenadoria_saude
+    if ($("#coordenadoria_select").val() == id_coord_saude) {
+        $(".mais_coordenadorias").hide()
+        $("#div_coordenadoria_saude").show()
+        $("#qual_coordenadoria").val("saude")
+    }
+
+    //exibir div_coordenadoria_juridica
+    if ($("#coordenadoria_select").val() == id_coord_juridica) {
+        $(".mais_coordenadorias").hide()
+        $("#div_coordenadoria_juridica").show()
+        $("#qual_coordenadoria").val("juridica")
+    }
 </script>

@@ -25,6 +25,7 @@ class AssistenciaModel
         $hora = $dados['hora'];
         $id_coordenadoria = $dados['id_coordenadoria'];
         $nome_coordenadoria = $dados['nome_coordenadoria_selecionada'];
+        $sus = $dados['sus'];
         $desc_juridica = $dados['desc_juridica'];
         $num_proc_juridica = $dados['num_proc_juridica'];
         $status_assist = $dados['status_assist'];
@@ -50,14 +51,14 @@ class AssistenciaModel
 
         //Se não existe...
         if (!($stmt = $mysqli->prepare("INSERT INTO assistencias (id_cidadao, descricao, descricao_complemento, date_at, hora, 
-        id_coordenadoria, nome_coordenadoria, desc_juridica, num_proc_juridica, status_assist, 
+        id_coordenadoria, nome_coordenadoria, sus, desc_juridica, num_proc_juridica, status_assist, 
         status_complemento, id_created_by, name_created_by) 
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))) {
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))) {
             $result['erro'] = "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
         }
 
         if (!$stmt->bind_param(
-            "issssisssssis",
+            "issssissssssis",
             $id_cidadao,
             $descricao,
             $descricao_complemento,
@@ -65,6 +66,7 @@ class AssistenciaModel
             $hora,
             $id_coordenadoria,
             $nome_coordenadoria,
+            $sus,
             $desc_juridica,
             $num_proc_juridica,
             $status_assist,

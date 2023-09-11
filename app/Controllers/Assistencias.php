@@ -283,7 +283,9 @@ class Assistencias extends Controller
                 'id_coordenadoria' => $form['id_coordenadoria'],
                 'nome_coordenadoria_selecionada' => $form['nome_coordenadoria_selecionada'],
                 'desc_juridica'      => trim($form['descricao_juridica']),
-                'num_proc_juridica'  => $form['proc_juridico'],
+                'num_proc_juridica'  => $form['num_proc_juridica'],
+                'sus'                => trim($form['sus']),
+
                 'status_assist'      => 'Iniciada',
                 'status_complemento' => 'Assistência Iniciada',
                 'date_at'             => $date_at,
@@ -292,12 +294,15 @@ class Assistencias extends Controller
                 'ano'                   => $ano,
                 'hora'             => date('H:i'),
                 'user_id_coordenadoria' => $user_id_coordenadoria,
+                'qual_coordenadoria'    => trim($form['qual_coordenadoria']),
                 'home'      => $this->home,
 
                 'descricao_erro' => '',
                 'descricao_complemento_erro' => '',
                 'id_coordenadoria_erro' => '',
-                'status_assist_erro' => ''
+                'status_assist_erro' => '',
+                'sus_erro'              => '',
+                'num_proc_juridica_erro'    => ''
             ];
 
 
@@ -312,6 +317,31 @@ class Assistencias extends Controller
                 $dados['nome_coordenadoria_selecionada'] = $res_nome_coord['nome']['nome'];
             }
 
+            //SUS
+            if ($dados['qual_coordenadoria'] == 'saude') {
+
+                if (!empty($dados['sus']) && strlen($dados['sus']) < 18) {
+                    $dados['sus_erro'] = 'Número incompleto!';
+                    $erro = 'erro';
+                }
+                if (!empty($dados['num_proc_juridica']) && strlen($dados['num_proc_juridica']) < 25) {
+                    $dados['num_proc_juridica'] = '';
+                    $dados['desc_juridica'] = '';
+                }
+            }
+
+            // Jurídica
+            if ($dados['qual_coordenadoria'] == 'juridica') {
+
+                if (!empty($dados['num_proc_juridica']) && strlen($dados['num_proc_juridica']) < 25) {
+                    $dados['num_proc_juridica_erro'] = 'Número incompleto!';
+                    $erro = 'erro';
+                }
+                if (!empty($dados['sus']) && strlen($dados['sus']) < 18) {
+                    $dados['sus'] = '';
+                }
+            }
+
             // Cadastra a Assistência
             if ($erro == '') {
 
@@ -319,7 +349,9 @@ class Assistencias extends Controller
 
                 if ($cadastro['existe'] == 'existe') {
 
-                    return $this->index();
+                    Sessao::mensagem('assistencia', 'Assistência existente!', 'alert alert-danger');
+
+                    return $this->cidadaoController->cidadao($id);
                 }
                 if ($cadastro['erro'] == '' && $cadastro['id_assistencia'] != '') {
 
@@ -357,6 +389,7 @@ class Assistencias extends Controller
 
                 $id_cidadao = $dados_cidadao['cidadao']['id'];
                 $nome_cidadao = $dados_cidadao['cidadao']['nome'];
+                $sus = $dados_cidadao['cidadao']['sus'];
             }
 
             $dados = [
@@ -376,11 +409,16 @@ class Assistencias extends Controller
                 'hora'   => date('H:i'),
                 'user_id_coordenadoria' => $user_id_coordenadoria,
                 'home'      => $this->home,
+                'sus'       => $sus,
+                'desc_juridica'      => '',
+                'num_proc_juridica'  => '',
 
                 'descricao_erro' => '',
                 'descricao_complemento_erro' => '',
                 'id_coordenadoria_erro' => '',
-                'status_assist_erro' => ''
+                'status_assist_erro' => '',
+                'sus_erro'                   => '',
+                'num_proc_juridica_erro'         => '',
             ];
         }
 
@@ -421,7 +459,7 @@ class Assistencias extends Controller
 
             if ($assistencias_update) {
                 foreach ($assistencias_update as $up) {
-                    
+
                     $dh = new DateTime($up['updated_at']);
                     $data_hora = $dh->format('d/m/Y H:i:s');
 
@@ -430,7 +468,7 @@ class Assistencias extends Controller
                     } else {
                         $status_compl_updated = $up['status_compl_updated'];
                     }
-                    
+
                     $updates[] = [
                         'data_hora' => $data_hora,
                         'status_updated' => $up['status_updated'],
@@ -443,7 +481,7 @@ class Assistencias extends Controller
                 $status_atual = $assistencias_update[$count_up]['status_updated'];
 
                 $status_complemento = $assistencias_update[$count_up]['status_compl_updated'];
-                
+
                 $dh_up = new DateTime($assistencias_update[$count_up]['updated_at']);
                 $data_hora = $dh_up->format('d/m/Y H:i:s');
             } else {
@@ -536,7 +574,7 @@ class Assistencias extends Controller
                     Sessao::mensagem('assistencia', 'ERRO ao finalizar Assistência, tente mais tarde!', 'alert alert-danger');
                 }
             }
-        } 
+        }
 
 
         $this->view('assistencias/finalizar', $dados);
