@@ -47,10 +47,6 @@
                     <input type="hidden" name="id_assistencia" value="<?= $dados['id_assistencia'] ?>">
                     <input type="hidden" name="status_atual" value="<?= $dados['status_atual'] ?>">
 
-                    <!--<input type="hidden" name="id_created_by" value="<?= $dados['id_created_by'] ?>">
-                <input type="hidden" name="name_created_by" value="<?= $dados['name_created_by'] ?>"> -->
-
-
                     <h5 class="cor-texto"><span>Nome do Cidadão: <b><?= $dados['nome_cidadao'] ?></b></span></h5>
                     <h6>Assistência: <span><?= $dados['descricao'] ?></span></h6>
                     <h6>Status atual: <span><?= $dados['status_atual'] ?></span></h6>

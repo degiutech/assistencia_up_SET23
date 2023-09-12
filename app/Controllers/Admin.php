@@ -18,6 +18,8 @@ class Admin extends Controller
     private $supervisaoModel;
     private $adminModel;
 
+    private $assistenciaController;
+
     public function __construct()
     {
 
@@ -38,6 +40,9 @@ class Admin extends Controller
         $this->representanteModel = $this->model('RepresentanteModel');
         $this->supervisaoModel = $this->model('SupervisaoModel');
         $this->adminModel = $this->model('AdminModel');
+
+        $this->assistenciaController = $this->controller('Assistencias');
+
     }
 
     public function index()
@@ -1967,111 +1972,12 @@ class Admin extends Controller
     /**
      * Atualiza o Status da Assistência
      */
+    //FUNÇÃO REDIRECIONADA
     public function update_status_assistencia($id_assistencia, $status)
     {
 
-        if ($status == 'Finalizada') {
-            $dados =
-                [
-                    'finalizada' => $status,
-                    'home'               => $this->home
-                ];
-        }
+        $this->assistenciaController->update_status($id_assistencia, $status);
 
-        $assistencia_res = $this->assistenciaModel->getAssistenciaById($id_assistencia);
-        if ($assistencia_res['erro'] == '' && $assistencia_res['assistencia'] != '') {
-            $assistencia = $assistencia_res['assistencia'];
-
-            // data de updated recente
-            $data_up_recente = $this->assistenciaModel->dataRecenteUpdate($id_assistencia);
-
-            //status_update atual
-            $update_assist = $this->assistenciaModel->updateAssistByData($data_up_recente, $id_assistencia);
-            $status_atual = $update_assist['assistencia_update']['status_updated'];
-        }
-
-        $cidadao_res = $this->cidadaoModel->getNomeIdCidadao($assistencia['id_cidadao']);
-        if ($cidadao_res['erro'] == '' && $cidadao_res['cidadao'] != '') {
-            $cidadao = $cidadao_res['cidadao'];
-            $nome_cidadao = $cidadao['nome'];
-        }
-
-        $dados = [
-            'id_assistencia' => $assistencia['id'],
-            'id_cidadao'   => $assistencia['id_cidadao'],
-            'nome_cidadao' => $nome_cidadao,
-            'descricao'    => $assistencia['descricao'],
-            'status_atual' => $status_atual,
-            'finalizada'   => $assistencia['status_assist'],
-            'home'               => $this->home
-        ];
-
-        $form = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
-        if (isset($form)) {
-            $dados = [
-                'id_assistencia' => trim($form['id_assistencia']),
-                'id_cidadao' => trim($form['id_cidadao']),
-                'nome_cidadao' => $nome_cidadao,
-                'descricao'    => $assistencia['descricao'],
-                'id_updated_by' => $_SESSION['user']['id'],
-                'name_updated_by' => $_SESSION['user']['nome'],
-                'status_atual'    => trim($form['status_atual']),
-                'status_complemento' => $form['status_complemento'],
-                'status_updated'  => $form['novo_status'],
-                'status_compl_updated' => $form['status_complemento'],
-                'id_coordenadoria' => $assistencia['id_coordenadoria'],
-                'nome_coordenadoria' => $assistencia['nome_coordenadoria'],
-                'home'               => $this->home
-            ];
-
-            if ($status == 'Finalizada') {
-                Sessao::mensagem('assistencia', 'ASSISTÊNCIA FINALIZADA; abra uma nova Assistência', 'alert alert-warning');
-                $dados = [
-                    'finalizada' => 'Finalizada',
-                    'id_cidadao' => $dados['id_cidadao']
-                ];
-                return $this->view('admin/update_status_assistencia', $dados);
-            }
-
-            //Verifica se já existe o status_update - Proteje do refresh da página
-            $update_existe = $this->assistenciaModel->updateStatusExiste($dados['status_updated'], $dados['status_compl_updated']);
-            if ($update_existe['erro'] == '' && $update_existe['num_rows'] != '' && $update_existe['num_rows'] != 0) {
-                return;
-            }
-
-            // Começando
-            $erro = '';
-
-            if (empty($dados['status_compl_updated']) && $dados['status_updated'] == $dados['status_atual']) {
-                Sessao::mensagem('assistencia', 'Complemente o Novo Status para justificar a atualização.', 'alert alert-warning');
-                $erro = 'erro';
-            }
-
-            if ($dados['status_updated'] != $dados['status_atual'] && empty($dados['status_compl_updated']) && $dados['status_updated'] != 'Finalizada' && $dados['status_updated'] != 'Selecione') {
-                Sessao::mensagem('assistencia', 'Complemente o Novo Status para justificar a atualização.', 'alert alert-danger');
-                $erro = 'erro';
-            }
-
-            if ($dados['status_updated'] == 'Selecione') {
-                Sessao::mensagem('assistencia', 'Selecione o novo Status!', 'alert alert-danger');
-                $erro = 'erro';
-            }
-
-            if ($erro != 'erro') {
-
-                //Aterar o Status
-                $update = $this->assistenciaModel->updateStatus($dados);
-                if ($update['erro'] == '' && $update['id_updated_status'] != '') {
-                    if ($dados['status_updated'] == 'Finalizada') {
-                        Sessao::mensagem('Assistência finalizada com sucesso!');
-                    } else {
-                        Sessao::mensagem('assistencia', 'Alteração de Status de Assistência efetuada com sucesso!');
-                    }
-                }
-            }
-        }
-
-        $this->view('admin/update_status_assistencia', $dados);
     }
 
     public function finalizar_assistencia($id_assistencia)
