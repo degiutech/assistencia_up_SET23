@@ -175,8 +175,8 @@
 
     //Coordenadorias
     //ATENÇÃO: MUDAR AS VARIÁVEIS CONFORME O BD EM PRODUÇÃO
-    let id_coord_saude = 2
-    let id_coord_juridica = 3
+    let id_coord_saude = '<?= ID_SAUDE ?>'
+    let id_coord_juridica = '<?= ID_JURIDICA ?>'
 
     //ao selecionar uma coordenadoria
     $("#coordenadoria_select").change(() => {

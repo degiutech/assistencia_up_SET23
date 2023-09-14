@@ -7,9 +7,9 @@
         </div>
 
         <div class="col-md-6 d-md-flex justify-content-end">
-            <?php if (isset($dados['link_retorno'])) { ?>
+            <?php if (isset($dados['link_gerenciamento'])) { ?>
                 <div>
-                    <!-- <a href="<?= $dados['link_retorno'] ?>" style="margin-right: 10px;" class="btn btn-outline-primary">Assistências </a> -->
+                    <a href="<?= $dados['link_gerenciamento'] ?>" style="margin-right: 10px;" class="btn btn-outline-primary">Assistências </a>
                 </div>
             <?php }
             if (isset($dados['home'])) { ?>

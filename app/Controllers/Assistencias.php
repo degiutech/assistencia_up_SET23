@@ -5,20 +5,18 @@ class Assistencias extends Controller
 
     private $sessao_acesso;
     private $home;
+    private $home_assistencia;
 
     private $userModel;
     private $cidadaoModel;
     private $coordenacaoModel;
     private $assistenciaModel;
+
     private $cidadaoController;
     private $representanteController;
 
     public function __construct()
     {
-
-        // if (!Sessao::estaLogado()) :
-        //     URL::redirect('users/login_email');
-        // endif;
 
         if (isset($_SESSION['user'])) {
 
@@ -120,6 +118,20 @@ class Assistencias extends Controller
      */
     public function update_status($id_assistencia, $status)
     {
+        //Link para retorno para gerenciamento de assistências
+        // $link_gerenciamento = '';
+        if ($this->sessao_acesso['acesso'] == 'Administração') {
+            $link_gerenciamento = URL . '/admin/assistencias';
+        }
+        if ($this->sessao_acesso['acesso'] == 'Supervisão') {
+            $link_gerenciamento = URL . '/supervisao/assistencias';
+        }
+        if ($this->sessao_acesso['acesso'] == 'Coordenadoria') {
+            $link_gerenciamento = URL . '/coordenacao/assistencias';
+        }
+        if ($this->sessao_acesso['acesso'] == 'Representante') {
+            $link_gerenciamento = URL . '/representante/minhas_assistencias';
+        }
 
         if ($status == 'Finalizada') {
             $dados =
@@ -143,7 +155,6 @@ class Assistencias extends Controller
             $sus_atual = $assistencia['sus'];
             $desc_juridica_atual = $assistencia['desc_juridica'];
             $num_proc_juridica_atual = $assistencia['num_proc_juridica'];
-
         }
 
         $cidadao_res = $this->cidadaoModel->getNomeIdCidadao($assistencia['id_cidadao']);
@@ -158,13 +169,14 @@ class Assistencias extends Controller
             'nome_cidadao'      => $nome_cidadao,
             'descricao'         => $assistencia['descricao'],
             'status_atual'      => $status_atual,
-            'status_complemento'=> '',
+            'status_complemento' => '',
             'finalizada'        => $assistencia['status_assist'],
             'id_coordenadoria'  => $assistencia['id_coordenadoria'],
             'desc_juridica'     => $assistencia['desc_juridica'],
             'num_proc_juridica' => $assistencia['num_proc_juridica'],
             'sus'               => $assistencia['sus'],
             'home'              => $this->home,
+            'link_gerenciamento' => $link_gerenciamento,
 
             'sus_erro'          => '',
             'num_proc_juridica_erro' => ''
@@ -203,6 +215,7 @@ class Assistencias extends Controller
                 'desc_juridica' => $desc_juridica,
                 'num_proc_juridica' => $num_proc_juridica,
                 'home'               => $this->home,
+                'link_gerenciamento' => $link_gerenciamento,
 
                 'sus_erro'                => '',
                 'num_proc_juridica_erro'  => ''
@@ -268,24 +281,21 @@ class Assistencias extends Controller
                 $update = $this->assistenciaModel->updateStatus($dados);
                 if ($update['erro'] == '' && $update['id_updated_status'] != '') {
                     if ($dados['status_updated'] == 'Finalizada') {
-                        Sessao::mensagem('assistencia', 'Assistência finalizada com sucesso!');
+                        Sessao::mensagem('assistencias', 'Assistência finalizada com sucesso!');
                     } else {
-                        Sessao::mensagem('assistencia', 'Atualização de Assistência efetuada com sucesso!');
+                        Sessao::mensagem('assistencias', 'Atualização de Assistência efetuada com sucesso!');
                     }
+                    
+                } else {
+                    Sessao::mensagem('assistencias', 'ERRO ao atualizar/finalizar Assistência, tente mais tarde.');
                 }
-                
             } else {
                 if ($dados['status_atual'] == 'Em andamento') {
                     $dados['status_atual'] = 'Em_andamento';
                 }
-                
+
                 return $this->view('assistencias/update_status', $dados);
             }
-        }
-
-        $dados['link_retorno'] = $this->home . '/assistencias';
-        if ($this->sessao_acesso['acesso'] == 'Representante') {
-            $dados['link_retorno'] = $this->home . '/minhas_assistencias';
         }
 
         $this->view('assistencias/update_status', $dados);
