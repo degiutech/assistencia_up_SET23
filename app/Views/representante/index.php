@@ -154,15 +154,15 @@
 
                                 <div class="mt-2">
 
-                                    <a href="<?= URL ?>/cidadao/cidadao/<?= $ass['id_cidadao'] ?>" class="btn btn-outline-primary btn-sm" target="_blank">Info Cidadão</a>
+                                    <a href="<?= URL ?>/cidadao/cidadao/<?= $ass['id_cidadao'] ?>" class="btn btn-outline-primary btn-sm">Info Cidadão</a>
 
                                     <?php if ($ass['tipo'] != 'Finalização') { ?>
 
                                         <a href="<?= URL ?>/assistencias/finalizar/<?= $ass['id_primeiro_registro'] ?>" class="btn btn-outline-dark btn-sm">Finalizar</a>
-                                        <a href="<?= URL ?>/assistencias/update_status/<?= $ass['id_primeiro_registro'] ?>/<?= $ass['status_assist'] ?>" class="btn btn-outline-secondary btn-sm" target="_blank">Atualizar</a>
+                                        <a href="<?= URL ?>/assistencias/update_status/<?= $ass['id_primeiro_registro'] ?>/<?= $ass['status_assist'] ?>" class="btn btn-outline-secondary btn-sm">Atualizar</a>
                                     <?php } ?>
 
-                                    <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id_primeiro_registro'] ?>" class="btn btn-outline-success btn-sm" target="_blank">Histórico</a>
+                                    <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id_primeiro_registro'] ?>" class="btn btn-outline-success btn-sm">Histórico</a>
                                 </div>
 
                             </div>
@@ -229,7 +229,7 @@
                                     <td style="width: 20%;"><?= $ass['status_compl_updated'] ?></td>
                                     <td style="width: 15%;"><?= $ass['status_assist'] ?></td>
                                     <td style="width: 15%;">
-                                        <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id_primeiro_registro'] ?>" target="_blank">
+                                        <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id_primeiro_registro'] ?>">
                                             <i class="bi bi-list-task" title="Histórico"></i>
                                         </a>
                                     </td>
