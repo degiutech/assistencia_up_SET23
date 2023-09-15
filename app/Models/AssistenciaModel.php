@@ -1315,7 +1315,7 @@ class AssistenciaModel
 
         $result = '';
 
-        if (!($stmt = $mysqli->prepare("UPDATE assistencias SET desc_juridica = ?, num_proc_juridica = ? WHERE id = ?"))) { 
+        if (!($stmt = $mysqli->prepare("UPDATE assistencias SET desc_juridica = ?, num_proc_juridica = ? WHERE id = ?"))) {
             $result = "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
         }
 
@@ -1407,6 +1407,43 @@ class AssistenciaModel
         $db->connClose();
 
         return $res;
+    }
+
+    //Insere SUS na Assistencia
+    public function insertSus($id_assistencia, $sus)
+    {
+
+        $db = new Database();
+        $mysqli = $db->getConection();
+
+        // $result = ['id' => '', 'erro' => ''];
+
+        $result = ['erro' => '', 'affected_rows' => ''];
+
+        $query = "UPDATE assistencias SET sus=? WHERE id=?";
+
+        if (!($stmt = $mysqli->prepare($query))) {
+            $result['erro'] = "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+        }
+
+        if (!$stmt->bind_param(
+            "si",
+            $sus,
+            $id_assistencia
+        )) {
+            $result['erro'] =  "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+        }
+
+        if (!$stmt->execute()) {
+            $result['erro'] = "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+        }
+
+        $result['affected_rows'] = mysqli_stmt_affected_rows($stmt);
+
+        mysqli_stmt_close($stmt);
+        $db->connClose();
+
+        return $result;
     }
 
     //Assistências do Cidadão

@@ -128,7 +128,7 @@
                         <div id="div_cartao_sus">
 
                             <label for="sus">Cartão SUS </label>
-                            <input type="text" name="sus" id="sus" value="<?= $dados['sus'] ?>" class="sus form-control <?= $dados['sus_erro'] != '' ? 'is-invalid' : '' ?>" maxlength="18" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" placeholder="somente números">
+                            <input type="text" name="sus" id="sus" value="<?= $dados['sus'] ?>" class="sus form-control <?= $dados['sus_erro'] != '' ? 'is-invalid' : '' ?>" placeholder="somente números">
                             <div class="invalid-feedback">
                                 <?= $dados['sus_erro'] ?>
                             </div>

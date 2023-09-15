@@ -224,7 +224,7 @@
                                     <td style="width: 20%;"><?= $ass['status_compl_updated'] ?></td>
                                     <td style="width: 15%;"><?= $ass['status_assist'] ?></td>
                                     <td style="width: 15%;">
-                                        <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id_primeiro_registro'] ?>" target="_blank">
+                                        <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id_primeiro_registro'] ?>">
                                             <i class="bi bi-list-task" title="Histórico"></i>
                                         </a>
                                     </td>
@@ -408,7 +408,5 @@
             }
         })
     </script>
-
-
 
 </div>

@@ -119,7 +119,6 @@ class Assistencias extends Controller
     public function update_status($id_assistencia, $status)
     {
         //Link para retorno para gerenciamento de assistências
-        // $link_gerenciamento = '';
         if ($this->sessao_acesso['acesso'] == 'Administração') {
             $link_gerenciamento = URL . '/admin/assistencias';
         }
@@ -152,7 +151,7 @@ class Assistencias extends Controller
             $update_assist = $this->assistenciaModel->updateAssistByData($data_up_recente, $id_assistencia);
             $status_atual = $update_assist['assistencia_update']['status_updated'];
 
-            $sus_atual = $assistencia['sus'];
+            $sus_assistencia = $assistencia['sus'];
             $desc_juridica_atual = $assistencia['desc_juridica'];
             $num_proc_juridica_atual = $assistencia['num_proc_juridica'];
         }
@@ -161,6 +160,15 @@ class Assistencias extends Controller
         if ($cidadao_res['erro'] == '' && $cidadao_res['cidadao'] != '') {
             $cidadao = $cidadao_res['cidadao'];
             $nome_cidadao = $cidadao['nome'];
+            $sus_cidadao = $cidadao['sus'];
+        }
+
+        $sus = '';
+        if ($sus_assistencia != '') {
+            $sus = $sus_assistencia;
+        }
+        if ($sus_assistencia == '' && $sus_cidadao != '') {
+            $sus = $sus_cidadao;
         }
 
         $dados = [
@@ -174,7 +182,7 @@ class Assistencias extends Controller
             'id_coordenadoria'  => $assistencia['id_coordenadoria'],
             'desc_juridica'     => $assistencia['desc_juridica'],
             'num_proc_juridica' => $assistencia['num_proc_juridica'],
-            'sus'               => $assistencia['sus'],
+            'sus'               => $sus,
             'home'              => $this->home,
             'link_gerenciamento' => $link_gerenciamento,
 
@@ -187,7 +195,6 @@ class Assistencias extends Controller
 
             $desc_juridica = $desc_juridica_atual;
             $num_proc_juridica = $num_proc_juridica_atual;
-            $sus = $sus_atual;
 
             if (isset($form['desc_juridica']) && isset($form['num_proc_juridica'])) {
                 $desc_juridica = trim($form['desc_juridica']);
@@ -233,7 +240,8 @@ class Assistencias extends Controller
             //Verifica se já existe o status_update - Proteje do refresh da página
             $update_existe = $this->assistenciaModel->updateStatusExiste($dados['status_updated'], $dados['status_compl_updated']);
             if ($update_existe['erro'] == '' && $update_existe['num_rows'] != '' && $update_existe['num_rows'] != 0) {
-                return;
+                Sessao::mensagem('assistencia', 'Não há novos dados para serem alterados!', 'alert alert-warning');
+                return $this->view('assistencias/update_status', $dados);
             }
 
             // Começando
@@ -255,11 +263,9 @@ class Assistencias extends Controller
             }
 
             // SUS
-            if ($sus_atual != $dados['sus']) {
-                if (!empty($dados['sus']) && strlen($dados['sus']) < 18) {
-                    $dados['sus_erro'] = 'Número incompleto!';
-                    $erro = 'erro';
-                }
+            if (!empty($dados['sus']) && strlen($dados['sus']) < 18) {
+                $dados['sus_erro'] = 'Número incompleto!';
+                $erro = 'erro';
             }
 
             //Jurídico
@@ -277,17 +283,27 @@ class Assistencias extends Controller
                     $this->assistenciaModel->addDadosJuridicos($dados['id_assistencia'], $dados['desc_juridica'], $dados['num_proc_juridica']);
                 }
 
+                //Insere cartão do SUS
+                if (!empty($dados['sus'])) {
+                    if ($sus_cidadao == '' || $sus_cidadao != $dados['sus']) {
+                        $this->cidadaoModel->insertSus($dados['id_cidadao'], $sus);
+                    }
+                    if ($sus_assistencia == '' || $sus_assistencia != $dados['sus']) {
+                        $this->assistenciaModel->insertSus($id_assistencia, $sus);
+                    }
+                }
+
                 //Aterar o Status
                 $update = $this->assistenciaModel->updateStatus($dados);
                 if ($update['erro'] == '' && $update['id_updated_status'] != '') {
+                    $dados['status_complemento'] = '';
                     if ($dados['status_updated'] == 'Finalizada') {
-                        Sessao::mensagem('assistencias', 'Assistência finalizada com sucesso!');
+                        Sessao::mensagem('assistencia', 'Assistência finalizada com sucesso!');
                     } else {
-                        Sessao::mensagem('assistencias', 'Atualização de Assistência efetuada com sucesso!');
+                        Sessao::mensagem('assistencia', 'Atualização de Assistência efetuada com sucesso!');
                     }
-                    
                 } else {
-                    Sessao::mensagem('assistencias', 'ERRO ao atualizar/finalizar Assistência, tente mais tarde.');
+                    Sessao::mensagem('assistencia', 'ERRO ao atualizar/finalizar Assistência, tente mais tarde.');
                 }
             } else {
                 if ($dados['status_atual'] == 'Em andamento') {
