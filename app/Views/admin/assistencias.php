@@ -85,6 +85,11 @@
                         <?php } ?>
                     </li>
 
+                    <!-- Mais filtros -->
+                    <li class="nav-item">
+                        <a href="<?= URL ?>/assistencias/mais_filtros" class="btn btn-outline-success d-block"><i class="bi bi-plus"></i>Filtros</a>
+                    </li>
+
                 </ul>
                 <div class="d-flex d-none d-lg-block">
 

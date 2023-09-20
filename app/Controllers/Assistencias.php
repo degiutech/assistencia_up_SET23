@@ -891,4 +891,10 @@ class Assistencias extends Controller
 
         $this->view('representante/index', $dados);
     }
+
+    //MAIS FILTROS
+    public function mais_filtros() {
+
+        $this->view('assistencias/mais_filtros');
+    }
 }
