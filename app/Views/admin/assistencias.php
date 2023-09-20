@@ -87,7 +87,15 @@
 
                     <!-- Mais filtros -->
                     <li class="nav-item">
-                        <a href="<?= URL ?>/assistencias/mais_filtros" class="btn btn-outline-success d-block"><i class="bi bi-plus"></i>Filtros</a>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-plus"></i>Filtros
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="<?= URL ?>/assistencias/filtro_coordenadoria">Por Coordenadoria</a></li>
+                                <li><a class="dropdown-item" href="#">Por Operador</a></li>
+                            </ul>
+                        </div>
                     </li>
 
                 </ul>

@@ -893,8 +893,21 @@ class Assistencias extends Controller
     }
 
     //MAIS FILTROS
-    public function mais_filtros() {
+    public function filtro_coordenadoria() {
 
-        $this->view('assistencias/mais_filtros');
+        $coordenadorias = '';
+
+        $coord_res = $this->coordenacaoModel->allCoordenadorias();
+        if ($coord_res['erro'] == '') {
+            $coordenadorias = $coord_res['coordenadorias'];
+        } else {
+            Sessao::mensagem('assistencias', 'ERRO ao buscar Coordenadorias', 'alert alert-danger');
+        }
+
+        $dados = [
+            'coordenadorias' => $coordenadorias
+        ];
+
+        $this->view('assistencias/filtro_coordenadoria', $dados);
     }
 }
