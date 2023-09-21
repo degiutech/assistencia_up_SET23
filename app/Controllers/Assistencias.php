@@ -905,7 +905,9 @@ class Assistencias extends Controller
         }
 
         $dados = [
-            'coordenadorias' => $coordenadorias
+            'coordenadorias' => $coordenadorias,
+            'meses'          => Times::meses(),
+            'anos'           => Times::anos_12()
         ];
 
         $this->view('assistencias/filtro_coordenadoria', $dados);
