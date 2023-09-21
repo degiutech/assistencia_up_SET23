@@ -910,4 +910,8 @@ class Assistencias extends Controller
 
         $this->view('assistencias/filtro_coordenadoria', $dados);
     }
+
+    public function busca_por_coordenadoria() {
+        echo 'na função';
+    }
 }
