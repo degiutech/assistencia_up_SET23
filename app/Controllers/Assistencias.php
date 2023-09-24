@@ -893,7 +893,8 @@ class Assistencias extends Controller
     }
 
     //MAIS FILTROS
-    public function filtro_coordenadoria() {
+    public function filtro_coordenadoria()
+    {
 
         $coordenadorias = '';
 
@@ -904,16 +905,133 @@ class Assistencias extends Controller
             Sessao::mensagem('assistencias', 'ERRO ao buscar Coordenadorias', 'alert alert-danger');
         }
 
-        $dados = [
-            'coordenadorias' => $coordenadorias,
-            'meses'          => Times::meses(),
-            'anos'           => Times::anos_12()
-        ];
+        $form = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
 
+        if (isset($form)) {
+
+            $dados = [
+                'coordenadorias'   => $coordenadorias,
+                'meses'            => Times::meses(),
+                'anos'             => Times::anos_12(),
+
+                'id_coordenadoria' => $form['select_coordenadoria'],
+                'select_coordenadoria' => $form['select_coordenadoria'],
+                'tipo_registro'    => $form['tipo_registro'],
+
+                'por_data'         => $form['por_data'],
+                'select_mes'       => $form['select_mes'],
+                'select_ano'       => $form['select_ano'],
+                'dt_inicial'       => $form['dt_inicial'],
+                'dt_final'         => $form['dt_final'],
+                'input_datas'      => trim($form['input_datas']),
+
+                'id_coordenadoria_erro'     => '',
+                'select_coordenadoria_erro' => '',
+                'tipo_registro_erro'        => '',
+
+                'por_data_erro'    => '',
+                'select_mes_erro'  => '',
+                'select_ano_erro'  => '',
+                'dt_inicial_erro'  => '',
+                'dt_final_erro'    => '',
+                'periodo_select_erro' => ''
+            ];
+
+            $erro = '';
+
+            // Coordenadoria
+            if ($dados['select_coordenadoria'] == '0') {
+                $dados['select_coordenadoria_erro'] = 'Selecione uma Coordenadoria';
+                $erro = 'erro';
+            }
+
+            // Tipo de registro
+            if ($dados['tipo_registro'] == '0') {
+                $dados['tipo_registro_erro'] = 'Selecione o tipo de registro';
+                $erro = 'erro';
+            }
+
+            // Data
+            if ($dados['input_datas'] == 'data') {
+                $hoje = strtotime(date('Y-m-d'));
+                $pd = strtotime($dados['por_data']);
+                if ($pd > $hoje) {
+                    $dados['por_data_erro'] = 'Informe uma data igual ou inferior a de hoje.';
+                    $erro = 'erro';
+                }
+                if (empty($dados['por_data'])) {
+                    $dados['por_data_erro'] = 'Informe uma data';
+                    $erro = 'erro';
+                }
+            }
+
+            // Mês e ano
+            if ($dados['input_datas'] == 'mes_ano') {
+                if ($dados['select_mes'] == 'mes') {
+                    $dados['select_mes_erro'] = 'Informe o mês';
+                    $erro = 'erro';
+                }
+                if ($dados['select_ano'] == 'ano') {
+                    $dados['select_ano_erro'] = 'Informe o ano';
+                    $erro = 'erro';
+                }
+            }
+
+            // Período
+            if ($dados['input_datas'] == 'periodo') {
+                $dt_inicial = strtotime($dados['dt_inicial']);
+                $dt_final = strtotime($dados['dt_final']);
+                if ($dt_inicial > $dt_final) {
+                    $dados['dt_inicial_erro'] = 'Data inicial não pode ser maior que a data final';
+                    $erro = 'erro';
+                }
+                if ($dados['dt_inicial'] == '') {
+                    $dados['dt_inicial_erro'] = 'Informe a data inicial';
+                    $erro = 'erro';
+                }
+                if ($dados['dt_final'] == '') {
+                    $dados['dt_final_erro'] = 'Informe a data final';
+                    $erro = 'erro';
+                }
+            }
+
+            if ($erro == '') {
+                $dados['select_coordenadoria'] = '0';
+                $dados['tipo_registro'] = '0';
+                $dados['por_data'] = '';
+                $dados['select_mes'] = 'mes';
+                $dados['select_ano'] = 'ano';
+                $dados['dt_inicial'] = '';
+                $dados['dt_final'] = '';
+                $dados['input_datas'] = 'nenhum';
+            }
+
+        } else {
+            $dados = [
+                'coordenadorias' => $coordenadorias,
+                'meses'          => Times::meses(),
+                'anos'           => Times::anos_12(),
+
+                'id_coordenadoria'     => '0',
+                'select_coordenadoria' => '0',
+                'tipo_registro'        => '0',
+                'por_data'             => '',
+                'select_mes'           => 'mes',
+                'select_ano'           => 'ano',
+                'dt_inicial'           => '',
+                'dt_final'             => '',
+                'input_datas'          => 'nenhum',
+
+                'select_coordenadoria_erro' => '',
+                'tipo_registro_erro'        => '',
+                'por_data_erro'             => '',
+                'select_mes_erro'           => '',
+                'select_ano_erro'           => '',
+                'dt_inicial_erro'           => '',
+                'dt_final_erro'             => '',
+            ];
+        }
+        // echo json_encode($dados);
         $this->view('assistencias/filtro_coordenadoria', $dados);
-    }
-
-    public function busca_por_coordenadoria() {
-        echo 'na função';
     }
 }
