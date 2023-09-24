@@ -996,6 +996,27 @@ class Assistencias extends Controller
             }
 
             if ($erro == '') {
+
+                $dados_model = [
+                    'id_coordenadoria' => $dados['select_coordenadoria'],
+                    'data'             => $dados['por_data'],
+                    'mes'              => $dados['select_mes'],
+                    'ano'              => $dados['select_ano'],
+                    'dt_inicial'       => $dados['dt_inicial'],
+                    'dt_final'         => $dados['dt_final'],
+                    'input_datas'      => $dados['input_datas']
+                ];
+
+                //busca por tipo assistencia
+                if ($dados['tipo_registro'] == 'assistencia') {
+                    echo json_encode($this->assistenciaModel->filtrosAssistenciasByCoordenadoria($dados_model));
+                }
+
+                //busca tipo update
+                if ($dados['tipo_registro'] == 'update') {
+                }
+
+
                 $dados['select_coordenadoria'] = '0';
                 $dados['tipo_registro'] = '0';
                 $dados['por_data'] = '';
@@ -1005,7 +1026,6 @@ class Assistencias extends Controller
                 $dados['dt_final'] = '';
                 $dados['input_datas'] = 'nenhum';
             }
-
         } else {
             $dados = [
                 'coordenadorias' => $coordenadorias,

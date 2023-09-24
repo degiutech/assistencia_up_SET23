@@ -1225,6 +1225,21 @@ class AssistenciaModel
         return $dados;
     }
 
+    //NOVOS FILTROS
+    public function filtrosAssistenciasByCoordenadoria($dados)
+    {
+
+        if ($dados['input_datas'] == 'data') {
+            return $this->assPorDataByCoordenadoria($dados['id_coordenadoria'], $dados['data']);
+        }
+        if ($dados['input_datas'] == 'mes_ano') {
+            return $this->assMesAnoByCoordenadoria($dados['id_coordenadoria'], $dados['mes'], $dados['ano']);
+        }
+        if ($dados['input_datas'] == 'periodo') {
+            return $this->assPeriodoByCoordenadoria($dados['id_coordenadoria'], $dados['dt_inicial'], $dados['dt_final']);
+        }
+    }
+
     // XXXXXXXXXXXXXXXXXXXXXXXX FIM DE FILTROS DE ASSISTÊNCIAS POR COORDENADORIA XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
