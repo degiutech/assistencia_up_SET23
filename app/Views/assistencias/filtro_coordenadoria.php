@@ -168,23 +168,30 @@
     <div class="card">
         <div class="card-body">
 
-            <div>Assistências: <?= count($dados['assistencias']) ?></div>
+            <div>Assistências: <?php if (isset($dados['assistencias'])) {
+                                    echo count($dados['assistencias']);
+                                }  ?>
+            </div>
 
-            <?php if ($dados['assistencias']) {
+            <?php if (isset($dados['assistencias'])) {
                 // echo 'qualé . ' . json_encode($dados['assistencias']);
-                foreach ($dados['assistencias'] as $ass) { 
-                    echo json_encode($ass);
-                    ?>
-                    
+                foreach ($dados['assistencias'] as $ass) {
+
+                    $dt = date_create($ass['date_at']);
+                    $data = date_format($dt, 'd/m/Y');
+
+            ?>
+
                     <div class="card mb-3 meu_hover">
                         <div class="card-body">
 
-                            <!-- <div>Assistido(a): <?= $ass['assistencia']['nome_cidadao'] ?></div>
+                            <div>Assistido(a): <?= $ass['nome_cidadao'] ?></div>
                             <div>Descrição: <?= $ass['descricao'] ?></div>
-                            <div>Data: <?= $ass['data'] ?></div>
-                            <div>Tipo: <?= $ass['tipo'] ?></div>
-                            <div>Cidadão assistido desde <?= $ass['data_primeiro_registro'] ?></div>
-                            <div>Coordenadoria: <?= $ass['nome_coordenadoria'] ?></div> -->
+                            <div>Data: <?= $data ?></div>
+                            <div>Última atualização <?= $ass['ultima_atualizacao'] ?></div>
+                            <div>Status atual: <?= $ass['status_atual'] ?></div>
+                           
+                            <div>Coordenadoria: <?= $ass['nome_coordenadoria'] ?></div>
 
                         </div>
 

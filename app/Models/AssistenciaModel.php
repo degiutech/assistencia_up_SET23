@@ -1256,13 +1256,33 @@ class AssistenciaModel
         } else {
 
             while ($row = $result->fetch_assoc()) {
-                $assistencias[] = $row;
+                $assistencias_res[] = $row;
             }
         }
 
         $db->connClose();
 
-        $res['assistencias'] = $assistencias;
+        //Pegar Cidadão
+        if ($assistencias_res != null && $assistencias_res != '') {
+
+            for ($i = 0; $i < count($assistencias_res); $i++) {
+
+                $cd = new CidadaoModel;
+                $cidadao = $cd->getNomeIdCidadao($assistencias_res[$i]['id_cidadao']);
+                $assistencias_res[$i]['nome_cidadao'] = $cidadao['cidadao']['nome'];
+
+                $up = $this->getAssistenciasUpdate($assistencias_res[$i]['id']);
+                $assistencias_res[$i]['updates'] = $up['assist_up'];
+                $assistencias_res[$i]['status_atual'] = $up['assist_up'][0]['status_updated'];
+                $dt_up = date_create($up['assist_up'][0]['updated_at']);
+                $assistencias_res[$i]['ultima_atualizacao'] = date_format($dt_up, 'd/m/Y');
+            }
+        } else {
+            $assistencias_res = '';
+            $msg_assistencias = 'NÃO HÁ REGISTROS!';
+        }
+
+        $res['assistencias'] = $assistencias_res;
 
         return $res;
     }
