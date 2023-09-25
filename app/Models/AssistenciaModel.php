@@ -1063,7 +1063,7 @@ class AssistenciaModel
             'assistencias'  => $assistencias,
             'data'          => $data,
             'msg_assistencias' => $msg_assistencias,
-            'num_registros'    => $num_registros
+            'num_registros'    => $num_registros,
         ];
 
         return $dados;
@@ -1219,7 +1219,7 @@ class AssistenciaModel
             'assistencias'  => $assistencias,
             'data'          => $data,
             'msg_assistencias' => $msg_assistencias,
-            'num_registros'    => $num_registros
+            'num_registros'    => $num_registros,
         ];
 
         return $dados;
@@ -1229,15 +1229,42 @@ class AssistenciaModel
     public function filtrosAssistenciasByCoordenadoria($dados)
     {
 
+        $id_coordenadoria = $dados['id_coordenadoria'];
+        $data = $dados['data'];
+        $mes = $dados['mes'];
+        $ano = $dados['ano'];
+        $dt_inicial = $dados['dt_inicial'];
+        $dt_final = $dados['dt_final'];
+
+        $res = ['erro' => '', 'assistencias' => ''];
+
+        $db = new Database();
+        $mysqli = $db->getConection();
+
         if ($dados['input_datas'] == 'data') {
-            return $this->assPorDataByCoordenadoria($dados['id_coordenadoria'], $dados['data']);
+            $assistencias = $this->assPorDataByCoordenadoria($dados['id_coordenadoria'], $dados['data']);
         }
         if ($dados['input_datas'] == 'mes_ano') {
             return $this->assMesAnoByCoordenadoria($dados['id_coordenadoria'], $dados['mes'], $dados['ano']);
         }
         if ($dados['input_datas'] == 'periodo') {
-            return $this->assPeriodoByCoordenadoria($dados['id_coordenadoria'], $dados['dt_inicial'], $dados['dt_final']);
+            $query = "SELECT * FROM assistencias WHERE id_coordenadoria='$id_coordenadoria' AND date(date_at) >= '$dt_inicial' AND date(date_at) <= '$dt_final' ORDER BY created_at DESC LIMIT 200";
         }
+
+        if (!$result = mysqli_query($mysqli, $query)) {
+            $res['erro'] = 'ERRO: ' . mysqli_error($mysqli);
+        } else {
+
+            while ($row = $result->fetch_assoc()) {
+                $assistencias[] = $row;
+            }
+        }
+
+        $db->connClose();
+
+        $res['assistencias'] = $assistencias;
+
+        return $res;
     }
 
     // XXXXXXXXXXXXXXXXXXXXXXXX FIM DE FILTROS DE ASSISTÊNCIAS POR COORDENADORIA XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

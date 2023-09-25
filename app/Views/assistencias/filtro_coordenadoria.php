@@ -163,69 +163,36 @@
 
     </div>
 
-    <!-- REGISTROS -->
-    <!-- RELATÓRIO -->
-    <div class="card" id="div_relatorio" style="display: none;">
+    <!-- Assistencias -->
+    <!-- <?= json_encode($dados) ?> -->
+    <div class="card">
         <div class="card-body">
 
-            <div class="row">
-                <div class="col-10">
-                    <h6><?= $dados['titulo_relatorio'] ?><span><i class="bi bi-file-arrow-down-fill text-dark" onclick="Javascript:window.print()" title="Salvar relatório" style="font-size: 2rem; cursor: pointer;"></i></span></h6>
+            <div>Assistências: <?= count($dados['assistencias']) ?></div>
 
-                    Assistências: <?= $count_assistencias ?>
-
-                    <?php if ($dados['titulo_botao'] != 'não finalizadas' && $dados['titulo_botao'] != 'finalizadas') { ?>
-                        <div>Não Finalizadas: <?= $count_nao_finalizadas; ?></div>
-                        <div>Finalizadas: <?= $count_finalizadas; ?></div>
-                    <?php } ?>
-
-                </div>
-                <div class="col-2 d-flex justify-content-end">
-                    <button type="button" class="btn btn-success mb-2" onclick="toggle_relatorio()"><i class="bi bi-arrow-left"></i> Voltar</button>
-                </div>
-            </div>
-
-            <table class="table table-sm table-bordered mt-3" style="width: 100%; position: relative;">
-                <thead>
-                    <tr>
-                        <th scope="col" style="width: 15%;">1º registro</th>
-                        <th scope="col" style="width: 20%;">Descrição 1º registro</th>
-                        <th scope="col" style="width: 15%;">Última atualização</th>
-                        <th scope="col" style="width: 20%;">Desc. última atualização</th>
-                        <th scope="col" style="width: 15%;">Status Atual</th>
-                        <th scope="col" style="width: 15%;">Histórico</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <?php if ($dados['assistencias']) {
-
-                        $array_existe2 = [];
-
-                        foreach ($dados['assistencias'] as $ass) {
-                            if (!in_array($ass['id_primeiro_registro'], $array_existe2)) {
-                                $array_existe2[] = $ass['id_primeiro_registro'];
+            <?php if ($dados['assistencias']) {
+                // echo 'qualé . ' . json_encode($dados['assistencias']);
+                foreach ($dados['assistencias'] as $ass) { 
+                    echo json_encode($ass);
                     ?>
+                    
+                    <div class="card mb-3 meu_hover">
+                        <div class="card-body">
 
-                                <tr>
-                                    <td scope="row" style="width: 15%;"><?= $ass['data_primeiro_registro'] ?></td>
-                                    <td style="width: 20%;"><?= $ass['descricao'] ?> - <?= $ass['desc_comp_primeiro_reg'] ?></td>
-                                    <td style="width: 15%;"><?= $ass['data'] ?></td>
-                                    <td style="width: 20%;"><?= $ass['status_compl_updated'] ?></td>
-                                    <td style="width: 15%;"><?= $ass['status_assist'] ?></td>
-                                    <td style="width: 15%;">
-                                        <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id_primeiro_registro'] ?>">
-                                            <i class="bi bi-list-task" title="Histórico"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                            <!-- <div>Assistido(a): <?= $ass['assistencia']['nome_cidadao'] ?></div>
+                            <div>Descrição: <?= $ass['descricao'] ?></div>
+                            <div>Data: <?= $ass['data'] ?></div>
+                            <div>Tipo: <?= $ass['tipo'] ?></div>
+                            <div>Cidadão assistido desde <?= $ass['data_primeiro_registro'] ?></div>
+                            <div>Coordenadoria: <?= $ass['nome_coordenadoria'] ?></div> -->
 
-                    <?php }
-                        }
-                    } ?>
+                        </div>
 
-                </tbody>
-            </table>
+                    </div>
+
+            <?php }
+            } ?>
+
         </div>
     </div>
 

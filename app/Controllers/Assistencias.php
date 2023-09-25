@@ -1009,7 +1009,13 @@ class Assistencias extends Controller
 
                 //busca por tipo assistencia
                 if ($dados['tipo_registro'] == 'assistencia') {
-                    echo json_encode($this->assistenciaModel->filtrosAssistenciasByCoordenadoria($dados_model));
+                    $ass_res = $this->assistenciaModel->filtrosAssistenciasByCoordenadoria($dados_model);
+                    if ($ass_res['erro'] == '') {
+                        $dados['assistencias'] = $ass_res['assistencias'];
+                        $dados['titulo_relatorio'] = 'ASSISTÊNCIAS INICIADAS EM ...';
+                    }
+
+                    $this->view('assistencias/filtro_coordenadoria', $dados);
                 }
 
                 //busca tipo update
