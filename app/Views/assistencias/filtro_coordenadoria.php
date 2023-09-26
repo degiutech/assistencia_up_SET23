@@ -164,44 +164,69 @@
     </div>
 
     <!-- Assistencias -->
-    <!-- <?= json_encode($dados) ?> -->
-    <div class="card">
-        <div class="card-body">
+    <?php if (isset($dados['assistencias'])) { ?>
+        <div class="card">
+            <div class="card-body">
 
-            <div>Assistências: <?php if (isset($dados['assistencias'])) {
-                                    echo count($dados['assistencias']);
-                                }  ?>
-            </div>
+                <b>Coordenadoria: <?= $dados['nome_coordenadoria'] ?></b><br>
 
-            <?php if (isset($dados['assistencias'])) {
-                // echo 'qualé . ' . json_encode($dados['assistencias']);
-                foreach ($dados['assistencias'] as $ass) {
+                <b><?= $dados['titulo'] ?></b>
 
-                    $dt = date_create($ass['date_at']);
-                    $data = date_format($dt, 'd/m/Y');
+                <div>Assistências: <?php if (isset($dados['assistencias'])) {
+                                        echo count($dados['assistencias']);
+                                    }  ?>
+                </div>
 
-            ?>
+                <?php if (isset($dados['assistencias'])) {
+                    // echo 'qualé . ' . json_encode($dados['assistencias']);
+                    foreach ($dados['assistencias'] as $ass) {
 
-                    <div class="card mb-3 meu_hover">
-                        <div class="card-body">
+                        $dt = date_create($ass['date_at']);
+                        $data = date_format($dt, 'd/m/Y');
 
-                            <div>Assistido(a): <?= $ass['nome_cidadao'] ?></div>
-                            <div>Descrição: <?= $ass['descricao'] ?></div>
-                            <div>Data: <?= $data ?></div>
-                            <div>Última atualização <?= $ass['ultima_atualizacao'] ?></div>
-                            <div>Status atual: <?= $ass['status_atual'] ?></div>
-                           
-                            <div>Coordenadoria: <?= $ass['nome_coordenadoria'] ?></div>
+                ?>
+
+                        <div class="card mb-3 meu_hover">
+                            <div class="card-body">
+
+                                <div>Assistido(a): <?= $ass['nome_cidadao'] ?></div>
+                                <div>Descrição: <?= $ass['descricao'] ?></div>
+                                <div>Data: <?= $data ?></div>
+                                <div>Status atual: <?= $ass['status_atual'] ?></div>
+
+                                <?php if ($ass['status_atual'] == 'Iniciada') {
+                                    echo 'Não há atualizações';
+                                } else {
+                                    echo '<div>Última atualização: ' . $ass['ultima_atualizacao'] . '</div>';
+                                    echo '<div>Descrição da última atualização: ' . $ass['desc_ultima_atualizacao'] . '</div>';
+                                } ?>
+
+                                <div>Coordenadoria: <?= $ass['nome_coordenadoria'] ?></div>
+
+                                <div class="mt-2">
+
+                                    <a href="<?= URL ?>/cidadao/cidadao/<?= $ass['id_cidadao'] ?>" class="btn btn-outline-primary btn-sm">Info Cidadão</a>
+
+                                    <?php if ($ass['status_atual'] != 'Finalizada') { ?>
+
+                                        <a href="<?= URL ?>/admin/finalizar_assistencia/<?= $ass['id'] ?>" class="btn btn-outline-dark btn-sm">Finalizar</a>
+                                        <a href="<?= URL ?>/admin/update_status_assistencia/<?= $ass['id'] ?>/<?= $ass['status_assist'] ?>" class="btn btn-outline-secondary btn-sm">Atualizar</a>
+                                    <?php } ?>
+
+                                    <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id'] ?>" class="btn btn-outline-success btn-sm">Histórico</a>
+                                </div>
+
+                            </div>
 
                         </div>
 
-                    </div>
+                <?php }
+                } ?>
 
-            <?php }
-            } ?>
-
+            </div>
         </div>
-    </div>
+
+    <?php  } ?>
 
     <script>
         let input_datas = '<?= $dados['input_datas'] ?>'

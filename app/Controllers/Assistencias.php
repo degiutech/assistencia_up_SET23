@@ -909,12 +909,31 @@ class Assistencias extends Controller
 
         if (isset($form)) {
 
+            //datas formatadas
+            //Data
+            $dt = date_create($form['por_data']);
+            $data_format = date_format($dt, 'd/m/Y');
+            //Data inicial
+            $dt_ini_f = date_create($form['dt_inicial']);
+            $dt_ini_format = date_format($dt_ini_f, 'd/m/Y');
+            //Data final
+            $dt_fin_f = date_create($form['dt_final']);
+            $dt_fin_format = date_format($dt_fin_f, 'd/m/Y');
+
+            //nome coordenadoria
+            foreach ($coordenadorias as $coord) {
+                if ($coord['id'] == $form['select_coordenadoria']) {
+                    $nome_coordenadoria = $coord['nome'];
+                }
+            }
+
             $dados = [
                 'coordenadorias'   => $coordenadorias,
                 'meses'            => Times::meses(),
                 'anos'             => Times::anos_12(),
 
                 'id_coordenadoria' => $form['select_coordenadoria'],
+                'nome_coordenadoria' => $nome_coordenadoria,
                 'select_coordenadoria' => $form['select_coordenadoria'],
                 'tipo_registro'    => $form['tipo_registro'],
 
@@ -995,6 +1014,7 @@ class Assistencias extends Controller
                 }
             }
 
+            // BUSCAR
             if ($erro == '') {
 
                 $dados_model = [
@@ -1012,7 +1032,20 @@ class Assistencias extends Controller
                     $ass_res = $this->assistenciaModel->filtrosAssistenciasByCoordenadoria($dados_model);
                     if ($ass_res['erro'] == '') {
                         $dados['assistencias'] = $ass_res['assistencias'];
-                        $dados['titulo_relatorio'] = 'ASSISTÊNCIAS INICIADAS EM ...';
+                    }
+
+                    //Título
+                    //data
+                    if ($dados['input_datas'] == 'data') {
+                        $dados['titulo'] = 'ASSISTENCIAS REGISTRADAS EM ' . $data_format;
+                    }
+                    //mes_ano
+                    if ($dados['input_datas'] == 'mes_ano') {
+                        $dados['titulo'] = 'ASSISTENCIAS REGISTRADAS NO MÊS ' . $dados['select_mes'] . '/' . $dados['select_ano'];
+                    }
+                    //período
+                    if ($dados['input_datas'] == 'periodo') {
+                        $dados['titulo'] = 'ASSISTENCIAS REGISTRADAS ENTRE ' . $dt_ini_format . ' e ' . $dt_fin_format;
                     }
 
                     $this->view('assistencias/filtro_coordenadoria', $dados);

@@ -1257,7 +1257,9 @@ class AssistenciaModel
 
             while ($row = $result->fetch_assoc()) {
                 $assistencias_res[] = $row;
+
             }
+
         }
 
         $db->connClose();
@@ -1275,7 +1277,14 @@ class AssistenciaModel
                 $assistencias_res[$i]['updates'] = $up['assist_up'];
                 $assistencias_res[$i]['status_atual'] = $up['assist_up'][0]['status_updated'];
                 $dt_up = date_create($up['assist_up'][0]['updated_at']);
-                $assistencias_res[$i]['ultima_atualizacao'] = date_format($dt_up, 'd/m/Y');
+
+                if (count($up) == 1) {
+                    $assistencias_res[$i]['ultima_atualizacao'] = 'Não há atualizações';
+                    $assistencias_res[$i]['desc_ultima_atualizacao'] = 'Não há atualizações';
+                } else {
+                    $assistencias_res[$i]['ultima_atualizacao'] = date_format($dt_up, 'd/m/Y');
+                    $assistencias_res[$i]['desc_ultima_atualizacao'] = $up['assist_up'][0]['status_compl_updated'];
+                }
             }
         } else {
             $assistencias_res = '';
