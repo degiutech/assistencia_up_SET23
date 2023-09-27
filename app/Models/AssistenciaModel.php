@@ -1264,15 +1264,17 @@ class AssistenciaModel
 
         $db->connClose();
 
-        //Pegar Cidadão
+        
         if ($assistencias_res != null && $assistencias_res != '') {
 
             for ($i = 0; $i < count($assistencias_res); $i++) {
 
+                //Pegar Cidadão
                 $cd = new CidadaoModel;
                 $cidadao = $cd->getNomeIdCidadao($assistencias_res[$i]['id_cidadao']);
                 $assistencias_res[$i]['nome_cidadao'] = $cidadao['cidadao']['nome'];
 
+                //Pegar updates
                 $up = $this->getAssistenciasUpdate($assistencias_res[$i]['id']);
                 $assistencias_res[$i]['updates'] = $up['assist_up'];
                 $assistencias_res[$i]['status_atual'] = $up['assist_up'][0]['status_updated'];
@@ -1286,6 +1288,7 @@ class AssistenciaModel
                     $assistencias_res[$i]['desc_ultima_atualizacao'] = $up['assist_up'][0]['status_compl_updated'];
                 }
             }
+            
         } else {
             $assistencias_res = '';
             $msg_assistencias = 'NÃO HÁ REGISTROS!';

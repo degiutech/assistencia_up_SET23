@@ -1037,15 +1037,15 @@ class Assistencias extends Controller
                     //Título
                     //data
                     if ($dados['input_datas'] == 'data') {
-                        $dados['titulo'] = 'ASSISTENCIAS REGISTRADAS EM ' . $data_format;
+                        $dados['titulo'] = 'ASSISTÊNCIAS REGISTRADAS EM ' . $data_format;
                     }
                     //mes_ano
                     if ($dados['input_datas'] == 'mes_ano') {
-                        $dados['titulo'] = 'ASSISTENCIAS REGISTRADAS NO MÊS ' . $dados['select_mes'] . '/' . $dados['select_ano'];
+                        $dados['titulo'] = 'ASSISTÊNCIAS REGISTRADAS NO MÊS ' . $dados['select_mes'] . '/' . $dados['select_ano'];
                     }
                     //período
                     if ($dados['input_datas'] == 'periodo') {
-                        $dados['titulo'] = 'ASSISTENCIAS REGISTRADAS ENTRE ' . $dt_ini_format . ' e ' . $dt_fin_format;
+                        $dados['titulo'] = 'ASSISTÊNCIAS REGISTRADAS ENTRE ' . $dt_ini_format . ' e ' . $dt_fin_format;
                     }
 
                     $this->view('assistencias/filtro_coordenadoria', $dados);

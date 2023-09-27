@@ -178,7 +178,7 @@
                 </div>
 
                 <?php if (isset($dados['assistencias'])) {
-                    // echo 'qualé . ' . json_encode($dados['assistencias']);
+                   
                     foreach ($dados['assistencias'] as $ass) {
 
                         $dt = date_create($ass['date_at']);
@@ -190,7 +190,7 @@
                             <div class="card-body">
 
                                 <div>Assistido(a): <?= $ass['nome_cidadao'] ?></div>
-                                <div>Descrição: <?= $ass['descricao'] ?></div>
+                                <div>Descrição: <?= $ass['descricao'] ?> - <?= $ass['descricao_complemento'] ?></div>
                                 <div>Data: <?= $data ?></div>
                                 <div>Status atual: <?= $ass['status_atual'] ?></div>
 
@@ -199,9 +199,10 @@
                                 } else {
                                     echo '<div>Última atualização: ' . $ass['ultima_atualizacao'] . '</div>';
                                     echo '<div>Descrição da última atualização: ' . $ass['desc_ultima_atualizacao'] . '</div>';
+                                    echo '<div>Número de atualizações: ' . count($ass['updates']) - 1 . '</div>';
                                 } ?>
 
-                                <div>Coordenadoria: <?= $ass['nome_coordenadoria'] ?></div>
+                                <!-- <div>Coordenadoria: <?= $ass['nome_coordenadoria'] ?></div> -->
 
                                 <div class="mt-2">
 
