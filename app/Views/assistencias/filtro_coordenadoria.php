@@ -220,8 +220,8 @@
                                     <!-- <a href="<?= URL ?>/cidadao/cidadao/<?= $ass['id_cidadao'] ?>" class="btn btn-outline-primary btn-sm">Info Cidadão</a> -->
 
                                     <?php if ($ass['status_atual'] != 'Finalizada') { ?>
-
-                                        <a href="<?= URL ?>/admin/finalizar_assistencia/<?= $ass['id'] ?>" class="btn btn-outline-dark btn-sm">Finalizar</a>
+                                        <button onclick="modal_finalizar('<?= $ass['id'] ?>')" class="btn btn-outline-dark btn-sm">Finalizar</button>
+                                        <!-- <a href="<?= URL ?>/admin/finalizar_assistencia/<?= $ass['id'] ?>" class="btn btn-outline-dark btn-sm">Finalizar</a> -->
                                         <a href="<?= URL ?>/admin/update_status_assistencia/<?= $ass['id'] ?>/<?= $ass['status_assist'] ?>" class="btn btn-outline-secondary btn-sm">Atualizar</a>
                                     <?php } ?>
 
@@ -229,7 +229,8 @@
                                 </div>
 
                                 <!-- inputs para modais -->
-                                <input type="hidden" id="nome_cidadao<?= $ass['nome_cidadao'] ?>">
+                                <input type="text" id="nome_cidadao<?= $ass['id'] ?>" value="<?= $ass['nome_cidadao'] ?>">
+                                <input type="text" id="id_cidadao<?= $ass['id'] ?>" value="<?= $ass['id_cidadao'] ?>">
 
                             </div>
 
@@ -244,6 +245,31 @@
         </div>
 
     <?php  } ?>
+
+    <!-- MODAL FINALIZAR -->
+    <!-- Button trigger modal -->
+    <button type="button" id="btn_modal_finalizar" class="btn btn-primary modal-lg" data-bs-toggle="modal" data-bs-target="#modal_finalizar" style="display: none;">
+        modal finalizar
+    </button>
+
+    <div class="modal fade" id="modal_finalizar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                <?= include 'modal_finalizar.php' ?>
+                   
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL CIDADAO -->
     <!-- Button trigger modal -->
@@ -303,5 +329,12 @@
                 $("#div_periodo").show()
                 $("#input_datas").val("periodo")
             }
+        }
+
+        function modal_finalizar(id_assistencia) {
+            $("#btn_modal_finalizar").click()
+            $("#id_cidadao_modal").val($("#id_cidadao" + id_assistencia).val())
+            $("#id_assistencia_modal").val(id_assistencia)
+            $("#nome_cidadao_modal").text($("#nome_cidadao" + id_assistencia).val())
         }
     </script>

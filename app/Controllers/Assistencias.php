@@ -648,6 +648,11 @@ class Assistencias extends Controller
         $this->view('assistencias/finalizar', $dados);
     }
 
+    public function finalizar_modal() {
+        $form = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
+        echo 'finalizar modal: ' . json_encode($form);
+    }
+
     //Função reescrita de Cidadao
     public function cidadao($id)
     {
