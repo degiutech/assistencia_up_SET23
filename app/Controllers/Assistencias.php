@@ -1046,14 +1046,14 @@ class Assistencias extends Controller
                     }
                     //mes_ano
                     if ($dados['input_datas'] == 'mes_ano') {
-                        $dados['titulo'] = 'ASSISTÊNCIAS REGISTRADAS NO MÊS ' . $dados['select_mes'] . '/' . $dados['select_ano'];
+                        $dados['titulo'] = 'ASSISTÊNCIAS REGISTRADAS NO MÊS DE ' . Times::mes_string($dados['select_mes']) . '/' . $dados['select_ano'];
                     }
                     //período
                     if ($dados['input_datas'] == 'periodo') {
                         $dados['titulo'] = 'ASSISTÊNCIAS REGISTRADAS ENTRE ' . $dt_ini_format . ' e ' . $dt_fin_format;
                     }
 
-                    $this->view('assistencias/filtro_coordenadoria', $dados);
+                    return $this->view('assistencias/filtro_coordenadoria', $dados);
                 }
 
                 //busca tipo update

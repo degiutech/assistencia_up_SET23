@@ -1229,6 +1229,8 @@ class AssistenciaModel
     public function filtrosAssistenciasByCoordenadoria($dados)
     {
 
+        $assistencias_res = [];
+
         $id_coordenadoria = $dados['id_coordenadoria'];
         $data = $dados['data'];
         $mes = $dados['mes'];
@@ -1245,7 +1247,7 @@ class AssistenciaModel
             $assistencias = $this->assPorDataByCoordenadoria($dados['id_coordenadoria'], $dados['data']);
         }
         if ($dados['input_datas'] == 'mes_ano') {
-            return $this->assMesAnoByCoordenadoria($dados['id_coordenadoria'], $dados['mes'], $dados['ano']);
+            $query = "SELECT * FROM assistencias WHERE id_coordenadoria='$id_coordenadoria' AND MONTH(date_at)='$mes' AND YEAR(date_at) ='$ano' ORDER BY created_at DESC LIMIT 200";
         }
         if ($dados['input_datas'] == 'periodo') {
             $query = "SELECT * FROM assistencias WHERE id_coordenadoria='$id_coordenadoria' AND date(date_at) >= '$dt_inicial' AND date(date_at) <= '$dt_final' ORDER BY created_at DESC LIMIT 200";
@@ -1282,7 +1284,7 @@ class AssistenciaModel
         $db->connClose();
 
         
-        if ($assistencias_res != null && $assistencias_res != '') {
+        if ($assistencias_res && $assistencias_res != '') {
 
             for ($i = 0; $i < count($assistencias_res); $i++) {
 

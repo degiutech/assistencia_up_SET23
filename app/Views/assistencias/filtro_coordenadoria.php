@@ -168,11 +168,17 @@
         <div class="card mt-3 mb-3">
             <div class="card-body">
 
-                <b>Coordenadoria: <?= $dados['nome_coordenadoria'] ?></b><br>
+                <b class="cor-texto">Coordenadoria: <?= $dados['nome_coordenadoria'] ?></b><br>
 
                 <b><?= $dados['titulo'] ?></b>
 
-                <div>Assistências: <?= count($dados['assistencias']) ?></div>
+                <?php 
+                $count_assistencias = 0;
+                if ($dados['assistencias'] != '') {
+                    $count_assistencias = count($dados['assistencias']);
+                }
+                ?>
+                <div>Assistências: <?= $count_assistencias ?></div>
                 <div>Não finalizadas: <?= $dados['nao_finalizadas'] ?></div>
                 <div class="mb-3">Finalizadas: <?= $dados['finalizadas'] ?></div>
 
@@ -182,7 +188,7 @@
         <div class="card">
             <div class="card-body">
 
-                <?php if (isset($dados['assistencias'])) {
+                <?php if (isset($dados['assistencias']) && $dados['assistencias'] != '') {
 
                     foreach ($dados['assistencias'] as $ass) {
 
@@ -227,6 +233,8 @@
                         </div>
 
                 <?php }
+                } else {
+                    echo 'Nenhum registro encontrado';
                 } ?>
 
             </div>
