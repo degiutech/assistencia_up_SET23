@@ -165,20 +165,25 @@
 
     <!-- Assistencias -->
     <?php if (isset($dados['assistencias'])) { ?>
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-body">
 
                 <b>Coordenadoria: <?= $dados['nome_coordenadoria'] ?></b><br>
 
                 <b><?= $dados['titulo'] ?></b>
 
-                <div>Assistências: <?php if (isset($dados['assistencias'])) {
-                                        echo count($dados['assistencias']);
-                                    }  ?>
-                </div>
+                <div>Assistências: <?= count($dados['assistencias']) ?></div>
+                <div>Não finalizadas: <?= $dados['nao_finalizadas'] ?></div>
+                <div class="mb-3">Finalizadas: <?= $dados['finalizadas'] ?></div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
 
                 <?php if (isset($dados['assistencias'])) {
-                   
+
                     foreach ($dados['assistencias'] as $ass) {
 
                         $dt = date_create($ass['date_at']);

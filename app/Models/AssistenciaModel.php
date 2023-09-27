@@ -1236,7 +1236,7 @@ class AssistenciaModel
         $dt_inicial = $dados['dt_inicial'];
         $dt_final = $dados['dt_final'];
 
-        $res = ['erro' => '', 'assistencias' => ''];
+        $res = ['erro' => '', 'assistencias' => '', 'nao_finalizadas' => '', 'finalizadas' => ''];
 
         $db = new Database();
         $mysqli = $db->getConection();
@@ -1255,8 +1255,25 @@ class AssistenciaModel
             $res['erro'] = 'ERRO: ' . mysqli_error($mysqli);
         } else {
 
+            
+            $count_nao_finalizadas = 0;
+            $count_finalizadas = 0;
+
+
             while ($row = $result->fetch_assoc()) {
+
+                
+                 //Não finalizadas
+                 if ($row['status_assist'] == 'Iniciada') {
+                    $count_nao_finalizadas += 1;
+                }
+                //Finalizadas
+                if ($row['status_assist'] == 'Finalizada') {
+                    $count_finalizadas += 1;
+                }
+
                 $assistencias_res[] = $row;
+
 
             }
 
@@ -1288,6 +1305,7 @@ class AssistenciaModel
                     $assistencias_res[$i]['desc_ultima_atualizacao'] = $up['assist_up'][0]['status_compl_updated'];
                 }
             }
+
             
         } else {
             $assistencias_res = '';
@@ -1295,6 +1313,9 @@ class AssistenciaModel
         }
 
         $res['assistencias'] = $assistencias_res;
+        $res['nao_finalizadas'] = $count_nao_finalizadas;
+        $res['finalizadas'] = $count_finalizadas;
+
 
         return $res;
     }

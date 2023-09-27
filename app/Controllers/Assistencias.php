@@ -1032,6 +1032,8 @@ class Assistencias extends Controller
                     $ass_res = $this->assistenciaModel->filtrosAssistenciasByCoordenadoria($dados_model);
                     if ($ass_res['erro'] == '') {
                         $dados['assistencias'] = $ass_res['assistencias'];
+                        $dados['nao_finalizadas'] = $ass_res['nao_finalizadas'];
+                        $dados['finalizadas'] = $ass_res['finalizadas'];
                     }
 
                     //Título
