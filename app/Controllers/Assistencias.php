@@ -921,9 +921,12 @@ class Assistencias extends Controller
             $dt_fin_format = date_format($dt_fin_f, 'd/m/Y');
 
             //nome coordenadoria
-            foreach ($coordenadorias as $coord) {
-                if ($coord['id'] == $form['select_coordenadoria']) {
-                    $nome_coordenadoria = $coord['nome'];
+            $nome_coordenadoria = '';
+            if ($form['select_coordenadoria'] != 0) {
+                foreach ($coordenadorias as $coord) {
+                    if ($coord['id'] == $form['select_coordenadoria']) {
+                        $nome_coordenadoria = $coord['nome'];
+                    }
                 }
             }
 

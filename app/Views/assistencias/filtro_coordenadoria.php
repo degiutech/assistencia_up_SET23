@@ -165,7 +165,7 @@
 
     <!-- Assistencias -->
     <?php if (isset($dados['assistencias'])) { ?>
-        <div class="card mb-3">
+        <div class="card mt-3 mb-3">
             <div class="card-body">
 
                 <b>Coordenadoria: <?= $dados['nome_coordenadoria'] ?></b><br>
