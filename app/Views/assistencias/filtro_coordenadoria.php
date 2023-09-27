@@ -172,7 +172,7 @@
 
                 <b><?= $dados['titulo'] ?></b>
 
-                <?php 
+                <?php
                 $count_assistencias = 0;
                 if ($dados['assistencias'] != '') {
                     $count_assistencias = count($dados['assistencias']);
@@ -217,7 +217,7 @@
 
                                 <div class="mt-2">
 
-                                    <a href="<?= URL ?>/cidadao/cidadao/<?= $ass['id_cidadao'] ?>" class="btn btn-outline-primary btn-sm">Info Cidadão</a>
+                                    <!-- <a href="<?= URL ?>/cidadao/cidadao/<?= $ass['id_cidadao'] ?>" class="btn btn-outline-primary btn-sm">Info Cidadão</a> -->
 
                                     <?php if ($ass['status_atual'] != 'Finalizada') { ?>
 
@@ -227,6 +227,9 @@
 
                                     <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id'] ?>" class="btn btn-outline-success btn-sm">Histórico</a>
                                 </div>
+
+                                <!-- inputs para modais -->
+                                <input type="hidden" id="nome_cidadao<?= $ass['nome_cidadao'] ?>">
 
                             </div>
 
@@ -241,6 +244,31 @@
         </div>
 
     <?php  } ?>
+
+    <!-- MODAL CIDADAO -->
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary modal-lg" data-bs-toggle="modal" data-bs-target="#modal_cidadao" style="display: none;">
+        Launch demo modal
+    </button>
+
+    <div class="modal fade" id="modal_cidadao" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         let input_datas = '<?= $dados['input_datas'] ?>'
