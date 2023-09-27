@@ -1244,7 +1244,7 @@ class AssistenciaModel
         $mysqli = $db->getConection();
 
         if ($dados['input_datas'] == 'data') {
-            $assistencias = $this->assPorDataByCoordenadoria($dados['id_coordenadoria'], $dados['data']);
+            $query = "SELECT * FROM assistencias WHERE id_coordenadoria='$id_coordenadoria' AND date_at='$data' ORDER BY created_at DESC LIMIT 200";
         }
         if ($dados['input_datas'] == 'mes_ano') {
             $query = "SELECT * FROM assistencias WHERE id_coordenadoria='$id_coordenadoria' AND MONTH(date_at)='$mes' AND YEAR(date_at) ='$ano' ORDER BY created_at DESC LIMIT 200";
