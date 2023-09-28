@@ -722,7 +722,8 @@ class Assistencias extends Controller
         $dados['select_mes']            = trim($form['select_mes_modal']);
         $dados['select_ano']            = trim($form['select_ano_modal']);
 
-        $this->view('assistencias/filtro_coordenadoria', $dados);
+        // $this->view('assistencias/filtro_coordenadoria', $dados);
+        $this->filtro_coordenadoria($dados);
     }
 
     //Função reescrita de Cidadao
@@ -970,7 +971,7 @@ class Assistencias extends Controller
     }
 
     //MAIS FILTROS
-    public function filtro_coordenadoria()
+    public function filtro_coordenadoria($dados_retorno = null)
     {
 
         $coordenadorias = '';
@@ -985,6 +986,10 @@ class Assistencias extends Controller
         $form = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
 
         if (isset($form)) {
+
+            if ($dados_retorno) {
+                $form = $dados_retorno;
+            }
 
             //datas formatadas
             //Data
