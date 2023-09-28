@@ -698,7 +698,7 @@ class Assistencias extends Controller
         // } else {
         //     Sessao::mensagem('assistencias', 'ERRO ao finalizar Assistência, tente mais tarde!', 'alert alert-danger');
         // }
-
+Sessao::mensagem('assistencia' . $dados['id_assistencia'], 'Assistência finalizada com sucesso!');
         //Dados de retorno
         $coordenadorias = '';
 

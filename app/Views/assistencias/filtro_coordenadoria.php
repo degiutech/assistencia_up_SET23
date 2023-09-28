@@ -200,6 +200,8 @@
                         <div class="card mb-3 meu_hover">
                             <div class="card-body">
 
+                                <?= Sessao::mensagem('assistencia' . $ass['id']) ?>
+
                                 <div>Assistido(a): <?= $ass['nome_cidadao'] ?></div>
                                 <div>Descrição: <?= $ass['descricao'] ?> - <?= $ass['descricao_complemento'] ?></div>
                                 <div>Data: <?= $data ?></div>
