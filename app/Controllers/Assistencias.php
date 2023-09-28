@@ -683,22 +683,20 @@ class Assistencias extends Controller
         //Na Assistência
         $dados['status_complemento'] = 'Finalizada';
 
-        // echo json_encode($dados);
-
         //Finaliza em assistencia
-        // $assist_res = $this->assistenciaModel->finalizarAssistencia($dados);
-        // if ($assist_res['erro'] == '' && $assist_res['affected_rows'] == 1) {
+        $assist_res = $this->assistenciaModel->finalizarAssistencia($dados);
+        if ($assist_res['erro'] == '' && $assist_res['affected_rows'] == 1) {
 
-        //     //create_update
-        //     $up = $this->assistenciaModel->updateStatus($dados);
-        //     if ($up['erro'] == '' && $up['id_updated_status'] != '') {
-        //         Sessao::mensagem('assistencias', 'Assistência finalizada com sucesso!');
+            //create_update
+            $up = $this->assistenciaModel->updateStatus($dados);
+            if ($up['erro'] == '' && $up['id_updated_status'] != '') {
+                Sessao::mensagem('assistencia' . $dados['id_assistencia'], 'Assistência finalizada com sucesso!');
 
-        //     }
-        // } else {
-        //     Sessao::mensagem('assistencias', 'ERRO ao finalizar Assistência, tente mais tarde!', 'alert alert-danger');
-        // }
-Sessao::mensagem('assistencia' . $dados['id_assistencia'], 'Assistência finalizada com sucesso!');
+            }
+        } else {
+            Sessao::mensagem('assistencia' . $dados['id_assistencia'], 'ERRO ao finalizar Assistência, tente mais tarde!', 'alert alert-danger');
+        }
+
         //Dados de retorno
         $coordenadorias = '';
 
