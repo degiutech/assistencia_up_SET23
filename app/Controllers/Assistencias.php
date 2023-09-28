@@ -722,7 +722,6 @@ Sessao::mensagem('assistencia' . $dados['id_assistencia'], 'Assistência finaliz
         $dados['select_mes']            = trim($form['select_mes_modal']);
         $dados['select_ano']            = trim($form['select_ano_modal']);
 
-        // $this->view('assistencias/filtro_coordenadoria', $dados);
         $this->filtro_coordenadoria($dados);
     }
 
@@ -1179,7 +1178,7 @@ Sessao::mensagem('assistencia' . $dados['id_assistencia'], 'Assistência finaliz
                 'dt_final_erro'             => '',
             ];
         }
-        // echo json_encode($dados);
+        
         $this->view('assistencias/filtro_coordenadoria', $dados);
     }
 }

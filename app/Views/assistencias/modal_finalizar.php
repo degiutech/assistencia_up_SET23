@@ -11,24 +11,24 @@
 
             <form method="post" name="registrar" action="<?= URL ?>/assistencias/finalizar_modal">
 
-                <input type="text" name="id_cidadao" id="id_cidadao_modal">
-                <input type="text" name="id_assistencia" id="id_assistencia_modal">
-                <input type="text" name="descricao_assistencia" id="desc_ass_modal">
-                <input type="text" name="nome_cidadao" id="nome_cidadao_modal">
-                <input type="text" name="id_coordenadoria" id="id_coordenadoria_modal">
-                <input type="text" name="nome_coordenadoria" id="nome_coordenadoria_modal">
+                <input type="hidden" name="id_cidadao" id="id_cidadao_modal">
+                <input type="hidden" name="id_assistencia" id="id_assistencia_modal">
+                <input type="hidden" name="descricao_assistencia" id="desc_ass_modal">
+                <input type="hidden" name="nome_cidadao" id="nome_cidadao_modal">
+                <input type="hidden" name="id_coordenadoria" id="id_coordenadoria_modal">
+                <input type="hidden" name="nome_coordenadoria" id="nome_coordenadoria_modal">
 
-                <input type="text" name="input_datas" value="<?= $dados['input_datas'] ?>">
+                <input type="hidden" name="input_datas" value="<?= $dados['input_datas'] ?>">
 
-                <input type="text" name="select_coordenadoria_modal" value="<?= $dados['select_coordenadoria'] ?>">
-                <input type="text" name="tipo_registro_modal" value="<?= $dados['tipo_registro'] ?>">
+                <input type="hidden" name="select_coordenadoria_modal" value="<?= $dados['select_coordenadoria'] ?>">
+                <input type="hidden" name="tipo_registro_modal" value="<?= $dados['tipo_registro'] ?>">
 
                 <!-- datas -->
-                <input type="text" name="por_data_modal" value="<?= $dados['por_data'] ?>">
-                <input type="text" name="select_mes_modal" value="<?= $dados['select_mes'] ?>">
-                <input type="text" name="select_ano_modal" value="<?= $dados['select_ano'] ?>">
-                <input type="text" name="dt_inicial_modal" value="<?= $dados['dt_inicial'] ?>">
-                <input type="text" name="dt_final_modal" value="<?= $dados['dt_final'] ?>">
+                <input type="hidden" name="por_data_modal" value="<?= $dados['por_data'] ?>">
+                <input type="hidden" name="select_mes_modal" value="<?= $dados['select_mes'] ?>">
+                <input type="hidden" name="select_ano_modal" value="<?= $dados['select_ano'] ?>">
+                <input type="hidden" name="dt_inicial_modal" value="<?= $dados['dt_inicial'] ?>">
+                <input type="hidden" name="dt_final_modal" value="<?= $dados['dt_final'] ?>">
 
 
                 <h5 class="cor-texto"><span>Nome do Cidadão: <b id="span_nome_cidadao_modal"></b></span></h5>

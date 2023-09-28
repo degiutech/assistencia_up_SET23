@@ -231,16 +231,11 @@
                                 </div>
 
                                 <!-- inputs para modais -->
-                                <input type="text" id="nome_cidadao<?= $ass['id'] ?>" value="<?= $ass['nome_cidadao'] ?>">
-                                <input type="text" id="id_cidadao<?= $ass['id'] ?>" value="<?= $ass['id_cidadao'] ?>">
-                                <input type="text" id="desc_ass<?= $ass['id'] ?>" value="<?= $ass['descricao'] ?>">
-                                <input type="text" id="id_coordenadoria<?= $ass['id'] ?>" value="<?= $ass['id_coordenadoria'] ?>">
-                                <input type="text" id="nome_coordenadoria<?= $ass['id'] ?>" value="<?= $ass['nome_coordenadoria'] ?>">
-
-                                <input type="text" id="select_coordenadoria<?= $ass['id'] ?>" value="<?= $dados['select_coordenadoria'] ?>">
-
-
-
+                                <input type="hidden" id="nome_cidadao<?= $ass['id'] ?>" value="<?= $ass['nome_cidadao'] ?>">
+                                <input type="hidden" id="id_cidadao<?= $ass['id'] ?>" value="<?= $ass['id_cidadao'] ?>">
+                                <input type="hidden" id="desc_ass<?= $ass['id'] ?>" value="<?= $ass['descricao'] ?>">
+                                <input type="hidden" id="id_coordenadoria<?= $ass['id'] ?>" value="<?= $ass['id_coordenadoria'] ?>">
+                                <input type="hidden" id="nome_coordenadoria<?= $ass['id'] ?>" value="<?= $ass['nome_coordenadoria'] ?>">
 
                             </div>
 
