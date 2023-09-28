@@ -223,8 +223,7 @@
 
                                     <?php if ($ass['status_atual'] != 'Finalizada') { ?>
                                         <button onclick="modal_finalizar('<?= $ass['id'] ?>')" class="btn btn-outline-dark btn-sm">Finalizar</button>
-                                        <!-- <a href="<?= URL ?>/admin/finalizar_assistencia/<?= $ass['id'] ?>" class="btn btn-outline-dark btn-sm">Finalizar</a> -->
-                                        <a href="<?= URL ?>/admin/update_status_assistencia/<?= $ass['id'] ?>/<?= $ass['status_assist'] ?>" class="btn btn-outline-secondary btn-sm">Atualizar</a>
+                                        <button onclick="modal_atualizar('<?= $ass['id'] ?>')" class="btn btn-outline-secondary btn-sm">Atualizar</button>
                                     <?php } ?>
 
                                     <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id'] ?>" class="btn btn-outline-success btn-sm">Histórico</a>
@@ -236,6 +235,12 @@
                                 <input type="hidden" id="desc_ass<?= $ass['id'] ?>" value="<?= $ass['descricao'] ?>">
                                 <input type="hidden" id="id_coordenadoria<?= $ass['id'] ?>" value="<?= $ass['id_coordenadoria'] ?>">
                                 <input type="hidden" id="nome_coordenadoria<?= $ass['id'] ?>" value="<?= $ass['nome_coordenadoria'] ?>">
+
+                                <input type="hidden" id="status_atual<?= $ass['id'] ?>" value="<?= $ass['status_atual'] ?>">
+                                <input type="hidden" id="sus<?= $ass['id'] ?>" value="<?= $ass['sus'] ?>">
+
+                                <input type="hidden" id="desc_juridica<?= $ass['id'] ?>" value="<?= $ass['desc_juridica'] ?>">
+                                <input type="hidden" id="num_proc_juridica<?= $ass['id'] ?>" value="<?= $ass['num_proc_juridica'] ?>">
 
                             </div>
 
@@ -250,6 +255,27 @@
         </div>
 
     <?php  } ?>
+
+    <!-- MODAL ATUALIZAR -->
+    <!-- Button trigger modal -->
+    <button type="button" id="btn_modal_atualizar" class="btn btn-primary modal-lg" data-bs-toggle="modal" data-bs-target="#modal_atualizar" style="display: none;">
+        modal atualizar
+    </button>
+
+    <div class="modal fade" id="modal_atualizar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <?= include 'modal_atualizar.php' ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL FINALIZAR -->
     <!-- Button trigger modal -->
@@ -334,6 +360,20 @@
                 $("#div_periodo").show()
                 $("#input_datas").val("periodo")
             }
+        }
+
+        function modal_atualizar(id_assistencia) {
+            $("#btn_modal_atualizar").click()
+            $("#status_atual_modal").val($("#status_atual" + id_assistencia).val())
+            $("#span_status_atual_modal").text($("#status_atual" + id_assistencia).val())
+            $("#id_cidadao_modal").val($("#id_cidadao" + id_assistencia).val())
+            $("#nome_cidadao_modal").val($("#nome_cidadao" + id_assistencia).val())
+            $("#span_nome_cidadao_modal").text($("#nome_cidadao" + id_assistencia).val())
+            $("#id_assistencia_modal").val(id_assistencia)
+            $("#span_descricao_modal").text($("#desc_ass" + id_assistencia).val())
+            $("#sus_modal").val($("#sus" + id_assistencia).val())
+            $("#desc_juridica_modal").val($("#desc_juridica" + id_assistencia).val())
+            $("#num_proc_juridica_modal").val($("#num_proc_juridica" + id_assistencia).val())
         }
 
         function modal_finalizar(id_assistencia) {

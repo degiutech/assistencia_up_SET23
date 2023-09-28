@@ -317,6 +317,193 @@ class Assistencias extends Controller
         $this->view('assistencias/update_status', $dados);
     }
 
+    public function atualizar_modal()
+    {
+
+        $form = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
+
+        $assistencia = '';
+
+        $assistencia_res = $this->assistenciaModel->getAssistenciaById(trim($form['id_assistencia_modal']));
+        if ($assistencia_res['erro'] == '' && $assistencia_res['assistencia'] != '') {
+            $assistencia = $assistencia_res['assistencia'];
+            
+            // data de updated recente
+            $data_up_recente = $this->assistenciaModel->dataRecenteUpdate(trim($form['id_assistencia_modal']));
+
+            //status_update atual
+            $update_assist = $this->assistenciaModel->updateAssistByData($data_up_recente, trim($form['id_assistencia_modal']));
+            $status_atual = $update_assist['assistencia_update']['status_updated'];
+
+            $sus_assistencia = $assistencia['sus'];
+            $desc_juridica_atual = $assistencia['desc_juridica'];
+            $num_proc_juridica_atual = $assistencia['num_proc_juridica'];
+        } else {
+            // return 'ERRO ao buscar Assistência!';
+        }
+
+        $cidadao_res = $this->cidadaoModel->getNomeIdCidadao($assistencia['id_cidadao']);
+        if ($cidadao_res['erro'] == '' && $cidadao_res['cidadao'] != '') {
+            $cidadao = $cidadao_res['cidadao'];
+            $nome_cidadao = $cidadao['nome'];
+            $sus_cidadao = $cidadao['sus'];
+        } else {
+            // return 'ERRO ao buscar Cidadão!';
+        }
+
+        $sus = '';
+        if ($sus_assistencia != '') {
+            $sus = $sus_assistencia;
+        }
+        if ($sus_assistencia == '' && $sus_cidadao != '') {
+            $sus = $sus_cidadao;
+        }
+
+        // $dados = [
+        //     'id_assistencia' => $assistencia['id'],
+        //     'id_cidadao'        => $assistencia['id_cidadao'],
+        //     'nome_cidadao'      => $nome_cidadao,
+        //     'descricao'         => $assistencia['descricao'],
+        //     'status_atual'      => $status_atual,
+        //     'status_complemento' => '',
+        //     'finalizada'        => $assistencia['status_assist'],
+        //     'id_coordenadoria'  => $assistencia['id_coordenadoria'],
+        //     'desc_juridica'     => $assistencia['desc_juridica'],
+        //     'num_proc_juridica' => $assistencia['num_proc_juridica'],
+        //     'sus'               => $sus,
+
+        //     'sus_erro'          => '',
+        //     'num_proc_juridica_erro' => ''
+        // ];
+
+        // $form = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
+        if (isset($form)) {
+
+            $desc_juridica = $desc_juridica_atual;
+            $num_proc_juridica = $num_proc_juridica_atual;
+
+            if (isset($form['desc_juridica']) && isset($form['num_proc_juridica'])) {
+                $desc_juridica = trim($form['desc_juridica']);
+                $num_proc_juridica = trim($form['num_proc_juridica']);
+            }
+
+            if (isset($form['sus'])) {
+                $sus = trim($form['sus']);
+            }
+
+            $dados = [
+                'id_assistencia' => trim($form['id_assistencia_modal']),
+                'id_cidadao' => trim($form['id_cidadao_modal']),
+                'nome_cidadao' => $nome_cidadao,
+                'descricao'    => $assistencia['descricao'],
+                'id_updated_by' => $_SESSION['user']['id'],
+                'name_updated_by' => $_SESSION['user']['nome'],
+                'status_atual'    => trim($form['novo_status_modal']),
+                'status_complemento' => $form['status_complemento_modal'],
+                'status_updated'  => $form['novo_status_modal'],
+                'status_compl_updated' => $form['status_complemento_modal'],
+                'id_coordenadoria' => $assistencia['id_coordenadoria'],
+                'nome_coordenadoria' => $assistencia['nome_coordenadoria'],
+                'sus'                => $sus,
+                'desc_juridica' => $desc_juridica,
+                'num_proc_juridica' => $num_proc_juridica,
+            ];
+
+            //Verifica se já existe o status_update - Proteje do refresh da página
+            $update_existe = $this->assistenciaModel->updateStatusExiste($dados['status_updated'], $dados['status_compl_updated']);
+            if ($update_existe['erro'] == '' && $update_existe['num_rows'] != '' && $update_existe['num_rows'] != 0) {
+                Sessao::mensagem('assistencia', 'Não há novos dados para serem alterados!', 'alert alert-warning');
+                // return $this->view('assistencias/update_status', $dados);
+            }
+
+            // Começando
+            $erro = '';
+
+            // if (empty($dados['status_compl_updated']) && $dados['status_updated'] == $dados['status_atual']) {
+            //     Sessao::mensagem('assistencia', 'Complemente o Novo Status para justificar a atualização.', 'alert alert-warning');
+            //     $erro = 'erro';
+            // }
+
+            // if ($dados['status_updated'] != $dados['status_atual'] && empty($dados['status_compl_updated']) && $dados['status_updated'] != 'Finalizada' && $dados['status_updated'] != 'Selecione') {
+            //     Sessao::mensagem('assistencia', 'Complemente o Novo Status para justificar a atualização.', 'alert alert-danger');
+            //     $erro = 'erro';
+            // }
+
+            // if ($dados['status_updated'] == 'Selecione' || $dados['status_updated'] == 'Iniciada') {
+            //     Sessao::mensagem('assistencia', 'Selecione o novo Status!', 'alert alert-danger');
+            //     $erro = 'erro';
+            // }
+
+            // // SUS
+            // if (!empty($dados['sus']) && strlen($dados['sus']) < 18) {
+            //     $dados['sus_erro'] = 'Número incompleto!';
+            //     $erro = 'erro';
+            // }
+
+            // //Jurídico
+            // if ($num_proc_juridica_atual != $dados['num_proc_juridica']) {
+            //     if (!empty($dados['num_proc_juridica']) && strlen($dados['num_proc_juridica']) < 25) {
+            //         $dados['num_proc_juridica_erro'] = 'Número incompleto!';
+            //         $erro = 'erro';
+            //     }
+            // }
+
+            if ($erro == '') {
+
+                // //Altera processo jurídico no caso de coordenadoria jurídica
+                // if (!empty($dados['desc_juridica']) || !empty($dados['num_proc_juridica'])) {
+                //     $this->assistenciaModel->addDadosJuridicos($dados['id_assistencia'], $dados['desc_juridica'], $dados['num_proc_juridica']);
+                // }
+
+                // //Insere cartão do SUS
+                // if (!empty($dados['sus'])) {
+                //     if ($sus_cidadao == '' || $sus_cidadao != $dados['sus']) {
+                //         $this->cidadaoModel->insertSus($dados['id_cidadao'], $sus);
+                //     }
+                //     if ($sus_assistencia == '' || $sus_assistencia != $dados['sus']) {
+                //         $this->assistenciaModel->insertSus($dados['id_assistencia'], $sus);
+                //     }
+                // }
+
+                // //Aterar o Status
+                // $update = $this->assistenciaModel->updateStatus($dados);
+                // if ($update['erro'] == '' && $update['id_updated_status'] != '') {
+                //     $dados['status_complemento'] = '';
+
+                //     Sessao::mensagem('assistencia' .$dados['id_assistencia'], 'Atualização de Assistência efetuada com sucesso!');
+                // } else {
+                //     Sessao::mensagem('assistencia' .$dados['id_assistencia'], 'ERRO ao atualizar/finalizar Assistência, tente mais tarde.');
+                // }
+
+                Sessao::mensagem('assistencia' . $dados['id_assistencia'], 'Atualização de Assistência efetuada com sucesso!');
+            }
+        }
+        //Dados de retorno
+        $coordenadorias = '';
+
+        $coord_res = $this->coordenacaoModel->allCoordenadorias();
+        if ($coord_res['erro'] == '') {
+            $coordenadorias = $coord_res['coordenadorias'];
+        } else {
+            Sessao::mensagem('assistencias', 'ERRO ao buscar Coordenadorias', 'alert alert-danger');
+        }
+
+        $dados['coordenadorias'] = $coordenadorias;
+        $dados['meses']          = Times::meses();
+        $dados['anos']           = Times::anos_12();
+        $dados['select_coordenadoria'] = trim($form['select_coordenadoria_modal']);
+        $dados['tipo_registro']        = trim($form['tipo_registro_modal']);
+        $dados['input_datas']          = trim($form['input_datas']);
+
+        $dados['dt_inicial']            = trim($form['dt_inicial_modal']);
+        $dados['dt_final']            = trim($form['dt_final_modal']);
+        $dados['por_data']            = trim($form['por_data_modal']);
+        $dados['select_mes']            = trim($form['select_mes_modal']);
+        $dados['select_ano']            = trim($form['select_ano_modal']);
+
+        $this->filtro_coordenadoria($dados);
+    }
+
     public function create($id)
     {
 
@@ -691,7 +878,6 @@ class Assistencias extends Controller
             $up = $this->assistenciaModel->updateStatus($dados);
             if ($up['erro'] == '' && $up['id_updated_status'] != '') {
                 Sessao::mensagem('assistencia' . $dados['id_assistencia'], 'Assistência finalizada com sucesso!');
-
             }
         } else {
             Sessao::mensagem('assistencia' . $dados['id_assistencia'], 'ERRO ao finalizar Assistência, tente mais tarde!', 'alert alert-danger');
@@ -1176,7 +1362,7 @@ class Assistencias extends Controller
                 'dt_final_erro'             => '',
             ];
         }
-        
+
         $this->view('assistencias/filtro_coordenadoria', $dados);
     }
 }
