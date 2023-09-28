@@ -648,9 +648,81 @@ class Assistencias extends Controller
         $this->view('assistencias/finalizar', $dados);
     }
 
-    public function finalizar_modal() {
+    public function finalizar_modal()
+    {
+
         $form = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
-        echo 'finalizar modal: ' . json_encode($form);
+
+        $dados = [
+            'id_cidadao'         => trim($form['id_cidadao']),
+            'id_assistencia'                 => trim($form['id_assistencia']),
+            'status_assist'      => 'Finalizada',
+            'status_complemento' => trim($form['status_complemento']),
+
+            'descricao'      => trim($form['descricao_assistencia']),
+            'status_assist'  => 'Finalizada',
+            'status_complemento' => '',
+            'nome_cidadao' => trim($form['nome_cidadao']),
+            'id_updated_by'      => $_SESSION['user']['id'],
+            'name_updated_by'    => $_SESSION['user']['nome'],
+            'status_updated'     => 'Finalizada',
+            'status_compl_updated' => '',
+            'id_coordenadoria' => trim($form['id_coordenadoria']),
+            'nome_coordenadoria' => trim($form['nome_coordenadoria']),
+
+            'select_coordenadoria_erro' => '',
+            'tipo_registro_erro' => '',
+            'por_data_erro'    => '',
+            'select_mes_erro'  => '',
+            'select_ano_erro'  => '',
+            'dt_inicial_erro'  => '',
+            'dt_final_erro'    => '',
+            'periodo_select_erro' => ''
+        ];
+
+        //Na Assistência
+        $dados['status_complemento'] = 'Finalizada';
+
+        // echo json_encode($dados);
+
+        //Finaliza em assistencia
+        // $assist_res = $this->assistenciaModel->finalizarAssistencia($dados);
+        // if ($assist_res['erro'] == '' && $assist_res['affected_rows'] == 1) {
+
+        //     //create_update
+        //     $up = $this->assistenciaModel->updateStatus($dados);
+        //     if ($up['erro'] == '' && $up['id_updated_status'] != '') {
+        //         Sessao::mensagem('assistencias', 'Assistência finalizada com sucesso!');
+
+        //     }
+        // } else {
+        //     Sessao::mensagem('assistencias', 'ERRO ao finalizar Assistência, tente mais tarde!', 'alert alert-danger');
+        // }
+
+        //Dados de retorno
+        $coordenadorias = '';
+
+        $coord_res = $this->coordenacaoModel->allCoordenadorias();
+        if ($coord_res['erro'] == '') {
+            $coordenadorias = $coord_res['coordenadorias'];
+        } else {
+            Sessao::mensagem('assistencias', 'ERRO ao buscar Coordenadorias', 'alert alert-danger');
+        }
+
+        $dados['coordenadorias'] = $coordenadorias;
+        $dados['meses']          = Times::meses();
+        $dados['anos']           = Times::anos_12();
+        $dados['select_coordenadoria'] = trim($form['select_coordenadoria_modal']);
+        $dados['tipo_registro']        = trim($form['tipo_registro_modal']);
+        $dados['input_datas']          = trim($form['input_datas']);
+
+        $dados['dt_inicial']            = trim($form['dt_inicial_modal']);
+        $dados['dt_final']            = trim($form['dt_final_modal']);
+        $dados['por_data']            = trim($form['por_data_modal']);
+        $dados['select_mes']            = trim($form['select_mes_modal']);
+        $dados['select_ano']            = trim($form['select_ano_modal']);
+
+        $this->view('assistencias/filtro_coordenadoria', $dados);
     }
 
     //Função reescrita de Cidadao
@@ -951,6 +1023,8 @@ class Assistencias extends Controller
                 'dt_inicial'       => $form['dt_inicial'],
                 'dt_final'         => $form['dt_final'],
                 'input_datas'      => trim($form['input_datas']),
+
+                'status_complemento' => '',
 
                 'id_coordenadoria_erro'     => '',
                 'select_coordenadoria_erro' => '',

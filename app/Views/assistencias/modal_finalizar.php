@@ -13,9 +13,26 @@
 
                 <input type="text" name="id_cidadao" id="id_cidadao_modal">
                 <input type="text" name="id_assistencia" id="id_assistencia_modal">
+                <input type="text" name="descricao_assistencia" id="desc_ass_modal">
+                <input type="text" name="nome_cidadao" id="nome_cidadao_modal">
+                <input type="text" name="id_coordenadoria" id="id_coordenadoria_modal">
+                <input type="text" name="nome_coordenadoria" id="nome_coordenadoria_modal">
 
-                <h5 class="cor-texto"><span>Nome do Cidadão: <b id="nome_cidadao_modal"></b></span></h5>
-                <h6>Assistência: <span id="desc_ass_modal"></span></h6>
+                <input type="text" name="input_datas" value="<?= $dados['input_datas'] ?>">
+
+                <input type="text" name="select_coordenadoria_modal" value="<?= $dados['select_coordenadoria'] ?>">
+                <input type="text" name="tipo_registro_modal" value="<?= $dados['tipo_registro'] ?>">
+
+                <!-- datas -->
+                <input type="text" name="por_data_modal" value="<?= $dados['por_data'] ?>">
+                <input type="text" name="select_mes_modal" value="<?= $dados['select_mes'] ?>">
+                <input type="text" name="select_ano_modal" value="<?= $dados['select_ano'] ?>">
+                <input type="text" name="dt_inicial_modal" value="<?= $dados['dt_inicial'] ?>">
+                <input type="text" name="dt_final_modal" value="<?= $dados['dt_final'] ?>">
+
+
+                <h5 class="cor-texto"><span>Nome do Cidadão: <b id="span_nome_cidadao_modal"></b></span></h5>
+                <h6>Assistência: <span id="span_desc_ass_modal"></span></h6>
 
                 <hr>
 
@@ -29,7 +46,7 @@
                         <i class="bi bi-question-circle col-auto"></i>
                     </button>
 
-                    <textarea name="status_complemento" id="status_complemento" class="form-control" cols="20" rows="3" maxlength="100" placeholder="máx. 100 caracteres"></textarea>
+                    <textarea name="status_complemento" id="status_complemento" class="form-control" cols="20" rows="3" maxlength="100" placeholder="máx. 100 caracteres" required></textarea>
 
                 </div>
 

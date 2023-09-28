@@ -231,6 +231,14 @@
                                 <!-- inputs para modais -->
                                 <input type="text" id="nome_cidadao<?= $ass['id'] ?>" value="<?= $ass['nome_cidadao'] ?>">
                                 <input type="text" id="id_cidadao<?= $ass['id'] ?>" value="<?= $ass['id_cidadao'] ?>">
+                                <input type="text" id="desc_ass<?= $ass['id'] ?>" value="<?= $ass['descricao'] ?>">
+                                <input type="text" id="id_coordenadoria<?= $ass['id'] ?>" value="<?= $ass['id_coordenadoria'] ?>">
+                                <input type="text" id="nome_coordenadoria<?= $ass['id'] ?>" value="<?= $ass['nome_coordenadoria'] ?>">
+
+                                <input type="text" id="select_coordenadoria<?= $ass['id'] ?>" value="<?= $dados['select_coordenadoria'] ?>">
+
+
+
 
                             </div>
 
@@ -260,13 +268,13 @@
                 </div>
                 <div class="modal-body">
 
-                <?= include 'modal_finalizar.php' ?>
-                   
+                    <?= include 'modal_finalizar.php' ?>
+
                 </div>
-                <div class="modal-footer">
+                <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -335,6 +343,12 @@
             $("#btn_modal_finalizar").click()
             $("#id_cidadao_modal").val($("#id_cidadao" + id_assistencia).val())
             $("#id_assistencia_modal").val(id_assistencia)
-            $("#nome_cidadao_modal").text($("#nome_cidadao" + id_assistencia).val())
+            $("#nome_cidadao_modal").val($("#nome_cidadao" + id_assistencia).val())
+            $("#span_nome_cidadao_modal").text($("#nome_cidadao" + id_assistencia).val())
+            $("#span_desc_ass_modal").text($("#desc_ass" + id_assistencia).val())
+            $("#desc_ass_modal").val($("#desc_ass" + id_assistencia).val())
+            $("#id_coordenadoria_modal").val($("#id_coordenadoria" + id_assistencia).val())
+            $("#nome_coordenadoria_modal").val($("#nome_coordenadoria" + id_assistencia).val())
         }
     </script>
+</div>
