@@ -44,15 +44,9 @@
 
                         <label for="novo_status" class="form-label">Atualizar Status <sup class="text-danger">*</sup></label>
 
-                        <select name="novo_status_modal" id="novo_status_modal" class="form-select">
-
-                            <option value="Selecione">Selecione</option>
-                            <option value="Em andamento" <?= ($dados['status_atual'] == 'Em andamento' || $dados['status_atual'] == 'Em_andamento') ? 'selected' : '' ?>>Em andamento</option>
-                            <option value="Aguardando" <?= ($dados['status_atual'] == 'Aguardando') ? 'selected' : '' ?>>Aguardando</option>
-                            <option value="Outro" <?= ($dados['status_atual'] == 'Outro') ? 'selected' : '' ?>>Outro</option>
-                            <?php if ($dados['status_atual'] == 'Iniciada') {
-                                echo '<option value="Iniciada" selected>Iniciada</option>';
-                            } ?>
+                        <select name="novo_status_modal" id="novo_status_modal" class="form-select" required>
+                            <option value="Em andamento">Em andamento</option>
+                            <option value="Aguardando">Aguardando</option>
                         </select>
 
                     </div>
@@ -85,7 +79,7 @@
 
                             <!-- Número do processo -->
                             <div class="col-md-4 mt-4">
-                                <input type="text" class="procJuridico form-control" name="num_proc_juridica_modal" id="num_proc_juridica_modal" placeholder="Número Processo Jurídico">
+                                <input type="text" class="procJuridico form-control" name="num_proc_juridica_modal" id="num_proc_juridica_modal" minlength="25" maxlength="25" placeholder="Número Processo Jurídico">
                             </div>
 
                         </div>
