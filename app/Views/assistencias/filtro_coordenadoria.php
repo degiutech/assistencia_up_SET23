@@ -190,10 +190,15 @@
 
                 <?php if (isset($dados['assistencias']) && $dados['assistencias'] != '') {
 
+                    $array_ups = [];
+
                     foreach ($dados['assistencias'] as $ass) {
 
                         $dt = date_create($ass['date_at']);
                         $data = date_format($dt, 'd/m/Y');
+
+                        $array_ups[$ass['id']] = $ass['updates'];
+
 
                 ?>
 
@@ -226,10 +231,15 @@
                                         <button onclick="modal_atualizar('<?= $ass['id'] ?>')" class="btn btn-outline-secondary btn-sm">Atualizar</button>
                                     <?php } ?>
 
-                                    <a href="<?= URL ?>/assistencias/assistencia/<?= $ass['id'] ?>" class="btn btn-outline-success btn-sm">Histórico</a>
+                                    <button onclick="modal_historico('<?= $ass['id'] ?>')" class="btn btn-outline-success btn-sm">Histórico</button>
+
                                 </div>
 
+
                                 <!-- inputs para modais -->
+                                <input type="hidden" id="id_assistencia_<?= $ass['id'] ?>" value="<?= $ass['id'] ?>">
+                                <input type="hidden" id="descricao<?= $ass['id'] ?>" value="<?= $ass['descricao'] ?>">
+                                <input type="hidden" id="descricao_complemento<?= $ass['id'] ?>" value="<?= $ass['descricao_complemento'] ?>">
                                 <input type="hidden" id="nome_cidadao<?= $ass['id'] ?>" value="<?= $ass['nome_cidadao'] ?>">
                                 <input type="hidden" id="id_cidadao<?= $ass['id'] ?>" value="<?= $ass['id_cidadao'] ?>">
                                 <input type="hidden" id="desc_ass<?= $ass['id'] ?>" value="<?= $ass['descricao'] ?>">
@@ -237,10 +247,17 @@
                                 <input type="hidden" id="nome_coordenadoria<?= $ass['id'] ?>" value="<?= $ass['nome_coordenadoria'] ?>">
 
                                 <input type="hidden" id="status_atual<?= $ass['id'] ?>" value="<?= $ass['status_atual'] ?>">
+                                <input type="hidden" id="status_complemento<?= $ass['id'] ?>" value="<?= $ass['status_complemento'] ?>">
+
                                 <input type="hidden" id="sus<?= $ass['id'] ?>" value="<?= $ass['sus'] ?>">
 
                                 <input type="hidden" id="desc_juridica<?= $ass['id'] ?>" value="<?= $ass['desc_juridica'] ?>">
                                 <input type="hidden" id="num_proc_juridica<?= $ass['id'] ?>" value="<?= $ass['num_proc_juridica'] ?>">
+
+                                <input type="hidden" id="name_created_ass<?= $ass['id'] ?>" value="<?= $ass['name_created_by'] ?>">
+
+                                <input type="hidden" id="data_hora1<?= $ass['id'] ?>" value="<?= $data . ' ' . $ass['hora'] . ' h' ?>">
+                                <input type="hidden" id="data_hora_up<?= $ass['id'] ?>" value="<?= $ass['ultima_atualizacao'] . ' ' . $ass['hora_ultima_atualizacao'] . ' h' ?>">
 
                             </div>
 
@@ -249,15 +266,43 @@
                 <?php }
                 } else {
                     echo 'Nenhum registro encontrado';
-                } ?>
+                }
+
+                $updates = json_encode($array_ups);
+                echo json_encode($array_ups);
+
+                ?>
 
             </div>
         </div>
 
     <?php  } ?>
 
+    <!-- MODAL HISTÓRICO -->
+    <button type="button" id="btn_modal_historico" class="btn btn-primary modal-lg" data-bs-toggle="modal" data-bs-target="#modal_historico" style="display: none;">
+        modal atualizar
+    </button>
+
+    <div class="modal fade" id="modal_historico" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+
+                    <?= include 'modal_historico.php' ?>
+
+                    <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL ATUALIZAR -->
-    <!-- Button trigger modal -->
     <button type="button" id="btn_modal_atualizar" class="btn btn-primary modal-lg" data-bs-toggle="modal" data-bs-target="#modal_atualizar" style="display: none;">
         modal atualizar
     </button>
@@ -360,6 +405,46 @@
                 $("#div_periodo").show()
                 $("#input_datas").val("periodo")
             }
+        }
+
+        function modal_historico(id_assistencia) {
+            $("#btn_modal_historico").click()
+
+            $("#span_nome_cidadao_modal").text($("#nome_cidadao" + id_assistencia).val())
+            $("#descricao_inicial_modal").text($("#descricao" + id_assistencia).val() + " - " + $("#descricao_complemento" + id_assistencia).val())
+            $("#status_info_modal").text($("#status_atual" + id_assistencia).val() + " - " + $("#status_complemento" + id_assistencia).val())
+            $("#data_hora1_modal").text($("#data_hora1" + id_assistencia).val())
+            $("#data_hora_up_modal").text($("#data_hora_up" + id_assistencia).val())
+            $("#nome_coordenadoria_modal").text($("#nome_coordenadoria" + id_assistencia).val())
+            $("#juridica_modal").text($("#desc_juridica" + id_assistencia).val() + ' - ' + $("#num_proc_juridica" + id_assistencia).val())
+            $("#sus_historico_modal").text($("#sus" + id_assistencia).val())
+            $("#primeiro_registro_por").text($("#name_created_ass" + id_assistencia).val())
+
+            let ups = <?= $updates; ?>;
+            // alert(ups[id_assistencia][0].name_updated_by)
+            let updates = ups[id_assistencia]
+            // alert(updates[0].name_updated_by)
+            for (let i = 0; i < updates.length; i++) {
+
+                let status_updated = updates[i].status_updated
+                if (updates[i].status_updated == "Iniciada") {
+                    status_updated = "Primeiro registro"
+                }
+
+                $("#tbody_ups").append(
+                    '<tr>' +
+                                '<td>' + updates[i].data_hora+ '</td>' +
+
+                                '<td>' + updates[i].complemento_updated + '</td>' +
+
+                                '<td>'+status_updated+'</td>' +
+
+                                '<td>' + updates[i].name_updated_by + '</td>' +
+                            '</tr>'
+                )
+                
+            }
+
         }
 
         function modal_atualizar(id_assistencia) {

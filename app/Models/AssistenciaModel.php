@@ -1304,6 +1304,7 @@ class AssistenciaModel
                     $assistencias_res[$i]['desc_ultima_atualizacao'] = 'Não há atualizações';
                 } else {
                     $assistencias_res[$i]['ultima_atualizacao'] = date_format($dt_up, 'd/m/Y');
+                    $assistencias_res[$i]['hora_ultima_atualizacao'] = date_format($dt_up, 'h:i');
                     $assistencias_res[$i]['desc_ultima_atualizacao'] = $up['assist_up'][0]['status_compl_updated'];
                 }
             }
