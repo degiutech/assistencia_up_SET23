@@ -170,7 +170,7 @@
         <div class="card mt-3 mb-3">
             <div class="card-body">
 
-                <b class="cor-texto">Coordenadoria: <?= $dados['nome_coordenadoria'] ?></b><br>
+                <h5><b class="cor-texto">Coordenadoria: <?= $dados['nome_coordenadoria'] ?></b></h5>
 
                 <b><?= $dados['titulo'] ?></b>
 
@@ -206,10 +206,11 @@
 
                                 <?= Sessao::mensagem('assistencia' . $ass['id']) ?>
 
+                                <div><b><?= $ass['status_atual'] ?></b></div>
+
                                 <div>Assistido(a): <?= $ass['nome_cidadao'] ?></div>
                                 <div>Descrição: <?= $ass['descricao'] ?> - <?= $ass['descricao_complemento'] ?></div>
                                 <div>Data: <?= $data ?></div>
-                                <div>Status atual: <?= $ass['status_atual'] ?></div>
 
                                 <?php if ($ass['status_atual'] == 'Iniciada') {
                                     echo 'Não há atualizações';
@@ -223,56 +224,68 @@
 
                                 <div class="mt-2">
 
-                                    <!-- <a href="<?= URL ?>/cidadao/cidadao/<?= $ass['id_cidadao'] ?>" class="btn btn-outline-primary btn-sm">Info Cidadão</a> -->
+                                    <button class="btn btn-outline-success btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#table_historico<?= $ass['id'] ?>" aria-expanded="false" aria-controls="table_historico">
+                                        Histórico
+                                    </button>
 
                                     <?php if ($ass['status_atual'] != 'Finalizada') { ?>
                                         <button onclick="modal_finalizar('<?= $ass['id'] ?>')" class="btn btn-outline-dark btn-sm">Finalizar</button>
                                         <button onclick="modal_atualizar('<?= $ass['id'] ?>')" class="btn btn-outline-secondary btn-sm">Atualizar</button>
                                     <?php } ?>
 
-                                    <button onclick="modal_historico('<?= $ass['id'] ?>')" class="btn btn-outline-success btn-sm">Histórico</button>
-
                                 </div>
 
-                                Histórico
+                                <div class="collapse mt-3" id="table_historico<?= $ass['id'] ?>">
 
+                                    <div class="card">
 
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Data e hora</th>
-                                            <th scope="col">Descrição</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Atualizada por</th>
-                                        </tr>
-                                    </thead>
+                                        <div class="card-body">
 
-                                    <tbody>
+                                            <div>Atualizações desta Assistência</div>
 
-                                        <?php $updates = $dados['updates'][$ass['id']];
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Data e hora</th>
+                                                        <th scope="col">Descrição</th>
+                                                        <th scope="col">Status</th>
+                                                        <th scope="col">Atualizada por</th>
+                                                    </tr>
+                                                </thead>
 
-                                        for ($i = 0; $i < count($updates); $i++) { 
-                                            
-                                            $dt = date_create($updates[$i]['updated_at']);
-                                            $data_hora = date_format($dt, 'd/m/Y H:i');
-                                            
-                                            ?>
+                                                <tbody>
 
-                                            <tr>
-                                                <td><?= $data_hora ?></td>
-                                                <td><?= $updates[$i]['status_compl_updated'] ?></td>
-                                                <td><?= $updates[$i]['status_updated'] ?></td>
-                                                <td><?= $updates[$i]['name_updated_by'] ?></td>
-                                            </tr>
+                                                    <?php $updates = $ass['updates'];
 
-                                        <?php } ?>
+                                                    for ($i = 0; $i < count($updates); $i++) {
 
-                                    </tbody>
-                                </table>
+                                                        $dt = date_create($updates[$i]['updated_at']);
+                                                        $data_hora = date_format($dt, 'd/m/Y H:i');
 
+                                                    ?>
 
+                                                        <?php if ($updates[$i]['status_updated'] == 'Iniciada') { ?>
+                                                            <tr style="background-color: #f1f2f4;">
+                                                            <?php } else { ?>
+                                                            <tr>
+                                                            <?php } ?>
+                                                            <td><?= $data_hora ?></td>
+                                                            <td><?= $updates[$i]['status_compl_updated'] ?></td>
+                                                            <td><?= $updates[$i]['status_updated'] ?></td>
+                                                            <td><?= $updates[$i]['name_updated_by'] ?></td>
+                                                            </tr>
 
+                                                        <?php
+                                                    } ?>
 
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
 
                                 <!-- inputs para modais -->
                                 <input type="hidden" id="id_assistencia_<?= $ass['id'] ?>" value="<?= $ass['id'] ?>">
@@ -321,134 +334,134 @@
 </div>
 
 
-    <!-- MODAL ATUALIZAR -->
-    <button type="button" id="btn_modal_atualizar" class="btn btn-primary modal-lg" data-bs-toggle="modal" data-bs-target="#modal_atualizar" style="display: none;">
-        modal atualizar
-    </button>
+<!-- MODAL ATUALIZAR -->
+<button type="button" id="btn_modal_atualizar" class="btn btn-primary modal-lg" data-bs-toggle="modal" data-bs-target="#modal_atualizar" style="display: none;">
+    modal atualizar
+</button>
 
-    <div class="modal fade" id="modal_atualizar" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+<div class="modal fade" id="modal_atualizar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
 
-                    <?= include 'modal_atualizar.php' ?>
+                <?= include 'modal_atualizar.php' ?>
 
-                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- MODAL FINALIZAR -->
-    <!-- Button trigger modal -->
-    <button type="button" id="btn_modal_finalizar" class="btn btn-primary modal-lg" data-bs-toggle="modal" data-bs-target="#modal_finalizar" style="display: none;">
-        modal finalizar
-    </button>
+<!-- MODAL FINALIZAR -->
+<!-- Button trigger modal -->
+<button type="button" id="btn_modal_finalizar" class="btn btn-primary modal-lg" data-bs-toggle="modal" data-bs-target="#modal_finalizar" style="display: none;">
+    modal finalizar
+</button>
 
-    <div class="modal fade" id="modal_finalizar" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+<div class="modal fade" id="modal_finalizar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
 
-                    <?= include 'modal_finalizar.php' ?>
+                <?= include 'modal_finalizar.php' ?>
 
-                </div>
-                <!-- <div class="modal-footer">
+            </div>
+            <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary">Save changes</button>
                 </div> -->
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CIDADAO -->
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary modal-lg" data-bs-toggle="modal" data-bs-target="#modal_cidadao" style="display: none;">
+    Launch demo modal
+</button>
+
+<div class="modal fade" id="modal_cidadao" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
-
-    <!-- MODAL CIDADAO -->
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary modal-lg" data-bs-toggle="modal" data-bs-target="#modal_cidadao" style="display: none;">
-        Launch demo modal
-    </button>
-
-    <div class="modal fade" id="modal_cidadao" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Modal body text goes here.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
 
 
-    <script>
-        let input_datas = '<?= $dados['input_datas'] ?>'
+<script>
+    let input_datas = '<?= $dados['input_datas'] ?>'
 
-        if (input_datas == "data") {
+    if (input_datas == "data") {
+        $("#div_data").show()
+        $("#div_btn_buscar").show()
+    }
+    if (input_datas == "mes_ano") {
+        $("#div_mes_ano").show()
+        $("#div_btn_buscar").show()
+    }
+    if (input_datas == "periodo") {
+        $("#div_periodo").show()
+        $("#div_btn_buscar").show()
+    }
+
+    function toggle_divs(tipo) {
+        $(".divs").hide()
+        $("#input_datas").val("nenhum")
+        $("#div_btn_buscar").show()
+
+        if (tipo == "data") {
             $("#div_data").show()
-            $("#div_btn_buscar").show()
+            $("#input_datas").val("data")
         }
-        if (input_datas == "mes_ano") {
+        if (tipo == "mes_ano") {
             $("#div_mes_ano").show()
-            $("#div_btn_buscar").show()
+            $("#input_datas").val("mes_ano")
         }
-        if (input_datas == "periodo") {
+        if (tipo == "periodo") {
             $("#div_periodo").show()
-            $("#div_btn_buscar").show()
+            $("#input_datas").val("periodo")
         }
+    }
 
-        function toggle_divs(tipo) {
-            $(".divs").hide()
-            $("#input_datas").val("nenhum")
-            $("#div_btn_buscar").show()
+    function modal_atualizar(id_assistencia) {
+        $("#btn_modal_atualizar").click()
+        $("#status_atual_modal").val($("#status_atual" + id_assistencia).val())
+        $("#span_status_atual_modal").text($("#status_atual" + id_assistencia).val())
+        $("#id_cidadao_modal").val($("#id_cidadao" + id_assistencia).val())
+        $("#nome_cidadao_modal").val($("#nome_cidadao" + id_assistencia).val())
+        $("#span_nome_cidadao_modal").text($("#nome_cidadao" + id_assistencia).val())
+        $("#id_assistencia_modal").val(id_assistencia)
+        $("#span_descricao_modal").text($("#desc_ass" + id_assistencia).val())
+        $("#sus_modal").val($("#sus" + id_assistencia).val())
+        $("#desc_juridica_modal").val($("#desc_juridica" + id_assistencia).val())
+        $("#num_proc_juridica_modal").val($("#num_proc_juridica" + id_assistencia).val())
+    }
 
-            if (tipo == "data") {
-                $("#div_data").show()
-                $("#input_datas").val("data")
-            }
-            if (tipo == "mes_ano") {
-                $("#div_mes_ano").show()
-                $("#input_datas").val("mes_ano")
-            }
-            if (tipo == "periodo") {
-                $("#div_periodo").show()
-                $("#input_datas").val("periodo")
-            }
-        }
-
-        function modal_atualizar(id_assistencia) {
-            $("#btn_modal_atualizar").click()
-            $("#status_atual_modal").val($("#status_atual" + id_assistencia).val())
-            $("#span_status_atual_modal").text($("#status_atual" + id_assistencia).val())
-            $("#id_cidadao_modal").val($("#id_cidadao" + id_assistencia).val())
-            $("#nome_cidadao_modal").val($("#nome_cidadao" + id_assistencia).val())
-            $("#span_nome_cidadao_modal").text($("#nome_cidadao" + id_assistencia).val())
-            $("#id_assistencia_modal").val(id_assistencia)
-            $("#span_descricao_modal").text($("#desc_ass" + id_assistencia).val())
-            $("#sus_modal").val($("#sus" + id_assistencia).val())
-            $("#desc_juridica_modal").val($("#desc_juridica" + id_assistencia).val())
-            $("#num_proc_juridica_modal").val($("#num_proc_juridica" + id_assistencia).val())
-        }
-
-        function modal_finalizar(id_assistencia) {
-            $("#btn_modal_finalizar").click()
-            $("#id_cidadao_modal").val($("#id_cidadao" + id_assistencia).val())
-            $("#id_assistencia_modal").val(id_assistencia)
-            $("#nome_cidadao_modal").val($("#nome_cidadao" + id_assistencia).val())
-            $("#span_nome_cidadao_modal").text($("#nome_cidadao" + id_assistencia).val())
-            $("#span_desc_ass_modal").text($("#desc_ass" + id_assistencia).val())
-            $("#desc_ass_modal").val($("#desc_ass" + id_assistencia).val())
-            $("#id_coordenadoria_modal").val($("#id_coordenadoria" + id_assistencia).val())
-            $("#nome_coordenadoria_modal").val($("#nome_coordenadoria" + id_assistencia).val())
-        }
-    </script>
+    function modal_finalizar(id_assistencia) {
+        $("#btn_modal_finalizar").click()
+        $("#id_cidadao_modal").val($("#id_cidadao" + id_assistencia).val())
+        $("#id_assistencia_modal").val(id_assistencia)
+        $("#nome_cidadao_modal").val($("#nome_cidadao" + id_assistencia).val())
+        $("#span_nome_cidadao_modal").text($("#nome_cidadao" + id_assistencia).val())
+        $("#span_desc_ass_modal").text($("#desc_ass" + id_assistencia).val())
+        $("#desc_ass_modal").val($("#desc_ass" + id_assistencia).val())
+        $("#id_coordenadoria_modal").val($("#id_coordenadoria" + id_assistencia).val())
+        $("#nome_coordenadoria_modal").val($("#nome_coordenadoria" + id_assistencia).val())
+    }
+</script>

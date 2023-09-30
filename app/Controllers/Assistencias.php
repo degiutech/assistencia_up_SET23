@@ -1246,19 +1246,27 @@ class Assistencias extends Controller
                     'input_datas'      => $dados['input_datas']
                 ];
 
+                $dados['assistencias'] = '';
+                $dados['nao_finalizadas'] = 0;
+                $dados['finalizadas'] = 0;
+                $dados['updates'] = '';
+
                 //busca por tipo assistencia
                 if ($dados['tipo_registro'] == 'assistencia') {
                     $ass_res = $this->assistenciaModel->filtrosAssistenciasByCoordenadoria($dados_model);
-                    if ($ass_res['erro'] == '') {
+                    if ($ass_res['erro'] == '' && $ass_res['assistencias'] != '') {
                         $dados['assistencias'] = $ass_res['assistencias'];
                         $dados['nao_finalizadas'] = $ass_res['nao_finalizadas'];
                         $dados['finalizadas'] = $ass_res['finalizadas'];
-                        
-                        $updates_res = '';
-                        for ($i = 0; $i < count($ass_res['assistencias']); $i++) {
-                            $dados['updates'][$ass_res['assistencias'][$i]['id']] = $ass_res['assistencias'][$i]['updates'];
-                            
-                        }
+
+// echo json_encode($ass_res['assistencias'][1]['updates']);
+
+                        // $updates_res = '';
+                        // $ups_array = [];
+                        // for ($i = 0; $i < count($ass_res['assistencias']); $i++) {
+                        //     $ups_array[$i] = $ass_res['assistencias'][$i]['updates'];
+                        // }
+                        // $dados['updates'] = $ups_array;
                         // echo json_encode($dados['updates']);
                     }
 
