@@ -67,5 +67,5 @@
     </div>
 
     <script>
-        $("#status_complemento").val('<?= $dados['status_complemento'] ?>')
+        
     </script>
