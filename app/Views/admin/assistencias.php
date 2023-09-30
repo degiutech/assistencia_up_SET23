@@ -6,20 +6,6 @@
         <div class="col-md-6">
             <h3 class="mt-4">Gerenciamento de Assistências</h3>
 
-            <!-- <div class="row mb-2">
-
-                <div class="col-auto cor-texto">
-                    Total geral (<?= $dados['count_geral'] ?>)
-                </div>
-                <div class="col-auto cor-texto">
-                    Não finalizadas (<?= $dados['count_geral_nao_finalizadas'] ?>)
-                </div>
-                <div class="col-auto cor-texto">
-                    Finalizadas (<?= $dados['count_geral_finalizadas'] ?>)
-                </div>
-
-            </div> -->
-
         </div>
     </div>
 
@@ -87,13 +73,13 @@
 
                     <!-- Mais filtros -->
                     <li class="nav-item">
-                        <div class="dropdown">
+                        <div class="dropdown" style="margin-left: 20px;">
                             <button class="btn btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-plus"></i>Filtros
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="<?= URL ?>/assistencias/filtro_coordenadoria">Por Coordenadoria</a></li>
-                                <li><a class="dropdown-item" href="#">Por Operador</a></li>
+                                <!-- <li><a class="dropdown-item" href="#">Por Operador</a></li> -->
                             </ul>
                         </div>
                     </li>

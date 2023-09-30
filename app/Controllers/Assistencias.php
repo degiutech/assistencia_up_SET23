@@ -1259,15 +1259,6 @@ class Assistencias extends Controller
                         $dados['nao_finalizadas'] = $ass_res['nao_finalizadas'];
                         $dados['finalizadas'] = $ass_res['finalizadas'];
 
-// echo json_encode($ass_res['assistencias'][1]['updates']);
-
-                        // $updates_res = '';
-                        // $ups_array = [];
-                        // for ($i = 0; $i < count($ass_res['assistencias']); $i++) {
-                        //     $ups_array[$i] = $ass_res['assistencias'][$i]['updates'];
-                        // }
-                        // $dados['updates'] = $ups_array;
-                        // echo json_encode($dados['updates']);
                     }
 
                     //Título

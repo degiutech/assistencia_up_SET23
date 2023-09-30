@@ -58,7 +58,7 @@
                             <option value="0" selected>- -</option>
 
                             <option value="assistencia" <?= $dados['tipo_registro'] == 'assistencia' ? 'selected' : ''; ?>>Primeiro registro</option>
-                            <option value="update" <?= $dados['tipo_registro'] == 'update' ? 'selected' : ''; ?>>Atualização</option>
+                            <!-- <option value="update" <?= $dados['tipo_registro'] == 'update' ? 'selected' : ''; ?>>Atualização</option> -->
                         </select>
 
                         <div class="invalid-feedback">
@@ -455,13 +455,13 @@
 
     function modal_finalizar(id_assistencia) {
         $("#btn_modal_finalizar").click()
-        $("#id_cidadao_modal").val($("#id_cidadao" + id_assistencia).val())
-        $("#id_assistencia_modal").val(id_assistencia)
-        $("#nome_cidadao_modal").val($("#nome_cidadao" + id_assistencia).val())
-        $("#span_nome_cidadao_modal").text($("#nome_cidadao" + id_assistencia).val())
-        $("#span_desc_ass_modal").text($("#desc_ass" + id_assistencia).val())
-        $("#desc_ass_modal").val($("#desc_ass" + id_assistencia).val())
-        $("#id_coordenadoria_modal").val($("#id_coordenadoria" + id_assistencia).val())
-        $("#nome_coordenadoria_modal").val($("#nome_coordenadoria" + id_assistencia).val())
+        $("#id_cidadao_modal_fin").val($("#id_cidadao" + id_assistencia).val())
+        $("#id_assistencia_modal_fin").val(id_assistencia)
+        $("#nome_cidadao_modal_fin").val($("#nome_cidadao" + id_assistencia).val())
+        $("#span_nome_cidadao_modal_fin").text($("#nome_cidadao" + id_assistencia).val())
+        $("#span_desc_ass_modal_fin").text($("#desc_ass" + id_assistencia).val())
+        $("#desc_ass_modal_fin").val($("#desc_ass" + id_assistencia).val())
+        $("#id_coordenadoria_modal_fin").val($("#id_coordenadoria" + id_assistencia).val())
+        $("#nome_coordenadoria_modal_fin").val($("#nome_coordenadoria" + id_assistencia).val())
     }
 </script>
