@@ -4,7 +4,6 @@
         <div class="col-md-6">
             <h3 class="mt-4">Gerenciamento de Assistências</h3>
         </div>
-
     </div>
 
     <!-- BOTÕES DE OPÇÕES -->
@@ -67,6 +66,20 @@
                         <?php } else { ?>
                             <a href="javascript:por_periodo()" class="btn btn-outline-secondary d-block">Período</a>
                         <?php } ?>
+                    </li>
+
+                    <!-- Mais filtros -->
+                    <li class="nav-item">
+                        <a href="<?= URL ?>/assistencias/filtro_coordenadoria" style="margin-left: 20px;" class="btn btn-secondary d-block">Por Coordenadoria</a>
+                        <!-- <div class="dropdown" style="margin-left: 20px;">
+                            <button class="btn btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-plus"></i>Filtros
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="<?= URL ?>/assistencias/filtro_coordenadoria">Por Coordenadoria</a></li>
+                                
+                            </ul>
+                        </div> -->
                     </li>
 
                 </ul>
@@ -370,12 +383,12 @@
 
     <!-- SCRIPT -->
     <script>
-        function toggle_relatorio() {
+        // function toggle_relatorio() {
 
-            $("#div_relatorio").toggle()
-            $("#div_registros").toggle()
+        //     $("#div_relatorio").toggle()
+        //     $("#div_registros").toggle()
 
-        }
+        // }
 
         //POR DATA
         function por_data() {

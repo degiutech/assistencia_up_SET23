@@ -1,11 +1,8 @@
 <div class="container">
 
-
-
     <div class="row mb-1">
         <div class="col-md-6">
             <h3 class="mt-4">Gerenciamento de Assistências</h3>
-
         </div>
     </div>
 
@@ -73,15 +70,15 @@
 
                     <!-- Mais filtros -->
                     <li class="nav-item">
-                        <div class="dropdown" style="margin-left: 20px;">
-                            <button class="btn btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a href="<?= URL ?>/assistencias/filtro_coordenadoria" style="margin-left: 20px;" class="btn btn-secondary d-block">Por Coordenadoria</a>
+                        <!-- <div class="dropdown" style="margin-left: 20px;">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-plus"></i>Filtros
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="<?= URL ?>/assistencias/filtro_coordenadoria">Por Coordenadoria</a></li>
-                                <!-- <li><a class="dropdown-item" href="#">Por Operador</a></li> -->
                             </ul>
-                        </div>
+                        </div> -->
                     </li>
 
                 </ul>
@@ -461,12 +458,12 @@
 
     <!-- SCRIPT -->
     <script>
-        function toggle_relatorio() {
+        // function toggle_relatorio() {
 
-            $("#div_relatorio").toggle()
-            $("#div_registros").toggle()
+        //     $("#div_relatorio").toggle()
+        //     $("#div_registros").toggle()
 
-        }
+        // }
 
         //POR DATA
         function por_data() {

@@ -63,20 +63,20 @@ include './../app/autoload.php';
 
 <body style="background-color: #f1f2f4;">
 
-  <div id="div_navs">
+  <!-- Div para print -->
+  <div id="div_print_geral" style="display: none; min-height: 100vh;" class="container-fluid card">
+
+    <div class="card-body">
+
+      <div id="conteudo_print"></div>
+
+    </div>
+
+  </div>
+
+  <div id="div_navs" class="esconder_para_print">
 
     <?php
-
-    //SEGURANÇA
-    // $url = substr($_SERVER["REQUEST_URI"], strpos($_SERVER["REQUEST_URI"], '/') + 1);
-    // $access = explode('/', $url);
-    // $url_acesso = $access[1];
-
-    // $url = $_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
-
-    // if ($url_acesso != $acesso && $url_acesso != 'ajax' && $url_acesso != 'assistencias' && $url_acesso != 'cidadao' && $url_acesso != 'degiutech' && $url_acesso != 'dguser' && $url_acesso != 'diversos' && $url_acesso != 'emails' && $url_acesso != 'faq' && $url_acesso != 'operadores' && $url_acesso != 'pages' && $url_acesso != 'posts' && $url_acesso != 'users') {
-    // URL::redirect($acesso . '/index');
-    // }
 
     if (isset($_SESSION['user'])) {
 
@@ -116,7 +116,7 @@ include './../app/autoload.php';
 
   </div>
 
-  <div id="div_do_rodape">
+  <div id="div_do_rodape" class="esconder_para_print">
 
     <?php
 

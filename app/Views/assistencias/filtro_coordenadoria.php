@@ -1,23 +1,8 @@
-<div class="container">
+<div class="esconder_para_print container">
 
     <div class="row mb-1">
         <div class="col-md-6">
             <h3 class="mt-4">Assistências por Coordenadoria</h3>
-
-            <!-- <div class="row mb-2">
-
-                <div class="col-auto cor-texto">
-                    Total geral (<?= $dados['count_geral'] ?>)
-                </div>
-                <div class="col-auto cor-texto">
-                    Não finalizadas (<?= $dados['count_geral_nao_finalizadas'] ?>)
-                </div>
-                <div class="col-auto cor-texto">
-                    Finalizadas (<?= $dados['count_geral_finalizadas'] ?>)
-                </div>
-
-            </div> -->
-
         </div>
     </div>
 
@@ -35,7 +20,7 @@
                         <label for="select_coordenadoria" class="form-label">Selecione a Coordenadoria</label>
 
                         <select class="form-select <?= $dados['select_coordenadoria_erro'] != '' ? 'is-invalid' : '' ?>" name="select_coordenadoria" aria-label="Default select example0">
-                            <option value="0" selected>- -</option>
+                            <option value="0" selected>Selecione</option>
 
                             <?php if ($dados['coordenadorias'] != '') {
                                 foreach ($dados['coordenadorias'] as $coord) { ?>
@@ -50,15 +35,14 @@
                     </div>
 
                     <!-- tipo de registro -->
-                    <div class="col-auto">
+                    <div class="col-auto" style="display: none;">
 
                         <label for="tipo_registro" class="form-label">Tipo de registro</label>
 
                         <select class="form-select <?= $dados['tipo_registro_erro'] != '' ? 'is-invalid' : '' ?>" name="tipo_registro" aria-label="Default select example">
-                            <option value="0" selected>- -</option>
+                            <!-- <option value="0" selected>- -</option> -->
 
                             <option value="assistencia" <?= $dados['tipo_registro'] == 'assistencia' ? 'selected' : ''; ?>>Primeiro registro</option>
-                            <!-- <option value="update" <?= $dados['tipo_registro'] == 'update' ? 'selected' : ''; ?>>Atualização</option> -->
                         </select>
 
                         <div class="invalid-feedback">
@@ -184,10 +168,12 @@
                 <div>Não finalizadas: <?= $dados['nao_finalizadas'] ?></div>
                 <div class="mb-3">Finalizadas: <?= $dados['finalizadas'] ?></div>
 
+                <button type="button" class="btn btn-success btn-sm mb-2" onclick="print_geral()">RELATÓRIO <i class="bi bi-arrow-right"></i></button>
+
             </div>
         </div>
 
-        <div class="card">
+        <div class="esconder_para_print card" id="div_registros">
             <div class="card-body">
 
                 <?php if (isset($dados['assistencias']) && $dados['assistencias'] != '') {
@@ -331,8 +317,70 @@
 
     <?php  } ?>
 
-</div>
 
+
+    <!-- RELATÓRIO -->
+    <div class="esconder_para_print card" id="div_relatorio" style="display: none;">
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-8">
+                    <h6><b>RELATÓRIO DE <?= $dados['titulo'] ?></b><span><i class="bi bi-file-arrow-down-fill text-dark" onclick="Javascript:window.print()" title="Salvar relatório" style="font-size: 2rem; cursor: pointer;"></i></span></h6>
+
+                    Assistências: <?= $count_assistencias ?>
+
+                    <div>Não Finalizadas: <?= $dados['nao_finalizadas'] ?></div>
+                    <div>Finalizadas: <?= $dados['finalizadas'] ?></div>
+
+
+                </div>
+                <div class="col-md-4 d-flex justify-content-end">
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-success mb-2" onclick="Javascript:window.print()"><i class="bi bi-arrow-down"></i> Guardar</button>
+                        <button type="button" class="btn btn-success mb-2" onclick="retorna_print_geral()"><i class="bi bi-arrow-left"></i> Voltar</button>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-sm table-bordered mt-3" style="width: 100%; position: relative;">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 15%;">1º registro</th>
+                        <th scope="col" style="width: 20%;">Descrição 1º registro</th>
+                        <th scope="col" style="width: 15%;">Última atualização</th>
+                        <th scope="col" style="width: 20%;">Desc. última atualização</th>
+                        <th scope="col" style="width: 15%;">Status Atual</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <?php if ($dados['assistencias']) {
+
+                        foreach ($dados['assistencias'] as $ass) {
+
+                            $dt_1_r = date_create($ass['date_at']);
+                            $dt_primeiro_registro = date_format($dt_1_r, 'd/m/Y');
+
+                    ?>
+
+                            <tr>
+                                <td><?= $dt_primeiro_registro ?></td>
+                                <td><?= $ass['descricao'] ?> - <?= $ass['descricao_complemento'] ?></td>
+                                <td><?= $ass['ultima_atualizacao'] ?></td>
+                                <td><?= $ass['desc_ultima_atualizacao'] ?></td>
+                                <td><?= $ass['status_assist'] ?></td>
+
+                            </tr>
+
+                    <?php }
+                    } ?>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
 
 <!-- MODAL ATUALIZAR -->
 <button type="button" id="btn_modal_atualizar" class="btn btn-primary modal-lg" data-bs-toggle="modal" data-bs-target="#modal_atualizar" style="display: none;">
@@ -404,7 +452,35 @@
 </div>
 
 
+<!-- FIM DA DIV ESCONDE GERAL -->
+</div>
+
 <script>
+    function print_geral() {
+
+        $(".esconder_para_print").hide()
+        $("#div_registros").hide()
+
+        $("#div_relatorio").hide()
+
+
+        $("#div_print_geral").show()
+        $("#conteudo_print").html($("#div_relatorio").html());
+
+    }
+
+    function retorna_print_geral() {
+
+        $(".esconder_para_print").show()
+        $("#div_registros").show()
+
+        $("#div_relatorio").show()
+
+        $("#div_print_geral").hide()
+        $("#conteudo_print").html("")
+
+    }
+
     let input_datas = '<?= $dados['input_datas'] ?>'
 
     if (input_datas == "data") {
