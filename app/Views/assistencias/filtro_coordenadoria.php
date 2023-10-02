@@ -168,6 +168,11 @@
                 <div>Não finalizadas: <?= $dados['nao_finalizadas'] ?></div>
                 <div class="mb-3">Finalizadas: <?= $dados['finalizadas'] ?></div>
 
+                <!-- inputs invisiveis -->
+                <input type="hidden" value="<?= $dados['nao_finalizadas'] ?>" id="input_count_n_finalizadas">
+                <input type="hidden" value="<?= $dados['finalizadas'] ?>" id="input_count_finalizadas">
+                <input type="hidden" value="<?= $count_assistencias ?>" id="input_count_assistencias">
+
                 <button type="button" class="btn btn-success btn-sm mb-2" onclick="print_geral()">RELATÓRIO <i class="bi bi-arrow-right"></i></button>
 
             </div>
@@ -477,20 +482,24 @@
 <script>
     function tipo_status(tipo) {
 
+        let tipo_nao_finalizadas = $("#input_count_n_finalizadas").val()
+        let tipo_finalizadas = $("#input_count_finalizadas").val()
+        let input_count_assistencias = $("#input_count_assistencias").val()
+
         if (tipo == "nao_finalizada_exibir" || tipo == "nao_finalizada_exibir2") {
             $(".nao_finalizada").show()
             $(".finalizada").hide()
-            $(".tipo_listar").html("<b>Mostrando " + '<?= $dados['nao_finalizadas'] ?>' + " Assistências não finalizadas.</b>").show()
+            $(".tipo_listar").html("<b>Mostrando " + tipo_nao_finalizadas + " Assistências não finalizadas.</b>").show()
         }
         if (tipo == "finalizada_exibir" || tipo == "finalizada_exibir2") {
             $(".nao_finalizada").hide()
             $(".finalizada").show()
-            $(".tipo_listar").html("<b>Mostrando " + '<?= $dados['finalizadas'] ?>' + " Assistências não finalizadas.</b>").show()
+            $(".tipo_listar").html("<b>Mostrando " + tipo_finalizadas + " Assistências não finalizadas.</b>").show()
         }
         if (tipo == "todas_exibir" || tipo == "todas_exibir2") {
             $(".nao_finalizada").show()
             $(".finalizada").show()
-            $(".tipo_listar").html("<b>Mostrando " + '<?= $count_assistencias ?>' + " Assistências finalizadas e não finalizadas.</b>").show()
+            $(".tipo_listar").html("<b>Mostrando " + input_count_assistencias + " Assistências finalizadas e não finalizadas.</b>").show()
         }
 
     }

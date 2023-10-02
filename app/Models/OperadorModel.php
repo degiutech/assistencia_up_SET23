@@ -46,6 +46,39 @@ class OperadorModel
         return $res;
     }
 
+    //Todos os operafdores sem distinção
+    public function allOperadoresSemDistincao()
+    {
+
+        if ($this->sessao_acesso['acesso'] != 'Supervisão' && $this->sessao_acesso['acesso'] != 'Administração') {
+            exit('Sem permissão de acesso');
+        }
+
+        $db = new Database();
+        $mysqli = $db->getConection();
+
+        $res = ['erro' => '', 'operadores' => ''];
+        $op = [];
+
+        $query = "SELECT * FROM users WHERE acesso != 'Dev'";
+
+        if (!$result = mysqli_query($mysqli, $query)) {
+            $res['erro'] = 'ERRO: ' . mysqli_error($mysqli);
+        } else {
+            // $res['operadores'] = $result->fetch_all();
+            while ($row = $result->fetch_assoc()) {
+
+                $op[] = $row;
+            }
+        }
+
+        $res['operadores'] = $op;
+
+        $db->connClose();
+
+        return $res;
+    }
+
     public function getInfoOperator($id)
     {
 
