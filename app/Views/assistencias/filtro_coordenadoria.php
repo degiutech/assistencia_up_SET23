@@ -174,7 +174,21 @@
         </div>
 
         <div class="esconder_para_print card" id="div_registros">
+
             <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="tipo_listar"><b>Mostrando <?= $count_assistencias ?> Assistências finalizadas e não finalizadas.</b></div>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-end">
+                        <button class="btn btn-light btn-sm" id="nao_finalizada_exibir" onclick="tipo_status(this.id)">Não finalizadas</button>
+                        <button class="btn btn-light btn-sm" id="finalizada_exibir" onclick="tipo_status(this.id)">Finalizadas</button>
+                        <button class="btn btn-light btn-sm" id="todas_exibir" onclick="tipo_status(this.id)">Todas</button>
+                    </div>
+                </div>
+
+
 
                 <?php if (isset($dados['assistencias']) && $dados['assistencias'] != '') {
 
@@ -185,9 +199,13 @@
                         $dt = date_create($ass['date_at']);
                         $data = date_format($dt, 'd/m/Y');
 
-                ?>
+                        if ($ass['status_atual'] == 'Finalizada') {
+                            $classe_exibir = 'finalizada';
+                        } else {
+                            $classe_exibir = 'nao_finalizada';
+                        } ?>
 
-                        <div class="card mb-3 meu_hover">
+                        <div class="<?= $classe_exibir ?> card mb-3 mt-4 meu_hover">
                             <div class="card-body">
 
                                 <?= Sessao::mensagem('assistencia' . $ass['id']) ?>
@@ -308,8 +326,6 @@
                     echo 'Nenhum registro encontrado';
                 }
 
-
-
                 ?>
 
             </div>
@@ -323,24 +339,23 @@
     <div class="esconder_para_print card" id="div_relatorio" style="display: none;">
         <div class="card-body">
 
-            <div class="row">
-                <div class="col-md-8">
-                    <h6><b>RELATÓRIO DE <?= $dados['titulo'] ?></b><span><i class="bi bi-file-arrow-down-fill text-dark" onclick="Javascript:window.print()" title="Salvar relatório" style="font-size: 2rem; cursor: pointer;"></i></span></h6>
-
-                    Assistências: <?= $count_assistencias ?>
-
-                    <div>Não Finalizadas: <?= $dados['nao_finalizadas'] ?></div>
-                    <div>Finalizadas: <?= $dados['finalizadas'] ?></div>
-
-
-                </div>
-                <div class="col-md-4 d-flex justify-content-end">
-                    <div class="col-auto">
-                        <button type="button" class="btn btn-success mb-2" onclick="Javascript:window.print()"><i class="bi bi-arrow-down"></i> Guardar</button>
-                        <button type="button" class="btn btn-success mb-2" onclick="retorna_print_geral()"><i class="bi bi-arrow-left"></i> Voltar</button>
-                    </div>
+            <div class="col-12 d-flex justify-content-end">
+                <div class="col-auto">
+                    <button type="button" class="btn btn-success mb-2" onclick="Javascript:window.print()"><i class="bi bi-arrow-down"></i> Guardar</button>
+                    <button type="button" class="btn btn-success mb-2" onclick="retorna_print_geral()"><i class="bi bi-arrow-left"></i> Voltar</button>
                 </div>
             </div>
+
+            <h5><b class="cor-texto">Coordenadoria: <?= $dados['nome_coordenadoria'] ?></b></h5>
+
+            <h6><b>RELATÓRIO DE <?= $dados['titulo'] ?></b></h6>
+
+            <button class="btn btn-light btn-sm" id="todas_exibir2" onclick="tipo_status(this.id)">Assistências: <?= $count_assistencias ?></button>
+
+            <button class="btn btn-light btn-sm" id="nao_finalizada_exibir2" onclick="tipo_status(this.id)">Não Finalizadas: <?= $dados['nao_finalizadas'] ?></button>
+            <button class="btn btn-light btn-sm" id="finalizada_exibir2" onclick="tipo_status(this.id)">Finalizadas: <?= $dados['finalizadas'] ?></button>
+
+            <div class="tipo_listar mt-3"><b>Mostrando <?= $count_assistencias ?> Assistências finalizadas e não finalizadas.</b></div>
 
             <table class="table table-sm table-bordered mt-3" style="width: 100%; position: relative;">
                 <thead>
@@ -361,9 +376,13 @@
                             $dt_1_r = date_create($ass['date_at']);
                             $dt_primeiro_registro = date_format($dt_1_r, 'd/m/Y');
 
-                    ?>
+                            if ($ass['status_atual'] == 'Finalizada') {
+                                $classe_exibir = 'finalizada';
+                            } else {
+                                $classe_exibir = 'nao_finalizada';
+                            } ?>
 
-                            <tr>
+                            <tr class="<?= $classe_exibir ?>">
                                 <td><?= $dt_primeiro_registro ?></td>
                                 <td><?= $ass['descricao'] ?> - <?= $ass['descricao_complemento'] ?></td>
                                 <td><?= $ass['ultima_atualizacao'] ?></td>
@@ -456,6 +475,26 @@
 </div>
 
 <script>
+    function tipo_status(tipo) {
+
+        if (tipo == "nao_finalizada_exibir" || tipo == "nao_finalizada_exibir2") {
+            $(".nao_finalizada").show()
+            $(".finalizada").hide()
+            $(".tipo_listar").html("<b>Mostrando " + '<?= $dados['nao_finalizadas'] ?>' + " Assistências não finalizadas.</b>").show()
+        }
+        if (tipo == "finalizada_exibir" || tipo == "finalizada_exibir2") {
+            $(".nao_finalizada").hide()
+            $(".finalizada").show()
+            $(".tipo_listar").html("<b>Mostrando " + '<?= $dados['finalizadas'] ?>' + " Assistências não finalizadas.</b>").show()
+        }
+        if (tipo == "todas_exibir" || tipo == "todas_exibir2") {
+            $(".nao_finalizada").show()
+            $(".finalizada").show()
+            $(".tipo_listar").html("<b>Mostrando " + '<?= $count_assistencias ?>' + " Assistências finalizadas e não finalizadas.</b>").show()
+        }
+
+    }
+
     function print_geral() {
 
         $(".esconder_para_print").hide()
@@ -474,7 +513,7 @@
         $(".esconder_para_print").show()
         $("#div_registros").show()
 
-        $("#div_relatorio").show()
+        $("#div_relatorio").hide()
 
         $("#div_print_geral").hide()
         $("#conteudo_print").html("")
