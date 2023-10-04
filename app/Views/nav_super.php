@@ -19,7 +19,8 @@ $user = $_SESSION['user'];
                         Assistências
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="<?= URL ?>/supervisao/assistencias">Gerenciamento</a></li>
+                        <!-- <li><a class="dropdown-item" href="<?= URL ?>/supervisao/assistencias">Gerenciamento</a></li> -->
+                        <li><a class="dropdown-item" href="<?= URL ?>/assistencias/filtro_geral">Geral</a></li>
                         <li><a class="dropdown-item" href="<?= URL ?>/assistencias/filtro_coordenadoria">Por Coordenadoria</a></li>
                         <li><a class="dropdown-item" href="<?= URL ?>/assistencias/filtro_operador">Por Operador</a></li>
                     </ul>

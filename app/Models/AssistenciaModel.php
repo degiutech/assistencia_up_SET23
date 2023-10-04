@@ -1226,6 +1226,103 @@ class AssistenciaModel
     }
 
     //NOVOS FILTROS
+
+    public function filtrosAssistenciasGeral($dados) {
+
+        $assistencias_res = [];
+
+        $data = $dados['data'];
+        $mes = $dados['mes'];
+        $ano = $dados['ano'];
+        $dt_inicial = $dados['dt_inicial'];
+        $dt_final = $dados['dt_final'];
+
+        $res = ['erro' => '', 'assistencias' => '', 'nao_finalizadas' => '', 'finalizadas' => ''];
+
+        $db = new Database();
+        $mysqli = $db->getConection();
+
+        if ($dados['input_datas'] == 'data') {
+            $query = "SELECT * FROM assistencias WHERE date_at='$data' ORDER BY created_at DESC LIMIT 200";
+        }
+        if ($dados['input_datas'] == 'mes_ano') {
+            $query = "SELECT * FROM assistencias WHERE MONTH(date_at)='$mes' AND YEAR(date_at) ='$ano' ORDER BY created_at DESC LIMIT 200";
+        }
+        if ($dados['input_datas'] == 'periodo') {
+            $query = "SELECT * FROM assistencias WHERE date(date_at) >= '$dt_inicial' AND date(date_at) <= '$dt_final' ORDER BY created_at DESC LIMIT 200";
+        }
+
+        if (!$result = mysqli_query($mysqli, $query)) {
+            $res['erro'] = 'ERRO: ' . mysqli_error($mysqli);
+        } else {
+
+            
+            $count_nao_finalizadas = 0;
+            $count_finalizadas = 0;
+
+
+            while ($row = $result->fetch_assoc()) {
+
+                
+                 //Não finalizadas
+                 if ($row['status_assist'] == 'Iniciada') {
+                    $count_nao_finalizadas += 1;
+                }
+                //Finalizadas
+                if ($row['status_assist'] == 'Finalizada') {
+                    $count_finalizadas += 1;
+                }
+
+                $assistencias_res[] = $row;
+
+
+            }
+
+        }
+
+        $db->connClose();
+
+        
+        if ($assistencias_res && $assistencias_res != '') {
+
+            for ($i = 0; $i < count($assistencias_res); $i++) {
+
+                //Pegar Cidadão
+                $cd = new CidadaoModel;
+                $cidadao = $cd->getNomeIdCidadao($assistencias_res[$i]['id_cidadao']);
+                $assistencias_res[$i]['nome_cidadao'] = $cidadao['cidadao']['nome'];
+
+                //Pegar updates
+                $up = $this->getAssistenciasUpdate($assistencias_res[$i]['id']);
+                $assistencias_res[$i]['updates'] = $up['assist_up'];
+                $assistencias_res[$i]['status_atual'] = $up['assist_up'][0]['status_updated'];
+                $dt_up = date_create($up['assist_up'][0]['updated_at']);
+
+                if (count($up) == 1) {
+                    $assistencias_res[$i]['ultima_atualizacao'] = 'Não há atualizações';
+                    $assistencias_res[$i]['desc_ultima_atualizacao'] = 'Não há atualizações';
+                } else {
+                    $assistencias_res[$i]['ultima_atualizacao'] = date_format($dt_up, 'd/m/Y');
+                    $assistencias_res[$i]['hora_ultima_atualizacao'] = date_format($dt_up, 'h:i');
+                    $assistencias_res[$i]['desc_ultima_atualizacao'] = $up['assist_up'][0]['status_compl_updated'];
+                }
+            }
+
+            
+        } else {
+            $assistencias_res = '';
+            $msg_assistencias = 'NÃO HÁ REGISTROS!';
+        }
+
+        $res['assistencias'] = $assistencias_res;
+        $res['nao_finalizadas'] = $count_nao_finalizadas;
+        $res['finalizadas'] = $count_finalizadas;
+
+
+        return $res;
+
+    }
+
     public function filtrosAssistenciasByCoordenadoria($dados)
     {
 

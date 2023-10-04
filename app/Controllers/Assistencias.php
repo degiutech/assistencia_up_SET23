@@ -483,6 +483,9 @@ class Assistencias extends Controller
         $dados['select_mes']            = trim($form['select_mes_modal']);
         $dados['select_ano']            = trim($form['select_ano_modal']);
 
+        if (trim($form['tipo_busca']) == 'geral') {
+            $this->filtro_geral($dados);
+        }
         if (trim($form['tipo_busca']) == 'coordenadoria') {
             $this->filtro_coordenadoria($dados);
         }
@@ -943,6 +946,9 @@ class Assistencias extends Controller
         $dados['select_mes']            = trim($form['select_mes_modal']);
         $dados['select_ano']            = trim($form['select_ano_modal']);
 
+        if (trim($form['tipo_busca']) == 'geral') {
+            $this->filtro_geral($dados);
+        }
         if (trim($form['tipo_busca']) == 'coordenadoria') {
             $this->filtro_coordenadoria($dados);
         }
@@ -1855,7 +1861,7 @@ class Assistencias extends Controller
 
         if (isset($form)) {
 
-            if (isset($dados_retorno)) {
+            if ($dados_retorno) {
                 $form = $dados_retorno;
             }
 
@@ -1874,7 +1880,13 @@ class Assistencias extends Controller
                 'meses'            => Times::meses(),
                 'anos'             => Times::anos_12(),
 
+                'id_coordenadoria' => 0,
+                'select_coordenadoria' => 0,
+                'nome_coordenadoria' => '',
                 'tipo_registro'    => $form['tipo_registro'],
+
+                'id_operador'      => '',
+                'select_operador'  => '',
 
                 'por_data'         => $form['por_data'],
                 'select_mes'       => $form['select_mes'],
@@ -1886,6 +1898,8 @@ class Assistencias extends Controller
 
                 'status_complemento' => '',
 
+                'id_coordenadoria_erro'     => '',
+                'select_coordenadoria_erro' => '',
                 'tipo_registro_erro'        => '',
 
                 'por_data_erro'    => '',
@@ -1967,7 +1981,7 @@ class Assistencias extends Controller
 
                 //busca por tipo assistencia
                 if ($dados['tipo_registro'] == 'assistencia') {
-                    $ass_res = $this->assistenciaModel->filtrosAssistenciasByOperador($dados_model);
+                    $ass_res = $this->assistenciaModel->filtrosAssistenciasGeral($dados_model);
                     if ($ass_res['erro'] == '' && $ass_res['assistencias'] != '') {
                         $dados['assistencias'] = $ass_res['assistencias'];
                         $dados['nao_finalizadas'] = $ass_res['nao_finalizadas'];
@@ -1988,7 +2002,7 @@ class Assistencias extends Controller
                         $dados['titulo'] = 'ASSISTÊNCIAS REGISTRADAS ENTRE ' . $dt_ini_format . ' e ' . $dt_fin_format;
                     }
 
-                    return $this->view('assistencias/filtro_operador', $dados);
+                    return $this->view('assistencias/filtro_geral', $dados);
                 }
 
                 //busca tipo update
@@ -1996,7 +2010,7 @@ class Assistencias extends Controller
                 }
 
 
-                $dados['select_operador'] = '0';
+                $dados['select_coordenadoria'] = '0';
                 $dados['tipo_registro'] = '0';
                 $dados['por_data'] = '';
                 $dados['select_mes'] = 'mes';
@@ -2010,8 +2024,8 @@ class Assistencias extends Controller
                 'meses'          => Times::meses(),
                 'anos'           => Times::anos_12(),
 
-                'id_operador'     => '0',
-                'select_operador' => '0',
+                'id_coordenadoria'     => '0',
+                'select_coordenadoria' => '0',
                 'tipo_registro'        => '0',
                 'por_data'             => '',
                 'select_mes'           => 'mes',
@@ -2019,9 +2033,9 @@ class Assistencias extends Controller
                 'dt_inicial'           => '',
                 'dt_final'             => '',
                 'input_datas'          => 'nenhum',
-                'tipo_busca'           => 'coordenadoria',
+                'tipo_busca'           => 'geral',
 
-                'select_operador_erro' => '',
+                'select_coordenadoria_erro' => '',
                 'tipo_registro_erro'        => '',
                 'por_data_erro'             => '',
                 'select_mes_erro'           => '',
