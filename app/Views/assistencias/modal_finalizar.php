@@ -52,7 +52,7 @@
                         <i class="bi bi-question-circle col-auto"></i>
                     </button>
 
-                    <textarea name="status_complemento" id="status_complemento" class="form-control" cols="20" rows="3" maxlength="100" placeholder="máx. 100 caracteres" required></textarea>
+                    <textarea name="status_complemento_modal" id="status_complemento" class="form-control" cols="20" rows="3" maxlength="100" placeholder="máx. 100 caracteres" required></textarea>
 
                 </div>
 

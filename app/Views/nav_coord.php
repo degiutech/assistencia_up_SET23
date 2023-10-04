@@ -21,8 +21,8 @@ $user = $_SESSION['user'];
                         Assistências
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="<?= URL ?>/coordenacao/assistencias">Gerenciamento</a></li>
-                        <li><a class="dropdown-item" href="<?= URL ?>/assistencias/filtro_minha_coordenadoria">Gerenciamento 2</a></li>
+                        <!-- <li><a class="dropdown-item" href="<?= URL ?>/coordenacao/assistencias">Gerenciamento</a></li> -->
+                        <li><a class="dropdown-item" href="<?= URL ?>/assistencias/filtro_minha_coordenadoria">Gerenciamento</a></li>
                     </ul>
                 </li>
 

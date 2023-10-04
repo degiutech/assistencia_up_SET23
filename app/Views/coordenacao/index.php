@@ -42,7 +42,8 @@
 
                 <h6 class="card-subtitle mb-2 text-muted">Atualizadas no mês atual <?= $dados['count_up_mes_atual'] ?></h6>
 
-                <a href="<?= URL ?>/coordenacao/assistencias" class="btn btn-secondary">Gerenciar Assistências</a>
+                <!-- <a href="<?= URL ?>/coordenacao/assistencias" class="btn btn-secondary">Gerenciar Assistências</a> -->
+                <a href="<?= URL ?>/assistencias/filtro_minha_coordenadoria" class="btn btn-secondary">Gerenciar Assistências</a>
 
             </div>
         </div>

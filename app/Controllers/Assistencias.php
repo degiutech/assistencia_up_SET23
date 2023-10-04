@@ -486,6 +486,9 @@ class Assistencias extends Controller
         if (trim($form['tipo_busca']) == 'coordenadoria') {
             $this->filtro_coordenadoria($dados);
         }
+        if (trim($form['tipo_busca']) == 'minha_coordenadoria') {
+            $this->filtro_minha_coordenadoria($dados);
+        }
         if (trim($form['tipo_busca']) == 'operador') {
             $this->filtro_operador($dados);
         }
@@ -849,7 +852,7 @@ class Assistencias extends Controller
             'id_cidadao'         => trim($form['id_cidadao']),
             'id_assistencia'                 => trim($form['id_assistencia']),
             'status_assist'      => 'Finalizada',
-            'status_complemento' => trim($form['status_complemento']),
+            'status_complemento' => trim($form['status_complemento_modal']),
 
             'descricao'      => trim($form['descricao_assistencia']),
             'status_assist'  => 'Finalizada',
@@ -858,7 +861,7 @@ class Assistencias extends Controller
             'id_updated_by'      => $_SESSION['user']['id'],
             'name_updated_by'    => $_SESSION['user']['nome'],
             'status_updated'     => 'Finalizada',
-            'status_compl_updated' => '',
+            'status_compl_updated' => $form['status_complemento_modal'],
 
 
             'id_coordenadoria' => $id_coordenadoria,
@@ -942,6 +945,9 @@ class Assistencias extends Controller
 
         if (trim($form['tipo_busca']) == 'coordenadoria') {
             $this->filtro_coordenadoria($dados);
+        }
+        if (trim($form['tipo_busca']) == 'minha_coordenadoria') {
+            $this->filtro_minha_coordenadoria($dados);
         }
         if (trim($form['tipo_busca']) == 'operador') {
             $this->filtro_operador($dados);
@@ -1464,7 +1470,7 @@ class Assistencias extends Controller
                 'dt_inicial'       => $form['dt_inicial'],
                 'dt_final'         => $form['dt_final'],
                 'input_datas'      => trim($form['input_datas']),
-                'tipo_busca'       => 'coordenadoria',
+                'tipo_busca'       => 'minha_coordenadoria',
 
                 'status_complemento' => '',
 

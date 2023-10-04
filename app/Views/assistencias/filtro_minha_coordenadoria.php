@@ -11,121 +11,133 @@
 
             <?= Sessao::mensagem('assistencias') ?>
 
-            <form action="<?= URL ?>/assistencias/filtro_minha_coordenadoria" method="post">
+            <div class="row">
 
-            <!-- inputs invisiveis -->
-            <input type="hidden" name="input_datas" id="input_datas" value="<?= $dados['input_datas'] ?>">
-            <input type="hidden" name="tipo_busca" class="tipo_busca" value="coordenadoria">
+                <div class="col-auto">
 
-                <div class="row">
+                    <form action="<?= URL ?>/assistencias/filtro_minha_coordenadoria" method="post">
 
-                    <!-- tipo de registro -->
-                    <div class="col-auto" style="display: none;">
+                        <!-- inputs invisiveis -->
+                        <input type="hidden" name="input_datas" id="input_datas" value="<?= $dados['input_datas'] ?>">
+                        <input type="hidden" name="tipo_busca" class="tipo_busca" value="coordenadoria">
 
-                        <label for="tipo_registro" class="form-label">Tipo de registro</label>
-
-                        <select class="form-select <?= $dados['tipo_registro_erro'] != '' ? 'is-invalid' : '' ?>" name="tipo_registro" aria-label="Default select example">
-                            <!-- <option value="0" selected>- -</option> -->
-
-                            <option value="assistencia" <?= $dados['tipo_registro'] == 'assistencia' ? 'selected' : ''; ?>>Primeiro registro</option>
-                        </select>
-
-                        <div class="invalid-feedback">
-                            <?= $dados['tipo_registro_erro'] ?>
-                        </div>
-                    </div>
-
-                    <div class="col-auto">
-                        <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                            <button type="button" onclick="toggle_divs('data')" class="btn btn-outline-primary">Data</button>
-                            <button type="button" onclick="toggle_divs('mes_ano')" class="btn btn-outline-primary">Mês/Ano</button>
-                            <button type="button" onclick="toggle_divs('periodo')" class="btn btn-outline-primary">Período</button>
-                        </div>
-                    </div>
-
-                    <!-- data -->
-                    <div class="divs col-auto" id="div_data" style="display: none;">
-                        <label for="por_data" class="form-label">Por data</label>
-                        <input type="date" name="por_data" value="<?= $dados['por_data'] ?>" id="input_por_data" class="form-control <?= $dados['por_data_erro'] != '' ? 'is-invalid' : '' ?>">
-                        <div class="invalid-feedback">
-                            <?= $dados['por_data_erro'] ?>
-                        </div>
-                    </div>
-
-                    <!-- mês/ano -->
-                    <div class="divs col-auto" id="div_mes_ano" style="display: none;">
-                        <label for="mes_ano" class="form-label">Por mês/ano</label>
                         <div class="row">
 
-                            <div class="col-auto">
-                                <select class="form-select <?= $dados['select_mes_erro'] != '' ? 'is-invalid' : '' ?>" id="select_mes" name="select_mes" aria-label="Default select example">
+                            <!-- tipo de registro -->
+                            <div class="col-auto" style="display: none;">
 
-                                    <option value="<?= $dados['select_mes'] ?>">Mês</option>
+                                <label for="tipo_registro" class="form-label">Tipo de registro</label>
 
-                                    <?php foreach ($dados['meses'] as $mes) { ?>
+                                <select class="form-select <?= $dados['tipo_registro_erro'] != '' ? 'is-invalid' : '' ?>" name="tipo_registro" aria-label="Default select example">
+                                    <!-- <option value="0" selected>- -</option> -->
 
-                                        <option value="<?= $mes['int'] ?>" <?= $dados['select_mes'] == $mes['int'] ? 'selected' : ''; ?>><?= $mes['string'] ?></option>
-
-                                    <?php } ?>
-
+                                    <option value="assistencia" <?= $dados['tipo_registro'] == 'assistencia' ? 'selected' : ''; ?>>Primeiro registro</option>
                                 </select>
+
                                 <div class="invalid-feedback">
-                                    <?= $dados['select_mes_erro'] ?>
+                                    <?= $dados['tipo_registro_erro'] ?>
                                 </div>
                             </div>
 
                             <div class="col-auto">
-                                <select class="form-select <?= $dados['select_ano_erro'] != '' ? 'is-invalid' : '' ?>" id="select_ano" name="select_ano" aria-label="Default select example">
-                                    <option value="<?= $dados['select_ano'] ?>">Ano</option>
-                                    <?php foreach ($dados['anos'] as $ano) { ?>
-
-                                        <option value="<?= $ano ?>" <?= $dados['select_ano'] == $ano ? 'selected' : ''; ?>><?= $ano ?></option>
-
-                                    <?php } ?>
-
-                                </select>
-                                <div class="invalid-feedback">
-                                    <?= $dados['select_ano_erro'] ?>
+                                <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+                                    <button type="button" onclick="toggle_divs('data')" class="btn btn-outline-primary">Data</button>
+                                    <button type="button" onclick="toggle_divs('mes_ano')" class="btn btn-outline-primary">Mês/Ano</button>
+                                    <button type="button" onclick="toggle_divs('periodo')" class="btn btn-outline-primary">Período</button>
                                 </div>
                             </div>
 
-                        </div>
+                            <!-- data -->
+                            <div class="divs col-auto" id="div_data" style="display: none;">
+                                <label for="por_data" class="form-label">Por data</label>
+                                <input type="date" name="por_data" value="<?= $dados['por_data'] ?>" id="input_por_data" class="form-control <?= $dados['por_data_erro'] != '' ? 'is-invalid' : '' ?>">
+                                <div class="invalid-feedback">
+                                    <?= $dados['por_data_erro'] ?>
+                                </div>
+                            </div>
 
-                    </div>
+                            <!-- mês/ano -->
+                            <div class="divs col-auto" id="div_mes_ano" style="display: none;">
+                                <label for="mes_ano" class="form-label">Por mês/ano</label>
+                                <div class="row">
 
-                    <!-- período -->
-                    <div class="divs row col-auto" id="div_periodo" style="display: none;">
+                                    <div class="col-auto">
+                                        <select class="form-select <?= $dados['select_mes_erro'] != '' ? 'is-invalid' : '' ?>" id="select_mes" name="select_mes" aria-label="Default select example">
 
-                        <div class="col-auto">
-                            <label for="dt_inicial" class="form-label">Data de Início</label>
-                            <input type="date" value="<?= $dados['dt_inicial'] ?>" class="form-control <?= $dados['dt_inicial_erro'] != '' ? 'is-invalid' : '' ?>" id="dt_inicial" name="dt_inicial">
+                                            <option value="<?= $dados['select_mes'] ?>">Mês</option>
 
-                            <div class="invalid-feedback">
-                                <?= $dados['dt_inicial_erro'] ?>
+                                            <?php foreach ($dados['meses'] as $mes) { ?>
+
+                                                <option value="<?= $mes['int'] ?>" <?= $dados['select_mes'] == $mes['int'] ? 'selected' : ''; ?>><?= $mes['string'] ?></option>
+
+                                            <?php } ?>
+
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            <?= $dados['select_mes_erro'] ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <select class="form-select <?= $dados['select_ano_erro'] != '' ? 'is-invalid' : '' ?>" id="select_ano" name="select_ano" aria-label="Default select example">
+                                            <option value="<?= $dados['select_ano'] ?>">Ano</option>
+                                            <?php foreach ($dados['anos'] as $ano) { ?>
+
+                                                <option value="<?= $ano ?>" <?= $dados['select_ano'] == $ano ? 'selected' : ''; ?>><?= $ano ?></option>
+
+                                            <?php } ?>
+
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            <?= $dados['select_ano_erro'] ?>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- período -->
+                            <div class="divs row col-auto" id="div_periodo" style="display: none;">
+
+                                <div class="col-auto">
+                                    <label for="dt_inicial" class="form-label">Data de Início</label>
+                                    <input type="date" value="<?= $dados['dt_inicial'] ?>" class="form-control <?= $dados['dt_inicial_erro'] != '' ? 'is-invalid' : '' ?>" id="dt_inicial" name="dt_inicial">
+
+                                    <div class="invalid-feedback">
+                                        <?= $dados['dt_inicial_erro'] ?>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-auto">
+
+                                    <label for="dt_final" class="form-label">Data Final</label>
+                                    <input type="date" value="<?= $dados['dt_final'] ?>" class="form-control <?= $dados['dt_final_erro'] != '' ? 'is-invalid' : '' ?>" id="dt_final" name="dt_final">
+
+                                    <div class="invalid-feedback">
+                                        <?= $dados['dt_final_erro'] ?>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- botão buscar -->
+                            <div class="col-auto" id="div_btn_buscar" style="display: none;">
+                                <label for="btn_submit" class="form-label" style="visibility: hidden;">.</label>
+                                <input type="submit" class="btn btn-info form-control" value="Buscar" name="btn_submit">
                             </div>
 
                         </div>
-
-                        <div class="col-auto">
-
-                            <label for="dt_final" class="form-label">Data Final</label>
-                            <input type="date" value="<?= $dados['dt_final'] ?>" class="form-control <?= $dados['dt_final_erro'] != '' ? 'is-invalid' : '' ?>" id="dt_final" name="dt_final">
-
-                            <div class="invalid-feedback">
-                                <?= $dados['dt_final_erro'] ?>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- botão buscar -->
-                    <div class="col-auto" id="div_btn_buscar" style="display: none;">
-                        <label for="btn_submit" class="form-label" style="visibility: hidden;">.</label>
-                        <input type="submit" class="btn btn-info form-control" value="Buscar" name="btn_submit">
-                    </div>
+                    </form>
 
                 </div>
-            </form>
+
+                <div class="col-auto d-flex align-items-center">
+                    <h5 style="color: blue;" id="texto_filtros_busca">Selecione um filtro para buscar Assistências</h5>
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -517,17 +529,23 @@
     if (input_datas == "data") {
         $("#div_data").show()
         $("#div_btn_buscar").show()
+        $("#texto_filtros_busca").hide()
     }
     if (input_datas == "mes_ano") {
         $("#div_mes_ano").show()
         $("#div_btn_buscar").show()
+        $("#texto_filtros_busca").hide()
     }
     if (input_datas == "periodo") {
         $("#div_periodo").show()
         $("#div_btn_buscar").show()
+        $("#texto_filtros_busca").hide()
     }
 
     function toggle_divs(tipo) {
+
+        $("#texto_filtros_busca").hide()
+
         $(".divs").hide()
         $("#input_datas").val("nenhum")
         $("#div_btn_buscar").show()
