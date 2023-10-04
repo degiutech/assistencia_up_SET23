@@ -70,7 +70,6 @@
 
                     <!-- Mais filtros -->
                     <li class="nav-item">
-                        <!-- <a href="<?= URL ?>/assistencias/filtro_coordenadoria" style="margin-left: 20px;" class="btn btn-secondary d-block">Por Coordenadoria</a> -->
                         <div class="dropdown" style="margin-left: 20px;">
                             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-plus"></i>Filtros

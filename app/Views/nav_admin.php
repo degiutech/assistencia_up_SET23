@@ -33,19 +33,8 @@ $user = $_SESSION['user'];
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="<?= URL ?>/cidadao/create">Novo Cidadão</a></li>
                         <li><a class="dropdown-item" href="<?= URL ?>/cidadao/cadastros_recentes">Cadastros Recentes</a></li>
-                        <li><a class="dropdown-item" href="<?= URL ?>/admin/assistencias">Assistências</a></li>
                     </ul>
                 </li>
-
-                <!-- Supervisão -->
-                <!-- <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Supervisão
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="<?= URL ?>/admin/all_supervisores">Listar Supervisores</a></li>
-                    </ul>
-                </li> -->
 
                 <!-- Coordenação -->
                 <li class="nav-item dropdown">
@@ -58,16 +47,6 @@ $user = $_SESSION['user'];
                         <li><a class="dropdown-item" href="<?= URL ?>/admin/create_coordenadoria">Nova Coordenadoria</a></li>
                     </ul>
                 </li>
-
-                <!-- Assessores -->
-                <!-- <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Assessores
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="<?= URL ?>/admin/all_representantes">Todos os Assessores</a></li>
-                    </ul>
-                </li> -->
 
                 <!-- Operadores -->
                 <li class="nav-item dropdown">

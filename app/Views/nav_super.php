@@ -14,14 +14,16 @@ $user = $_SESSION['user'];
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <!-- Assistências -->
-                <!-- <li class="nav-item dropdown">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Assistências
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="<?= URL ?>/supervisao/assistencias">Gerenciamento</a></li>
+                        <li><a class="dropdown-item" href="<?= URL ?>/assistencias/filtro_coordenadoria">Por Coordenadoria</a></li>
+                        <li><a class="dropdown-item" href="<?= URL ?>/assistencias/filtro_operador">Por Operador</a></li>
                     </ul>
-                </li> -->
+                </li>
 
                 <!-- Cidadão -->
                 <li class="nav-item dropdown">
@@ -31,7 +33,6 @@ $user = $_SESSION['user'];
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="<?= URL ?>/cidadao/create">Novo Cidadão</a></li>
                         <li><a class="dropdown-item" href="<?= URL ?>/supervisao/cidadaos">Cadastros Recentes</a></li>
-                        <li><a class="dropdown-item" href="<?= URL ?>/supervisao/assistencias">Assistências</a></li>
                     </ul>
                 </li>
 
@@ -45,16 +46,6 @@ $user = $_SESSION['user'];
                         <li><a class="dropdown-item" href="<?= URL ?>/supervisao/create_coordenadoria">Nova Coordenadoria</a></li>
                     </ul>
                 </li>
-
-                <!-- <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Assessores
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="<?= URL ?>/supervisao/all_representantes">Todos os Assessores</a></li>
-
-                    </ul>
-                </li> -->
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -77,8 +68,8 @@ $user = $_SESSION['user'];
                         <li><a class="dropdown-item" href="<?= URL ?>/supervisao/minhas_assistencias">Minhas Assistências</a></li>
                     </ul>
                 </li>
-				
-				<!-- Mensagens -->
+
+                <!-- Mensagens -->
                 <li class="nav-item">
                     <a class="nav-link active" href="<?= URL ?>/mensagem">
                         Mensagens
@@ -91,13 +82,6 @@ $user = $_SESSION['user'];
                         FAQ
                     </a>
                 </li>
-				
-				<!-- Conversas -->
-                <!-- <li class="nav-item">
-                    <a class="nav-link active" href="<?= URL ?>/chat/chat">
-                        Conversas
-                    </a>
-                </li> -->
 
             </ul>
 
