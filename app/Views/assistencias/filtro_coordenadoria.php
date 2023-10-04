@@ -13,6 +13,10 @@
 
             <form action="<?= URL ?>/assistencias/filtro_coordenadoria" method="post">
 
+            <!-- inputs invisiveis -->
+            <input type="hidden" name="input_datas" id="input_datas" value="<?= $dados['input_datas'] ?>">
+            <input type="hidden" name="tipo_busca" class="tipo_busca" value="coordenadoria">
+
                 <div class="row">
 
                     <!-- coordenadorias -->
@@ -132,8 +136,6 @@
 
                         </div>
                     </div>
-
-                    <input type="hidden" name="input_datas" id="input_datas" value="<?= $dados['input_datas'] ?>">
 
                     <!-- botão buscar -->
                     <div class="col-auto" id="div_btn_buscar" style="display: none;">
@@ -565,13 +567,13 @@
 
     function modal_atualizar(id_assistencia) {
         $("#btn_modal_atualizar").click()
-        $("#status_atual_modal").val($("#status_atual" + id_assistencia).val())
-        $("#span_status_atual_modal").text($("#status_atual" + id_assistencia).val())
-        $("#id_cidadao_modal").val($("#id_cidadao" + id_assistencia).val())
-        $("#nome_cidadao_modal").val($("#nome_cidadao" + id_assistencia).val())
-        $("#span_nome_cidadao_modal").text($("#nome_cidadao" + id_assistencia).val())
-        $("#id_assistencia_modal").val(id_assistencia)
-        $("#span_descricao_modal").text($("#desc_ass" + id_assistencia).val())
+        $(".status_atual_modal").val($("#status_atual" + id_assistencia).val())
+        $(".span_status_atual_modal").text($("#status_atual" + id_assistencia).val())
+        $(".id_cidadao_modal").val($("#id_cidadao" + id_assistencia).val())
+        $(".nome_cidadao_modal").val($("#nome_cidadao" + id_assistencia).val())
+        $(".span_nome_cidadao_modal").text($("#nome_cidadao" + id_assistencia).val())
+        $(".id_assistencia_modal").val(id_assistencia)
+        $(".span_descricao_modal").text($("#desc_ass" + id_assistencia).val())
         $("#sus_modal").val($("#sus" + id_assistencia).val())
         $("#desc_juridica_modal").val($("#desc_juridica" + id_assistencia).val())
         $("#num_proc_juridica_modal").val($("#num_proc_juridica" + id_assistencia).val())
@@ -579,13 +581,13 @@
 
     function modal_finalizar(id_assistencia) {
         $("#btn_modal_finalizar").click()
-        $("#id_cidadao_modal_fin").val($("#id_cidadao" + id_assistencia).val())
-        $("#id_assistencia_modal_fin").val(id_assistencia)
-        $("#nome_cidadao_modal_fin").val($("#nome_cidadao" + id_assistencia).val())
-        $("#span_nome_cidadao_modal_fin").text($("#nome_cidadao" + id_assistencia).val())
-        $("#span_desc_ass_modal_fin").text($("#desc_ass" + id_assistencia).val())
-        $("#desc_ass_modal_fin").val($("#desc_ass" + id_assistencia).val())
-        $("#id_coordenadoria_modal_fin").val($("#id_coordenadoria" + id_assistencia).val())
-        $("#nome_coordenadoria_modal_fin").val($("#nome_coordenadoria" + id_assistencia).val())
+        $(".id_cidadao_modal").val($("#id_cidadao" + id_assistencia).val())
+        $(".id_assistencia_modal").val(id_assistencia)
+        $(".nome_cidadao_modal").val($("#nome_cidadao" + id_assistencia).val())
+        $(".span_nome_cidadao_modal").text($("#nome_cidadao" + id_assistencia).val())
+        $(".span_desc_ass_modal").text($("#desc_ass" + id_assistencia).val())
+        $(".desc_ass_modal").val($("#desc_ass" + id_assistencia).val())
+        $(".id_coordenadoria_modal").val($("#id_coordenadoria" + id_assistencia).val())
+        $(".nome_coordenadoria_modal").val($("#nome_coordenadoria" + id_assistencia).val())
     }
 </script>

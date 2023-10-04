@@ -10,19 +10,23 @@
 
             <form method="post" name="registrar" action="<?= URL ?>/assistencias/atualizar_modal">
 
-                <input type="hidden" name="id_cidadao_modal" id="id_cidadao_modal">
-                <input type="hidden" name="id_assistencia_modal" id="id_assistencia_modal">
+                <input type="hidden" name="tipo_busca" class="tipo_busca_modal" value="<?= $dados['tipo_busca'] ?>">
+
+                <input type="hidden" name="id_cidadao_modal" class="id_cidadao_modal">
+                <input type="hidden" name="id_assistencia_modal" class="id_assistencia_modal">
                 <input type="hidden" name="status_atual_modal" id="status_atual_modal">
 
-                <input type="hidden" name="descricao_assistencia" id="desc_ass_modal">
-                <input type="hidden" name="nome_cidadao" id="nome_cidadao_modal">
-                <input type="hidden" name="id_coordenadoria" id="id_coordenadoria_modal">
-                <input type="hidden" name="nome_coordenadoria" id="nome_coordenadoria_modal">
+                <input type="hidden" name="descricao_assistencia" class="desc_ass_modal">
+                <input type="hidden" name="nome_cidadao" class="nome_cidadao_modal">
+                <input type="hidden" name="id_coordenadoria" class="id_coordenadoria_modal">
+                <input type="hidden" name="nome_coordenadoria" class="nome_coordenadoria_modal">
 
                 <input type="hidden" name="input_datas" value="<?= $dados['input_datas'] ?>">
 
                 <input type="hidden" name="select_coordenadoria_modal" value="<?= $dados['select_coordenadoria'] ?>">
                 <input type="hidden" name="tipo_registro_modal" value="<?= $dados['tipo_registro'] ?>">
+
+                <input type="hidden" name="select_operador_modal" value="<?= $dados['select_operador'] ?>">
 
                 <!-- datas -->
                 <input type="hidden" name="por_data_modal" value="<?= $dados['por_data'] ?>">
@@ -31,9 +35,9 @@
                 <input type="hidden" name="dt_inicial_modal" value="<?= $dados['dt_inicial'] ?>">
                 <input type="hidden" name="dt_final_modal" value="<?= $dados['dt_final'] ?>">
 
-                <h5 class="cor-texto"><span>Nome do Cidadão: <b id="span_nome_cidadao_modal"></b></span></h5>
-                <h6>Assistência: <span id="span_descricao_modal"></span></h6>
-                <h6>Status atual: <span id="span_status_atual_modal"></span></h6>
+                <h5 class="cor-texto"><span>Nome do Cidadão: <b class="span_nome_cidadao_modal"></b></span></h5>
+                <h6>Assistência: <span class="span_descricao_modal"></span></h6>
+                <h6>Status atual: <span class="span_status_atual_modal"></span></h6>
 
                 <hr>
 

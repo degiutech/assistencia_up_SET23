@@ -386,11 +386,24 @@ class Assistencias extends Controller
                 'status_complemento' => $form['status_complemento_modal'],
                 'status_updated'  => $form['novo_status_modal'],
                 'status_compl_updated' => $form['status_complemento_modal'],
+
                 'id_coordenadoria' => $assistencia['id_coordenadoria'],
                 'nome_coordenadoria' => $assistencia['nome_coordenadoria'],
+
+                'id_operador'        => $assistencia['id_created_by'],
+                
                 'sus'                => $sus,
                 'desc_juridica' => $desc_juridica,
                 'num_proc_juridica' => $num_proc_juridica,
+
+                'select_coordenadoria_erro' => '',
+                'select_operador_erro'      => '',
+                'tipo_registro_erro'        => '',
+                'por_data_erro'             => '',
+                'select_mes_erro'           => '',
+                'select_ano_erro'           => '',
+                'dt_inicial_erro'           => '',
+                'dt_final_erro'             => '',
             ];
 
             //Verifica se já existe o status_update - Proteje do refresh da página
@@ -429,22 +442,40 @@ class Assistencias extends Controller
 
             Sessao::mensagem('assistencia' . $dados['id_assistencia'], 'Atualização de Assistência efetuada com sucesso!');
         }
-        //Dados de retorno
-        $coordenadorias = '';
 
-        $coord_res = $this->coordenacaoModel->allCoordenadorias();
-        if ($coord_res['erro'] == '') {
-            $coordenadorias = $coord_res['coordenadorias'];
-        } else {
-            Sessao::mensagem('assistencias', 'ERRO ao buscar Coordenadorias', 'alert alert-danger');
+        //Dados de retorno
+
+        $coordenadorias = '';
+        if (trim($form['tipo_busca']) == 'coordenadoria') {
+            $coord_res = $this->coordenacaoModel->allCoordenadorias();
+            if ($coord_res['erro'] == '') {
+                $coordenadorias = $coord_res['coordenadorias'];
+            } else {
+                Sessao::mensagem('assistencias', 'ERRO ao buscar Coordenadorias', 'alert alert-danger');
+            }
+        }
+
+        $operadores = '';
+
+        if (trim($form['tipo_busca']) == 'operador') {
+            $op_res = $this->operadorModel->allOperadoresSemDistincao();
+            if ($op_res['erro'] == '') {
+                $operadores = $op_res['operadores'];
+            } else {
+                Sessao::mensagem('assistencias', 'ERRO ao buscar Operadores', 'alert alert-danger');
+            }
         }
 
         $dados['coordenadorias'] = $coordenadorias;
+        $dados['operadores']     = $operadores;
         $dados['meses']          = Times::meses();
         $dados['anos']           = Times::anos_12();
         $dados['select_coordenadoria'] = trim($form['select_coordenadoria_modal']);
         $dados['tipo_registro']        = trim($form['tipo_registro_modal']);
         $dados['input_datas']          = trim($form['input_datas']);
+        $dados['tipo_busca']           = trim($form['tipo_busca']);
+
+        $dados['select_operador']      = $assistencia['id_created_by'];
 
         $dados['dt_inicial']            = trim($form['dt_inicial_modal']);
         $dados['dt_final']            = trim($form['dt_final_modal']);
@@ -452,7 +483,12 @@ class Assistencias extends Controller
         $dados['select_mes']            = trim($form['select_mes_modal']);
         $dados['select_ano']            = trim($form['select_ano_modal']);
 
-        $this->filtro_coordenadoria($dados);
+        if (trim($form['tipo_busca']) == 'coordenadoria') {
+            $this->filtro_coordenadoria($dados);
+        }
+        if (trim($form['tipo_busca']) == 'operador') {
+            $this->filtro_operador($dados);
+        }
     }
 
     public function create($id)
@@ -788,8 +824,26 @@ class Assistencias extends Controller
 
     public function finalizar_modal()
     {
+        $id_coordenadoria = '';
+        $nome_coordenadoria = '';
+        $select_coordenadoria = 0;
+
+        $id_operador = '';
+        $nome_operador = '';
+        $select_operador = 0;
 
         $form = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
+
+        if (trim($form['tipo_busca']) == 'coordenadoria') {
+            $id_coordenadoria = $form['id_coordenadoria'];
+            $nome_coordenadoria = $form['nome_coordenadoria'];
+            $select_coordenadoria = trim($form['select_coordenadoria_modal']);
+        }
+        if (trim($form['tipo_busca']) == 'operador') {
+            $id_operador = $form['id_operador_modal'];
+            $nome_operador = $form['nome_operador_modal'];
+            $select_operador = trim($form['select_operador_modal']);
+        }
 
         $dados = [
             'id_cidadao'         => trim($form['id_cidadao']),
@@ -805,8 +859,13 @@ class Assistencias extends Controller
             'name_updated_by'    => $_SESSION['user']['nome'],
             'status_updated'     => 'Finalizada',
             'status_compl_updated' => '',
-            'id_coordenadoria' => trim($form['id_coordenadoria']),
-            'nome_coordenadoria' => trim($form['nome_coordenadoria']),
+
+
+            'id_coordenadoria' => $id_coordenadoria,
+            'nome_coordenadoria' => $nome_coordenadoria,
+
+            'id_operador'        => $id_operador,
+            'nome_operador'      => $nome_operador,
 
             'select_coordenadoria_erro' => '',
             'tipo_registro_erro' => '',
@@ -815,7 +874,9 @@ class Assistencias extends Controller
             'select_ano_erro'  => '',
             'dt_inicial_erro'  => '',
             'dt_final_erro'    => '',
-            'periodo_select_erro' => ''
+            'periodo_select_erro' => '',
+
+            'select_operador_erro' => '',
         ];
 
         //Na Assistência
@@ -835,7 +896,26 @@ class Assistencias extends Controller
         }
 
         //Dados de retorno
+
         $coordenadorias = '';
+        if (trim($form['tipo_busca']) == 'coordenadoria') {
+            $coord_res = $this->coordenacaoModel->allCoordenadorias();
+            if ($coord_res['erro'] == '') {
+                $coordenadorias = $coord_res['coordenadorias'];
+            } else {
+                Sessao::mensagem('assistencias', 'ERRO ao buscar Coordenadorias', 'alert alert-danger');
+            }
+        }
+
+        $operadores = '';
+        if (trim($form['tipo_busca']) == 'operador') {
+            $op_res = $this->operadorModel->allOperadoresSemDistincao();
+            if ($op_res['erro'] == '') {
+                $operadores = $op_res['operadores'];
+            } else {
+                Sessao::mensagem('assistencias', 'ERRO ao buscar Operadores', 'alert alert-danger');
+            }
+        }
 
         $coord_res = $this->coordenacaoModel->allCoordenadorias();
         if ($coord_res['erro'] == '') {
@@ -845,11 +925,14 @@ class Assistencias extends Controller
         }
 
         $dados['coordenadorias'] = $coordenadorias;
+        $dados['operadores']     = $operadores;
         $dados['meses']          = Times::meses();
         $dados['anos']           = Times::anos_12();
-        $dados['select_coordenadoria'] = trim($form['select_coordenadoria_modal']);
+        $dados['select_coordenadoria'] = $select_coordenadoria;
+        $dados['select_operador']      = $select_operador;
         $dados['tipo_registro']        = trim($form['tipo_registro_modal']);
         $dados['input_datas']          = trim($form['input_datas']);
+        $dados['tipo_busca']           = trim($form['tipo_busca']);
 
         $dados['dt_inicial']            = trim($form['dt_inicial_modal']);
         $dados['dt_final']            = trim($form['dt_final_modal']);
@@ -857,7 +940,12 @@ class Assistencias extends Controller
         $dados['select_mes']            = trim($form['select_mes_modal']);
         $dados['select_ano']            = trim($form['select_ano_modal']);
 
-        $this->filtro_coordenadoria($dados);
+        if (trim($form['tipo_busca']) == 'coordenadoria') {
+            $this->filtro_coordenadoria($dados);
+        }
+        if (trim($form['tipo_busca']) == 'operador') {
+            $this->filtro_operador($dados);
+        }
     }
 
     //Função reescrita de Cidadao
@@ -1156,12 +1244,16 @@ class Assistencias extends Controller
                 'select_coordenadoria' => $form['select_coordenadoria'],
                 'tipo_registro'    => $form['tipo_registro'],
 
+                'id_operador'      => '',
+                'select_operador'  => '',
+
                 'por_data'         => $form['por_data'],
                 'select_mes'       => $form['select_mes'],
                 'select_ano'       => $form['select_ano'],
                 'dt_inicial'       => $form['dt_inicial'],
                 'dt_final'         => $form['dt_final'],
                 'input_datas'      => trim($form['input_datas']),
+                'tipo_busca'       => 'coordenadoria',
 
                 'status_complemento' => '',
 
@@ -1308,6 +1400,7 @@ class Assistencias extends Controller
                 'dt_inicial'           => '',
                 'dt_final'             => '',
                 'input_datas'          => 'nenhum',
+                'tipo_busca'           => 'coordenadoria',
 
                 'select_coordenadoria_erro' => '',
                 'tipo_registro_erro'        => '',
@@ -1338,186 +1431,191 @@ class Assistencias extends Controller
 
         if (isset($form)) {
 
-            // if ($dados_retorno) {
-            //     $form = $dados_retorno;
-            // }
+            if (isset($dados_retorno)) {
+                $form = $dados_retorno;
+            }
 
-            // //datas formatadas
-            // //Data
-            // $dt = date_create($form['por_data']);
-            // $data_format = date_format($dt, 'd/m/Y');
-            // //Data inicial
-            // $dt_ini_f = date_create($form['dt_inicial']);
-            // $dt_ini_format = date_format($dt_ini_f, 'd/m/Y');
-            // //Data final
-            // $dt_fin_f = date_create($form['dt_final']);
-            // $dt_fin_format = date_format($dt_fin_f, 'd/m/Y');
+            //datas formatadas
+            //Data
+            $dt = date_create($form['por_data']);
+            $data_format = date_format($dt, 'd/m/Y');
+            //Data inicial
+            $dt_ini_f = date_create($form['dt_inicial']);
+            $dt_ini_format = date_format($dt_ini_f, 'd/m/Y');
+            //Data final
+            $dt_fin_f = date_create($form['dt_final']);
+            $dt_fin_format = date_format($dt_fin_f, 'd/m/Y');
 
-            // //nome coordenadoria
-            // $nome_coordenadoria = '';
-            // if ($form['select_coordenadoria'] != 0) {
-            //     foreach ($operadores as $coord) {
-            //         if ($coord['id'] == $form['select_coordenadoria']) {
-            //             $nome_coordenadoria = $coord['nome'];
-            //         }
-            //     }
-            // }
+            //nome operador
+            $nome_operador = '';
+            if ($form['select_operador'] != 0) {
+                foreach ($operadores as $op) {
+                    if ($op['id'] == $form['select_operador']) {
+                        $nome_operador = $op['nome'];
+                    }
+                }
+            }
 
-            // $dados = [
-            //     'operadores'   => $operadores,
-            //     'meses'            => Times::meses(),
-            //     'anos'             => Times::anos_12(),
+            $dados = [
+                'operadores'   => $operadores,
+                'meses'            => Times::meses(),
+                'anos'             => Times::anos_12(),
 
-            //     'id_coordenadoria' => $form['select_coordenadoria'],
-            //     'nome_coordenadoria' => $nome_coordenadoria,
-            //     'select_coordenadoria' => $form['select_coordenadoria'],
-            //     'tipo_registro'    => $form['tipo_registro'],
+                'id_operador' => $form['select_operador'],
+                'nome_operador' => $nome_operador,
 
-            //     'por_data'         => $form['por_data'],
-            //     'select_mes'       => $form['select_mes'],
-            //     'select_ano'       => $form['select_ano'],
-            //     'dt_inicial'       => $form['dt_inicial'],
-            //     'dt_final'         => $form['dt_final'],
-            //     'input_datas'      => trim($form['input_datas']),
+                'id_coordenadoria'     => '',
+                'select_coordenadoria' => '',
 
-            //     'status_complemento' => '',
+                'select_operador' => $form['select_operador'],
+                'tipo_registro'    => $form['tipo_registro'],
 
-            //     'id_coordenadoria_erro'     => '',
-            //     'select_coordenadoria_erro' => '',
-            //     'tipo_registro_erro'        => '',
+                'por_data'         => $form['por_data'],
+                'select_mes'       => $form['select_mes'],
+                'select_ano'       => $form['select_ano'],
+                'dt_inicial'       => $form['dt_inicial'],
+                'dt_final'         => $form['dt_final'],
+                'input_datas'      => trim($form['input_datas']),
+                'tipo_busca'       => 'operador',
 
-            //     'por_data_erro'    => '',
-            //     'select_mes_erro'  => '',
-            //     'select_ano_erro'  => '',
-            //     'dt_inicial_erro'  => '',
-            //     'dt_final_erro'    => '',
-            //     'periodo_select_erro' => ''
-            // ];
+                'status_complemento' => '',
 
-            // $erro = '';
+                'id_operador_erro'     => '',
+                'select_operador_erro' => '',
+                'tipo_registro_erro'        => '',
 
-            // // Coordenadoria
-            // if ($dados['select_coordenadoria'] == '0') {
-            //     $dados['select_coordenadoria_erro'] = 'Selecione uma Coordenadoria';
-            //     $erro = 'erro';
-            // }
+                'por_data_erro'    => '',
+                'select_mes_erro'  => '',
+                'select_ano_erro'  => '',
+                'dt_inicial_erro'  => '',
+                'dt_final_erro'    => '',
+                'periodo_select_erro' => ''
+            ];
 
-            // // Tipo de registro
-            // if ($dados['tipo_registro'] == '0') {
-            //     $dados['tipo_registro_erro'] = 'Selecione o tipo de registro';
-            //     $erro = 'erro';
-            // }
+            $erro = '';
 
-            // // Data
-            // if ($dados['input_datas'] == 'data') {
-            //     $hoje = strtotime(date('Y-m-d'));
-            //     $pd = strtotime($dados['por_data']);
-            //     if ($pd > $hoje) {
-            //         $dados['por_data_erro'] = 'Informe uma data igual ou inferior a de hoje.';
-            //         $erro = 'erro';
-            //     }
-            //     if (empty($dados['por_data'])) {
-            //         $dados['por_data_erro'] = 'Informe uma data';
-            //         $erro = 'erro';
-            //     }
-            // }
+            // Operador
+            if ($dados['select_operador'] == '0') {
+                $dados['select_operador_erro'] = 'Selecione um operador';
+                $erro = 'erro';
+            }
 
-            // // Mês e ano
-            // if ($dados['input_datas'] == 'mes_ano') {
-            //     if ($dados['select_mes'] == 'mes') {
-            //         $dados['select_mes_erro'] = 'Informe o mês';
-            //         $erro = 'erro';
-            //     }
-            //     if ($dados['select_ano'] == 'ano') {
-            //         $dados['select_ano_erro'] = 'Informe o ano';
-            //         $erro = 'erro';
-            //     }
-            // }
+            // Tipo de registro
+            if ($dados['tipo_registro'] == '0') {
+                $dados['tipo_registro_erro'] = 'Selecione o tipo de registro';
+                $erro = 'erro';
+            }
 
-            // // Período
-            // if ($dados['input_datas'] == 'periodo') {
-            //     $dt_inicial = strtotime($dados['dt_inicial']);
-            //     $dt_final = strtotime($dados['dt_final']);
-            //     if ($dt_inicial > $dt_final) {
-            //         $dados['dt_inicial_erro'] = 'Data inicial não pode ser maior que a data final';
-            //         $erro = 'erro';
-            //     }
-            //     if ($dados['dt_inicial'] == '') {
-            //         $dados['dt_inicial_erro'] = 'Informe a data inicial';
-            //         $erro = 'erro';
-            //     }
-            //     if ($dados['dt_final'] == '') {
-            //         $dados['dt_final_erro'] = 'Informe a data final';
-            //         $erro = 'erro';
-            //     }
-            // }
+            // Data
+            if ($dados['input_datas'] == 'data') {
+                $hoje = strtotime(date('Y-m-d'));
+                $pd = strtotime($dados['por_data']);
+                if ($pd > $hoje) {
+                    $dados['por_data_erro'] = 'Informe uma data igual ou inferior a de hoje.';
+                    $erro = 'erro';
+                }
+                if (empty($dados['por_data'])) {
+                    $dados['por_data_erro'] = 'Informe uma data';
+                    $erro = 'erro';
+                }
+            }
 
-            // // BUSCAR
-            // if ($erro == '') {
+            // Mês e ano
+            if ($dados['input_datas'] == 'mes_ano') {
+                if ($dados['select_mes'] == 'mes') {
+                    $dados['select_mes_erro'] = 'Informe o mês';
+                    $erro = 'erro';
+                }
+                if ($dados['select_ano'] == 'ano') {
+                    $dados['select_ano_erro'] = 'Informe o ano';
+                    $erro = 'erro';
+                }
+            }
 
-            //     $dados_model = [
-            //         'id_coordenadoria' => $dados['select_coordenadoria'],
-            //         'data'             => $dados['por_data'],
-            //         'mes'              => $dados['select_mes'],
-            //         'ano'              => $dados['select_ano'],
-            //         'dt_inicial'       => $dados['dt_inicial'],
-            //         'dt_final'         => $dados['dt_final'],
-            //         'input_datas'      => $dados['input_datas']
-            //     ];
+            // Período
+            if ($dados['input_datas'] == 'periodo') {
+                $dt_inicial = strtotime($dados['dt_inicial']);
+                $dt_final = strtotime($dados['dt_final']);
+                if ($dt_inicial > $dt_final) {
+                    $dados['dt_inicial_erro'] = 'Data inicial não pode ser maior que a data final';
+                    $erro = 'erro';
+                }
+                if ($dados['dt_inicial'] == '') {
+                    $dados['dt_inicial_erro'] = 'Informe a data inicial';
+                    $erro = 'erro';
+                }
+                if ($dados['dt_final'] == '') {
+                    $dados['dt_final_erro'] = 'Informe a data final';
+                    $erro = 'erro';
+                }
+            }
 
-            //     $dados['assistencias'] = '';
-            //     $dados['nao_finalizadas'] = 0;
-            //     $dados['finalizadas'] = 0;
-            //     $dados['updates'] = '';
+            // BUSCAR
+            if ($erro == '') {
 
-            //     //busca por tipo assistencia
-            //     if ($dados['tipo_registro'] == 'assistencia') {
-            //         $ass_res = $this->assistenciaModel->filtrosAssistenciasByCoordenadoria($dados_model);
-            //         if ($ass_res['erro'] == '' && $ass_res['assistencias'] != '') {
-            //             $dados['assistencias'] = $ass_res['assistencias'];
-            //             $dados['nao_finalizadas'] = $ass_res['nao_finalizadas'];
-            //             $dados['finalizadas'] = $ass_res['finalizadas'];
-            //         }
+                $dados_model = [
+                    'id_operador'      => $dados['select_operador'],
+                    'data'             => $dados['por_data'],
+                    'mes'              => $dados['select_mes'],
+                    'ano'              => $dados['select_ano'],
+                    'dt_inicial'       => $dados['dt_inicial'],
+                    'dt_final'         => $dados['dt_final'],
+                    'input_datas'      => $dados['input_datas']
+                ];
 
-            //         //Título
-            //         //data
-            //         if ($dados['input_datas'] == 'data') {
-            //             $dados['titulo'] = 'ASSISTÊNCIAS REGISTRADAS EM ' . $data_format;
-            //         }
-            //         //mes_ano
-            //         if ($dados['input_datas'] == 'mes_ano') {
-            //             $dados['titulo'] = 'ASSISTÊNCIAS REGISTRADAS NO MÊS DE ' . Times::mes_string($dados['select_mes']) . '/' . $dados['select_ano'];
-            //         }
-            //         //período
-            //         if ($dados['input_datas'] == 'periodo') {
-            //             $dados['titulo'] = 'ASSISTÊNCIAS REGISTRADAS ENTRE ' . $dt_ini_format . ' e ' . $dt_fin_format;
-            //         }
+                $dados['assistencias'] = '';
+                $dados['nao_finalizadas'] = 0;
+                $dados['finalizadas'] = 0;
+                $dados['updates'] = '';
 
-            //         return $this->view('assistencias/filtro_coordenadoria', $dados);
-            //     }
+                //busca por tipo assistencia
+                if ($dados['tipo_registro'] == 'assistencia') {
+                    $ass_res = $this->assistenciaModel->filtrosAssistenciasByOperador($dados_model);
+                    if ($ass_res['erro'] == '' && $ass_res['assistencias'] != '') {
+                        $dados['assistencias'] = $ass_res['assistencias'];
+                        $dados['nao_finalizadas'] = $ass_res['nao_finalizadas'];
+                        $dados['finalizadas'] = $ass_res['finalizadas'];
+                    }
 
-            //     //busca tipo update
-            //     if ($dados['tipo_registro'] == 'update') {
-            //     }
+                    //Título
+                    //data
+                    if ($dados['input_datas'] == 'data') {
+                        $dados['titulo'] = 'ASSISTÊNCIAS REGISTRADAS EM ' . $data_format;
+                    }
+                    //mes_ano
+                    if ($dados['input_datas'] == 'mes_ano') {
+                        $dados['titulo'] = 'ASSISTÊNCIAS REGISTRADAS NO MÊS DE ' . Times::mes_string($dados['select_mes']) . '/' . $dados['select_ano'];
+                    }
+                    //período
+                    if ($dados['input_datas'] == 'periodo') {
+                        $dados['titulo'] = 'ASSISTÊNCIAS REGISTRADAS ENTRE ' . $dt_ini_format . ' e ' . $dt_fin_format;
+                    }
+
+                    return $this->view('assistencias/filtro_operador', $dados);
+                }
+
+                //busca tipo update
+                if ($dados['tipo_registro'] == 'update') {
+                }
 
 
-            //     $dados['select_coordenadoria'] = '0';
-            //     $dados['tipo_registro'] = '0';
-            //     $dados['por_data'] = '';
-            //     $dados['select_mes'] = 'mes';
-            //     $dados['select_ano'] = 'ano';
-            //     $dados['dt_inicial'] = '';
-            //     $dados['dt_final'] = '';
-            //     $dados['input_datas'] = 'nenhum';
-            // }
+                $dados['select_operador'] = '0';
+                $dados['tipo_registro'] = '0';
+                $dados['por_data'] = '';
+                $dados['select_mes'] = 'mes';
+                $dados['select_ano'] = 'ano';
+                $dados['dt_inicial'] = '';
+                $dados['dt_final'] = '';
+                $dados['input_datas'] = 'nenhum';
+            }
         } else {
             $dados = [
                 'operadores' => $operadores,
                 'meses'          => Times::meses(),
                 'anos'           => Times::anos_12(),
 
-                'id_coordenadoria'     => '0',
-                'select_coordenadoria' => '0',
+                'id_operador'     => '0',
+                'select_operador' => '0',
                 'tipo_registro'        => '0',
                 'por_data'             => '',
                 'select_mes'           => 'mes',
@@ -1525,8 +1623,9 @@ class Assistencias extends Controller
                 'dt_inicial'           => '',
                 'dt_final'             => '',
                 'input_datas'          => 'nenhum',
+                'tipo_busca'           => 'coordenadoria',
 
-                'select_coordenadoria_erro' => '',
+                'select_operador_erro' => '',
                 'tipo_registro_erro'        => '',
                 'por_data_erro'             => '',
                 'select_mes_erro'           => '',
@@ -1536,6 +1635,6 @@ class Assistencias extends Controller
             ];
         }
 
-        $this->view('assistencias/filtro_coordenadoria', $dados);
+        $this->view('assistencias/filtro_operador', $dados);
     }
 }
