@@ -9,7 +9,7 @@
 
         <div class="col-md-3 mt-3">
 
-        <!-- ASSISTÊNCIAS -->
+            <!-- ASSISTÊNCIAS -->
             <div class="card">
                 <div class="card-body" style="height: 150px;">
                     <h5 class="card-title">Assistências</h5>
@@ -26,8 +26,14 @@
 
                 </div>
                 <div class="card-body">
-                    <!-- <a href="<?= URL ?>/assistencias" class="card-link">Recentes</a> -->
-                    <a href="<?= URL ?>/supervisao/assistencias" class="card-link">Gerenciar</a>
+                    <a href="javascript:divs_links_gerenciar_assistencias()" class="card-link">Gerenciar</a>
+                    <div class="div_links_gerenciar_assistencias" style="display: none;">
+                        <div class="card-body" id="">
+                            <div><a href="<?= URL ?>/assistencias/filtro_geral" class="card-link">Geral</a></div>
+                            <div><a href="<?= URL ?>/assistencias/filtro_coordenadoria" class="card-link">Por Coordenadoria</a></div>
+                            <div><a href="<?= URL ?>/assistencias/filtro_operador" class="card-link">Por Operador</a></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

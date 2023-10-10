@@ -23,9 +23,6 @@
 
     <?= Sessao::mensagem('user'); ?>
 
-
-
-
     <div class="row mt-5">
         <div class="col-md-6">
             <h3>Painel do Administrador</h3>
@@ -57,8 +54,14 @@
 
                 </div>
                 <div class="card-body">
-                    <!-- <a href="<?= URL ?>/assistencias" class="card-link">Recentes</a> -->
-                    <a href="<?= URL ?>/admin/assistencias" class="card-link">Gerenciar</a>
+                    <a href="javascript:divs_links_gerenciar_assistencias()" class="card-link">Gerenciar</a>
+                    <div class="div_links_gerenciar_assistencias" style="display: none;">
+                        <div class="card-body" id="">
+                            <div><a href="<?= URL ?>/assistencias/filtro_geral" class="card-link">Geral</a></div>
+                            <div><a href="<?= URL ?>/assistencias/filtro_coordenadoria" class="card-link">Por Coordenadoria</a></div>
+                            <div><a href="<?= URL ?>/assistencias/filtro_operador" class="card-link">Por Operador</a></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -121,7 +124,7 @@
 
 <script>
     $(document).ready(() => {
-        
+
         if ($("#input_num_registros").val() != 0) {
             $("#btn_aniversariantes_dia").show();
         }

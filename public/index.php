@@ -151,4 +151,9 @@ include './../app/autoload.php';
     $("#div_do_rodape").hide()
     $("#div_navs").hide()
   }
+
+  //links gerenciar assistências
+  function divs_links_gerenciar_assistencias() {
+    $(".div_links_gerenciar_assistencias").toggle()
+  }
 </script>
