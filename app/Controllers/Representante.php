@@ -39,9 +39,9 @@ class Representante extends Controller
     {
 
         //Minhas Assistências - recentes todas
-        $dados = $this->minhas_assistencias();
+        // $dados = $this->minhas_assistencias();
 
-        $this->view('representante/index', $dados);
+        $this->view('representante/index');
     }
 
     //MINHAS ASSISTÊNCIAS

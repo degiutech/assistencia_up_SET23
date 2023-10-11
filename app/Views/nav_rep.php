@@ -15,11 +15,14 @@ $user = $_SESSION['user'];
 
                 <!-- Assistências -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <!-- <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Assistências
+                    </a> -->
+                    <a class="nav-link active" href="<?= URL ?>/assistencias/filtro_meus_registros_ass">
+                        Assistencias
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="<?= URL ?>/representante">Registradas por mim</a></li>
+                        <li><a class="dropdown-item" href="<?= URL ?>/assistencias/filtro_meus_registros_ass">Registradas por mim</a></li>
                     </ul>
                 </li>
 
