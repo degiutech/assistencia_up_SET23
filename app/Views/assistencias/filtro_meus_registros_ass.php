@@ -3,7 +3,7 @@
 
     <div class="row mb-1">
         <div class="col-md-6">
-            <h3 class="mt-4">Assistências</h3>
+            <h3 class="mt-4">Meus Registros</h3>
         </div>
     </div>
 

@@ -55,7 +55,7 @@ $user = $_SESSION['user'];
                         Meus Registros
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="<?= URL ?>/coordenacao/minhas_assistencias">Minhas Assistências</a></li>
+                        <li><a class="dropdown-item" href="<?= URL ?>/assistencias/filtro_meus_registros_ass">Minhas Assistências</a></li>
                     </ul>
                 </li>
 				
