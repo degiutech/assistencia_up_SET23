@@ -10,7 +10,9 @@ class Users extends Controller
     private $operadorModel;
     private $coordenacaoModel;
     private $assistenciaModel;
+
     private $dgUserModel;
+    private $dgAssistenciaModel;
 
     public function __construct()
     {
@@ -39,6 +41,7 @@ class Users extends Controller
         $this->assistenciaModel = $this->model('AssistenciaModel');
 
         $this->dgUserModel = $this->model('DgUserModel');
+        $this->dgAssistenciaModel = $this->model('DgAssistenciaModel');
     }
 
     public function index()
@@ -59,6 +62,13 @@ class Users extends Controller
 
     public function login_email()
     {
+
+        $sistema_res = $this->dgAssistenciaModel->getSistema(1);
+        if ($sistema_res['erro'] == '') {
+            if (!$sistema_res['sistema']['bloqueio']) {
+                return $this->sistema_suspenso($sistema_res['sistema']);
+            }
+        }
 
         $dados = [
             'email' => '',
@@ -1304,6 +1314,11 @@ class Users extends Controller
         }
 
         $this->view('users/meus_dados', $dados);
+    }
+
+    public function sistema_suspenso($sistema) {
+
+        $this->view('users/suspenso');
     }
 
     //Formulário para trocar senha
