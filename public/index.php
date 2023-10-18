@@ -57,6 +57,9 @@ include './../app/autoload.php';
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.11.5/b-2.2.2/b-colvis-2.2.2/b-print-2.2.2/date-1.1.2/r-2.2.9/datatables.min.js"></script>
 
+  <!-- Mercado Pago -->
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+
 </head>
 
 <!-- #50acff #f1f2f4 -->
