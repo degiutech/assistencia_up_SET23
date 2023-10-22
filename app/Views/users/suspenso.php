@@ -21,24 +21,7 @@
     <div class="card col-md-3">
 
         <div class="card-body">
-            <h2>SISTEMA SUSPENSO</h2>
-            Efetue o pagamento da(s) parcela(s) vencida(s) para reestabelecer o Sistema
-
-            <div id="wallet_container">
-            </div>
-            <script>
-                const mp = new MercadoPago('TEST-439cec97-9e41-4fe0-99b0-c38a58e6ce45', {
-                    locale: 'pt-BR'
-                });
-
-                mp.bricks().create("wallet", "wallet_container", {
-                    initialization: {
-                        preferenceId: "<PREFERENCE_ID>",
-                    },
-                });
-            </script>
-
-
+            <h1>Sistema suspenso</h1>
         </div>
 
     </div>
