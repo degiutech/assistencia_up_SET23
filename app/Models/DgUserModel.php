@@ -132,6 +132,43 @@ class DgUserModel
         return $resposta;
     }
 
+    /////////////////VERIFICA SISTEMA - ATIVO OU NÃO
+    public function CheckBloqueioSistema() {
+
+        $db = new DatabaseDg();
+        $mysqli = $db->getConection();
+
+        $resposta = ['erro' => '', 'msg' => '', 'sistema' => []];
+
+        if (!($stmt = $mysqli->prepare("SELECT id, bloqueio FROM sistemas WHERE nome = ?"))) {
+            $resposta['erro'] = "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+        }
+
+        $nome = 'Assistência ao Cidadão';
+
+        if (!$stmt->bind_param("s", $nome)) {
+            $resposta['erro'] = "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+        }
+
+        if (!$stmt->execute()) {
+            $resposta['erro'] = "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+        }
+
+        $result = $stmt->get_result(); // get the mysqli result
+
+        $num_rows = mysqli_num_rows($result);
+
+        if ($num_rows == 0) {
+            $resposta['msg'] = 'Usuário não encontrado!';
+        } else {
+            $resposta['sistema'] = $result->fetch_assoc();
+
+            
+        }
+        return $resposta;
+
+    }
+
     public function getUser($id)
     {
 

@@ -18,34 +18,62 @@
 
 <div class="d-flex align-items-center justify-content-center" style="height: 100vh; width: 100vw;">
 
-    <div class="card col-md-3">
-        <div class="card-header bg-secondary text-white">
-            <h3>Login</h3>
-        </div>
-        <div class="card-body" style="z-index: 10;">
-            <?= Sessao::mensagem('user'); ?>
-            <p class="card-text"><small class="text-muted">Informe seu e-mail para fazer o login</small></p>
+    <?php
 
-            <form method="post" name="login" action="<?= URL ?>/users/login_email">
+    //IGUAL A 1 = bloqueado
+    //IGUAL A 0 = desbloqueado
+    //$bloqueado = $dados['bloqueado'];
+    $bloqueado = 1;
 
-                <div class="mb-3">
-                    <label for="email">E-mail: <sup class="text-danger">*</sup></label>
-                    <input type="text" name="email" id="email" value="<?= $dados['email'] ?>" class="form-control <?= $dados['email_erro'] != '' ? 'is-invalid' : '' ?>">
-                    <div class="invalid-feedback">
-                        <?= $dados['email_erro'] ?>
-                    </div>
-                </div>
+    if ($bloqueado == 0) { ?>
 
-                <div class="mb-3">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <input type="submit" class="btn btn-info btn-block" value="Continuar">
+        <div class="card col-md-3">
+            <div class="card-header bg-secondary text-white">
+                <h3>Login</h3>
+            </div>
+            <div class="card-body" style="z-index: 10;">
+                <?= Sessao::mensagem('user'); ?>
+                <p class="card-text"><small class="text-muted">Informe seu e-mail para fazer o login</small></p>
+
+                <form method="post" name="login" action="<?= URL ?>/users/login_email">
+
+                    <div class="mb-3">
+                        <label for="email">E-mail: <sup class="text-danger">*</sup></label>
+                        <input type="text" name="email" id="email" value="<?= $dados['email'] ?>" class="form-control <?= $dados['email_erro'] != '' ? 'is-invalid' : '' ?>">
+                        <div class="invalid-feedback">
+                            <?= $dados['email_erro'] ?>
                         </div>
                     </div>
-                </div>
-            </form>
+
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="submit" class="btn btn-info btn-block" value="Continuar">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
+
+    <?php } ?>
+
+    <!-- Div da mensagem SUSTENSO -->
+    <?php if ($bloqueado == 1) { ?>
+        <div class="card col-md-3">
+
+            <div class="card-body">
+                <p class="card-text">
+                    SISTEMA SUSPENSO
+                    <div><small>O Sistema será reativado assim que recebermos a confirmação de pagamento</small></div>
+                    <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js" data-preference-id="1513878577-a8005d9f-b8c1-4ed2-8ef6-1cd436340405" data-source="button">
+                    </script>
+                </p>
+            </div>
+
+        </div>
+    <?php } ?>
+
 </div>
 
 <script>

@@ -10,6 +10,7 @@ class Users extends Controller
     private $operadorModel;
     private $coordenacaoModel;
     private $assistenciaModel;
+    private $dgAssistenciaModel;
     private $dgUserModel;
 
     public function __construct()
@@ -37,6 +38,7 @@ class Users extends Controller
         $this->operadorModel = $this->model('OperadorModel');
         $this->coordenacaoModel = $this->model('CoordenacaoModel');
         $this->assistenciaModel = $this->model('AssistenciaModel');
+        $this->dgAssistenciaModel = $this->model('DgAssistenciaModel');
 
         $this->dgUserModel = $this->model('DgUserModel');
     }
@@ -59,8 +61,14 @@ class Users extends Controller
 
     public function login_email()
     {
+        // Verifica se sistema está ativo
+        $sistema_res = $this->dgUserModel->CheckBloqueioSistema();
+        if ($sistema_res['erro'] == '') {
+            $bloqueado = $sistema_res['sistema']['bloqueio'];
+        }
 
         $dados = [
+            'bloqueado' => $bloqueado,
             'email' => '',
             'email_erro' => ''
         ];
@@ -112,6 +120,7 @@ class Users extends Controller
         else :
 
             $dados = [
+                'bloqueado' => $bloqueado,
                 'email' => '',
                 'email_erro' => '',
             ];

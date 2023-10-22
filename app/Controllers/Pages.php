@@ -25,59 +25,59 @@ class Pages extends Controller
         // $this->view('users/login');
     }
 
-    public function login_email()
-    {
+    // public function login_email()
+    // {
 
-        $dados = [
-            'email' => '',
-            'email_erro' => ''
-        ];
+    //     $dados = [
+    //         'email' => '',
+    //         'email_erro' => ''
+    //     ];
 
-        $form = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
+    //     $form = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
 
-        if (isset($form)) :
+    //     if (isset($form)) :
 
-            if (empty(trim($form['email']))) :
-                $dados['email_erro'] = 'Campo email não pode ser vazio!';
-                return $this->view('users/login_email', $dados);
+    //         if (empty(trim($form['email']))) :
+    //             $dados['email_erro'] = 'Campo email não pode ser vazio!';
+    //             return $this->view('users/login_email', $dados);
 
-            elseif (!empty(trim($form['email'])) && Check::checkEmail(trim($form['email']))) :
-                $dados['email_erro'] = 'Digite um email válido!';
-                return $this->view('users/login_email', $dados);
+    //         elseif (!empty(trim($form['email'])) && Check::checkEmail(trim($form['email']))) :
+    //             $dados['email_erro'] = 'Digite um email válido!';
+    //             return $this->view('users/login_email', $dados);
 
-            endif;
+    //         endif;
 
-            $check = $this->userModel->checkEmail(trim($form['email']));
+    //         $check = $this->userModel->checkEmail(trim($form['email']));
 
-            if ($check) :
-                $dados = [
-                    'email' => trim($form['email']),
-                    'email_erro' => '',
-                    'pass'       => '',
-                    'pass_erro'  => ''
-                ];
-                return $this->view('users/login', $dados);
-            else :
-                $dados = [
-                    'email' => trim($form['email']),
-                    'email_erro' => 'Este email não está registrado!',
-                    'pass'       => '',
-                    'pass_erro'  => ''
-                ];
-                return $this->view('users/login_email', $dados);
-            endif;
+    //         if ($check) :
+    //             $dados = [
+    //                 'email' => trim($form['email']),
+    //                 'email_erro' => '',
+    //                 'pass'       => '',
+    //                 'pass_erro'  => ''
+    //             ];
+    //             return $this->view('users/login', $dados);
+    //         else :
+    //             $dados = [
+    //                 'email' => trim($form['email']),
+    //                 'email_erro' => 'Este email não está registrado!',
+    //                 'pass'       => '',
+    //                 'pass_erro'  => ''
+    //             ];
+    //             return $this->view('users/login_email', $dados);
+    //         endif;
 
-        else :
+    //     else :
 
-            $dados = [
-                'email' => '',
-                'email_erro' => '',
-            ];
+    //         $dados = [
+    //             'email' => '',
+    //             'email_erro' => '',
+    //         ];
 
-        endif;
+    //     endif;
 
-        $this->view('users/login_email', $dados);
-    }
+    //     $this->view('users/login_email', $dados);
+    // }
 
     public function home()
     {
