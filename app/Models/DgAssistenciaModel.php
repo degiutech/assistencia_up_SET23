@@ -37,7 +37,7 @@ class DgAssistenciaModel
         )) {
             $result['erro'] =  "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
         }
-
+ 
         if (!$stmt->execute()) {
             $result['erro'] = "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
         } else {
@@ -50,8 +50,7 @@ class DgAssistenciaModel
         return $result;
     }
 
-    public function updateOperador($dados)
-    {
+    public function updateOperador($dados) {
 
         $db = new Database();
         $mysqli = $db->getConection();
@@ -120,34 +119,6 @@ class DgAssistenciaModel
         $db->connClose();
 
         return $result;
-    }
 
-    public function getSistema($id)
-    {
-
-        $db = new DatabaseDg();
-        $mysqli = $db->getConection();
-
-        $res = ['erro' => '', 'sistema' => ''];
-
-        if (!($stmt = $mysqli->prepare("SELECT * FROM sistemas WHERE id = ?"))) {
-            $res['erro'] = "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
-        }
-
-        if (!$stmt->bind_param("i", $id)) {
-            $res['erro'] = "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
-        }
-
-        if (!$stmt->execute()) {
-            $res['erro'] = "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
-        }
-
-        if (!$result = $stmt->get_result()) {
-            $res['erro'] = "Result failed: " . $stmt->errno . ") " . $stmt->error;
-        } else {
-            $res['sistema'] = $result->fetch_assoc();
-        }
-
-        return $res;
     }
 }
